@@ -127,7 +127,6 @@ export const marketChart = () => {
   return `<figure class="mchart" data-reveal data-bars>
   <figcaption><strong>블로그 대행 1회당 금액 비교</strong><span>${MARKET_BLOG.date} 조회 · 부가세 별도 기준</span></figcaption>
   <ul>${MARKET_BLOG.rows.map(r => `<li class="${r.ours ? 'is-ours' : ''}"><div class="mchart__k"><b>${esc(r.k)}</b><small>${esc(r.sub)}</small></div><div class="mchart__bar"><span class="mchart__range" style="--lo:${(r.lo / max * 100).toFixed(1)}%;--hi:${(r.hi / max * 100).toFixed(1)}%"></span><em>${r.lo === r.hi ? won(r.lo) : `${won(r.lo)} ~ ${won(r.hi)}`}</em></div></li>`).join('')}</ul>
-  <p class="mchart__note">${esc(MARKET_BLOG.footnote)} 출처: ${MARKET_BLOG.sources.map(([t, u]) => `<a href="${u}" target="_blank" rel="noopener nofollow">${esc(t)}</a>`).join(', ')}</p>
 </figure>`;
 };
 
