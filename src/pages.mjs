@@ -52,7 +52,7 @@ ${logosMarquee(R)}
 <section class="manifesto" id="manifesto">
   <div class="wrap">
     <p class="eyebrow">WHY MIRAE ADONE</p>
-    <p class="manifesto__t" data-words>광고 영업 전화, 불분명한 계약 조건,<br>연락이 닿지 않는 담당자 때문에 불안하셨나요?<br>미래애드원은 직접 기획하고 제작·관리하는 실행형 파트너입니다.<br>상주 작가와 디자이너, 발행 전 확인,<br>전용 소통 채널과 정기 보고로 무엇을 어떻게 진행하는지 보여 드립니다.</p>
+    <p class="manifesto__t" data-words><span class="ln">광고 영업 전화, 불분명한 계약 조건,</span> <span class="ln">연락이 닿지 않는 담당자 때문에 불안하셨나요?</span> <span class="ln">미래애드원은 직접 기획하고 제작·관리하는 실행형 파트너입니다.</span> <span class="ln">상주 작가와 디자이너, 발행 전 확인,</span> <span class="ln">전용 소통 채널과 정기 보고로 무엇을 어떻게 진행하는지 보여 드립니다.</span></p>
     <ul class="pillars">${[['chat', '담당자 소통', '1:1 전담 담당자와 전용 단톡방'], ['shield', '발행 전 확인', '원고·디자인을 먼저 보고 승인'], ['pen', '직접 제작', '상주 작가·디자이너가 직접 작업'], ['chart', '정기 보고', '회차별 URL, 1~2주·월간 보고']].map(([ic, k, d], i) => `<li data-reveal style="--d:${i * 70}ms">${icon(ic)}<b>${k}</b><span>${d}</span></li>`).join('')}</ul>
   </div>
 </section>
@@ -118,7 +118,7 @@ ${scrollSequence(R)}
     <div data-reveal><p class="eyebrow">BUSINESS EXPERIENCE</p><h2>광고를 넘어<br>실제 사업을 이해합니다</h2><p>미래애드원의 대표는 광고대행업 외에 별도의 식자재 유통 사업을 운영합니다. 직접 사업을 하며 겪는 고객 확보와 비용, 운영의 고민을 알기 때문에 광고 상품보다 사업 과제를 먼저 묻습니다.</p><p class="small">식자재 유통 사업은 미래애드원 법인과 별개로 대표자가 운영하는 사업입니다.</p><a class="btn btn--line btn--sm" href="about/#experience">회사소개 보기 ${icon('arrow')}</a></div>
     <div class="exp__posts">
       <div class="exp__ph"><p class="eyebrow">INSIGHTS</p><a href="insights/" class="link">전체 글 ${icon('arrow')}</a></div>
-      ${posts.slice(0, 3).map(p => postCard(R, p)).join('')}
+      <div class="exp__list">${posts.slice(0, 3).map(p => postCard(R, p)).join('')}</div>
     </div>
   </div>
 </section>

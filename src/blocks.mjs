@@ -92,7 +92,8 @@ export const blogStatsStrip = (R, n = 8) => `<div class="statsimg">${PORTFOLIO.f
 // ───────── 가격
 export const blogPlans = (R, { compact = false } = {}) => `<div class="plans" data-plans>
   <div class="seg" role="radiogroup" aria-label="가격 표시 방식"><button type="button" role="radio" aria-checked="true" data-plan-view="month">월 금액</button><button type="button" role="radio" aria-checked="false" data-plan-view="per">1회당 금액</button><span class="seg__thumb"></span></div>
-  <div class="plans__grid">${BLOG_PLANS.map((p, i) => `<article class="plan${p.best ? ' plan--best glass' : ''}" data-reveal style="--d:${i * 80}ms">
+  <p class="plans__hint" aria-hidden="true">옆으로 넘겨 세 상품을 비교해 보세요</p>
+  <div class="plans__grid" data-plans-grid>${BLOG_PLANS.map((p, i) => `<article class="plan${p.best ? ' plan--best glass' : ''}" data-reveal style="--d:${i * 80}ms">
     ${p.best ? '<span class="plan__flag">가장 많이 선택</span>' : ''}
     <p class="plan__name">${p.name}</p><p class="plan__label">${esc(p.label)}</p>
     <p class="plan__price"><span class="plan__v" data-month="${man(p.price)}" data-per="${won(Math.round(p.price / p.count))}">${man(p.price)}</span><small data-month-unit="/ 월 · VAT 별도" data-per-unit="/ 1회 · VAT 별도">/ 월 · VAT 별도</small></p>
@@ -130,7 +131,7 @@ export const marketChart = () => {
 </figure>`;
 };
 
-export const structureTable = () => `<div class="cmp" data-reveal><table><thead><tr>${STRUCTURE_COMPARE.cols.map((c, i) => `<th scope="col"${i === 2 ? ' class="is-ours"' : ''}>${c}</th>`).join('')}</tr></thead><tbody>${STRUCTURE_COMPARE.rows.map(r => `<tr><th scope="row">${r[0]}</th><td>${r[1]}</td><td class="is-ours">${icon('check')}${r[2]}</td></tr>`).join('')}</tbody></table></div>`;
+export const structureTable = () => `<div class="cmp" data-reveal><table><thead><tr>${STRUCTURE_COMPARE.cols.map((c, i) => `<th scope="col"${i === 2 ? ' class="is-ours"' : ''}>${c}</th>`).join('')}</tr></thead><tbody>${STRUCTURE_COMPARE.rows.map(r => `<tr><th scope="row">${r[0]}</th><td data-label="일반적인 구조"><span>${r[1]}</span></td><td class="is-ours" data-label="${STRUCTURE_COMPARE.cols[2]}"><span>${icon('check')}${r[2]}</span></td></tr>`).join('')}</tbody></table></div>`;
 
 export const cpcCalculator = () => `<div class="calc glass glass--light" data-calc data-reveal>
   <div class="calc__in">
@@ -245,7 +246,7 @@ export const reportChart = () => {
 </figure>`;
 };
 
-export const reportFieldsTable = () => `<div class="cmp cmp--fields" data-reveal><table><thead><tr><th scope="col">필드</th><th scope="col">기록 기준</th></tr></thead><tbody>${REPORT_FIELDS.map(([k, v]) => `<tr><th scope="row">${k}</th><td>${v}</td></tr>`).join('')}</tbody></table></div>`;
+export const reportFieldsTable = () => `<div class="cmp cmp--fields" data-reveal><table><thead><tr><th scope="col">필드</th><th scope="col">기록 기준</th></tr></thead><tbody>${REPORT_FIELDS.map(([k, v]) => `<tr><th scope="row">${k}</th><td data-label="기록 기준">${v}</td></tr>`).join('')}</tbody></table></div>`;
 
 export const monthFlows = () => `<div class="flows"><article data-reveal><p class="eyebrow">1개월 차</p><h3>구축 + 첫 달 육성</h3><ol>${MONTH1.map(([k, v]) => `<li><b>${k}</b><span>${v}</span></li>`).join('')}</ol></article><article data-reveal style="--d:90ms"><p class="eyebrow">2개월 차부터</p><h3>반복 운영</h3><ol>${MONTH2.map(([k, v]) => `<li><b>${k}</b><span>${v}</span></li>`).join('')}</ol></article></div>`;
 

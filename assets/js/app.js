@@ -149,6 +149,15 @@
     if ($('#modal')?.classList.contains('is-open')) return; // 모달은 자체 처리
     const d = $$('.drawer.is-open').pop(); if (d) closeDrawer(d);
   });
+  // 바텀시트(모바일 상담 드로어): 손잡이·머리 부분을 아래로 끌어 닫기
+  $$('[data-sheet-handle]').forEach(h => {
+    const panel = h.closest('.drawer__panel'), d = h.closest('.drawer'), head = $('.drawer__head', panel);
+    let y0 = null, dy = 0;
+    const start = e => { if (innerWidth > 640) return; y0 = e.touches[0].clientY; dy = 0; panel.style.transition = 'none'; };
+    const move = e => { if (y0 === null) return; dy = Math.max(0, e.touches[0].clientY - y0); panel.style.transform = `translateY(${dy}px)`; };
+    const end = () => { if (y0 === null) return; panel.style.transition = ''; panel.style.transform = ''; if (dy > 90) closeDrawer(d); y0 = null; };
+    [h, head].forEach(el => { el.addEventListener('touchstart', start, { passive: true }); el.addEventListener('touchmove', move, { passive: true }); el.addEventListener('touchend', end); });
+  });
   // 모바일 메뉴 링크를 누르면 닫기
   $$('.dnav a').forEach(a => a.addEventListener('click', () => closeDrawer(a.closest('.drawer'))));
 
@@ -279,9 +288,8 @@
   const words = $('[data-words]');
   if (words && !reduce) {
     const keys = ['직접', '실행형', '상주', '발행', '전', '확인', '정기', '보고'];
-    // <br> 로 나눈 줄은 그대로 두고 줄 안의 단어만 감싼다
-    const tmp = document.createElement('div');
-    words.innerHTML = words.innerHTML.split(/<br\s*\/?>/i).map(line => { tmp.innerHTML = line; return tmp.textContent.trim().split(/\s+/).map(w => `<span class="w${keys.some(k => w.startsWith(k)) ? ' is-key' : ''}">${esc(w)}</span>`).join(' '); }).join('<br>');
+    // 줄(.ln)은 그대로 두고 줄 안의 단어만 감싼다
+    $$('.ln', words).forEach(ln => { ln.innerHTML = ln.textContent.trim().split(/\s+/).map(w => `<span class="w${keys.some(k => w.startsWith(k)) ? ' is-key' : ''}">${esc(w)}</span>`).join(' '); });
     const ws = $$('.w', words);
     const upd = () => {
       const r = words.getBoundingClientRect(), vh = innerHeight;
@@ -305,7 +313,7 @@
       screens.forEach((s, k) => s.classList.toggle('is-on', k === i));
       if (i === 1) typer.forEach(typeCount);
     };
-    const desk = matchMedia('(min-width:1024px)');
+    const desk = matchMedia('(min-height:560px)'); // CSS와 같은 조건: 이 높이 미만이면 고정 없이 세로 나열
     const upd = () => {
       if (!desk.matches) return;
       const r = pin.getBoundingClientRect(), total = r.height - innerHeight;
@@ -339,6 +347,11 @@
       $$('.plan__v', w).forEach(v => { v.style.opacity = 0; setTimeout(() => { v.textContent = per ? v.dataset.per : v.dataset.month; v.style.opacity = 1; }, 160); });
       $$('[data-month-unit]', w).forEach(u => { u.textContent = per ? u.dataset.perUnit : u.dataset.monthUnit; });
     }));
+  });
+
+  $$('[data-plans-grid]').forEach(g => {
+    if (getComputedStyle(g).overflowX !== 'auto') return;
+    const best = $('.plan--best', g); if (best) g.scrollLeft = best.offsetLeft - (g.clientWidth - best.offsetWidth) / 2;
   });
 
   /* ───────── 비용 계산기 */

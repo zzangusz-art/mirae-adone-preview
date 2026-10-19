@@ -176,6 +176,7 @@ export function layers(R) {
 <div class="drawer drawer--quote" id="drawer-quote" data-drawer="quote" aria-hidden="true">
   <div class="drawer__scrim" data-drawer-close></div>
   <aside class="drawer__panel" role="dialog" aria-modal="true" aria-labelledby="qd-title">
+    <span class="sheet-handle" aria-hidden="true" data-sheet-handle></span>
     <div class="drawer__head"><div><p class="eyebrow">FREE CONSULTING</p><h2 id="qd-title">맞춤 광고 상담</h2></div><button class="iconbtn" type="button" aria-label="닫기" data-drawer-close>${icon('close')}</button></div>
     <p class="drawer__lead">세 단계면 끝납니다. 담당자가 확인 후 연락드립니다.</p>
     ${quoteForm('qd', R)}
