@@ -77,7 +77,7 @@ ${extraHead}
 }
 
 export function header(R, current) {
-  const mega = AXES.map(a => `<div class="mega__col"><p class="mega__axis"><span>${a.en}</span>${a.ko}</p><ul>${SERVICES.filter(s => s.axis === a.id).map(s => `<li><a href="${R}services/${s.slug}/">${esc(s.name)}${s.isNew ? '<em>NEW</em>' : ''}</a></li>`).join('')}</ul></div>`).join('');
+  const mega = AXES.map(a => `<div class="mega__col"><p class="mega__axis"><span>${a.en}</span>${a.ko}</p><ul>${SERVICES.filter(s => s.axis === a.id).map(s => `<li><a href="${R}services/${s.slug}/"><span>${s.navLines ? s.navLines.map(esc).join('<br>') : esc(s.name)}</span>${s.isNew ? '<em>NEW</em>' : ''}</a></li>`).join('')}</ul></div>`).join('');
   const navItem = n => n.mega
     ? `<li class="gnb__item has-mega${current === n.href ? ' is-current' : ''}"><a class="gnb__link" href="${R}${n.href}" aria-haspopup="true" aria-expanded="false">${n.label}${icon('chev', 'gnb__chev')}</a>
       <div class="mega" role="region" aria-label="서비스 전체"><div class="mega__inner glass glass--light">${mega}${MEGA_FEATURE().replace('{R}', R)}<a class="mega__all" href="${R}services/">18개 서비스 전체 보기 ${icon('arrow')}</a></div></div></li>`
