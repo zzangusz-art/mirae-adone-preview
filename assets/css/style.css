@@ -219,6 +219,8 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
 
 /* ───────── 공통 섹션 */
 .sec{padding:clamp(72px,10vw,136px) 0;position:relative}
+/* 서비스 상세 페이지: 섹션 사이 여백을 좁게 */
+.is-svc .sec{padding:clamp(52px,6vw,80px) 0}
 .sec--gray{background:var(--g50)}
 .sec--navy{background:radial-gradient(1200px 600px at 85% -10%,rgba(0,66,214,.35),transparent 60%),radial-gradient(800px 500px at 0% 110%,rgba(242,139,75,.14),transparent 60%),var(--navy);color:#fff}
 .sec--ink{background:radial-gradient(900px 500px at 90% 0%,rgba(61,125,255,.22),transparent 60%),#0A0F18;color:#fff}
