@@ -1,0 +1,16 @@
+{
+  "name": "mirae-adone-site",
+  "private": true,
+  "description": "미래애드원 홈페이지 정적 사이트 + 인사이트(블로그) AI 자동 발행",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "check": "node build.mjs && node tools/check-site.mjs && node tools/blog-ai/generate.mjs --check",
+    "blog:generate": "node tools/blog-ai/generate.mjs",
+    "blog:check": "node tools/blog-ai/generate.mjs --check",
+    "blog:plan": "node tools/blog-ai/generate.mjs --plan"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.135.0"
+  }
+}

@@ -1,0 +1,603 @@
+[
+  {
+    "id": "blog-agency-cost-per-post",
+    "title": "블로그 관리대행 비용 비교",
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "done",
+    "slug": "blog-agency-cost-per-post",
+    "date": "2026-10-19",
+    "note": "사람이 작성한 첫 글"
+  },
+  {
+    "id": "what-is-geo-vs-seo",
+    "title": "GEO와 SEO의 차이",
+    "category": "AI 검색·SEO",
+    "service": "seo-aeo-geo",
+    "status": "done",
+    "slug": "what-is-geo-vs-seo",
+    "date": "2026-10-19",
+    "note": "사람이 작성한 첫 글"
+  },
+  {
+    "id": "naver-search-ads-cost-structure",
+    "title": "검색광고 비용 구조",
+    "category": "검색광고·플레이스",
+    "service": "naver-search-ads",
+    "status": "done",
+    "slug": "naver-search-ads-cost-structure",
+    "date": "2026-10-19",
+    "note": "사람이 작성한 첫 글"
+  },
+  {
+    "id": "website-renewal-checklist",
+    "title": "홈페이지 리뉴얼 점검",
+    "category": "홈페이지",
+    "service": "website",
+    "status": "done",
+    "slug": "website-renewal-checklist",
+    "date": "2026-10-19",
+    "note": "사람이 작성한 첫 글"
+  },
+  {
+    "id": "check-brand-in-ai-answers",
+    "title": "AI 답변 브랜드 확인",
+    "category": "AI 검색·SEO",
+    "service": "ai-visibility",
+    "status": "done",
+    "slug": "check-brand-in-ai-answers",
+    "date": "2026-10-19",
+    "note": "사람이 작성한 첫 글"
+  },
+  {
+    "id": "sponsored-post-disclosure-guide",
+    "title": "협찬 표시 기준",
+    "category": "블로그 마케팅",
+    "service": "blog-viral",
+    "status": "done",
+    "slug": "sponsored-post-disclosure-guide",
+    "date": "2026-10-19",
+    "note": "사람이 작성한 첫 글"
+  },
+  {
+    "id": "blog-topic-planning",
+    "title": "브랜드 블로그 주제가 떨어질 때 쓰는 기획법",
+    "angle": "매달 15~40회 글감을 어떻게 찾는지, 업종 질문·계절·지역 키워드로 주제 캘린더를 짜는 실무 방법",
+    "keywords": [
+      "블로그 주제 기획",
+      "블로그 글감"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "todo"
+  },
+  {
+    "id": "homepage-style-blog-skin",
+    "title": "홈페이지형 블로그 스킨, 언제 필요하고 무엇을 넣어야 할까",
+    "angle": "블로그 첫 화면을 메뉴형으로 바꾸면 무엇이 달라지는지, 카테고리 구성과 하단 배너 활용",
+    "keywords": [
+      "홈페이지형 블로그",
+      "블로그 스킨"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "todo"
+  },
+  {
+    "id": "blog-before-publish-approval",
+    "title": "블로그 대행 맡겼는데 글을 발행 후에야 본다면",
+    "angle": "발행 전 확인 절차가 왜 필요한지, 승인 기한·수정 범위를 계약서에 어떻게 적는지",
+    "keywords": [
+      "블로그 대행 검수",
+      "블로그 발행 전 확인"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "todo"
+  },
+  {
+    "id": "blog-report-how-to-read",
+    "title": "블로그 대행 보고서, 조회수 말고 무엇을 봐야 하나",
+    "angle": "회차별 발행 URL, 키워드 노출 확인, 월간 추이를 읽는 법과 흔한 오해",
+    "keywords": [
+      "블로그 보고서",
+      "블로그 성과"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "todo"
+  },
+  {
+    "id": "local-keyword-blog",
+    "title": "지역 키워드 블로그, 동네 이름을 어디까지 넣어야 할까",
+    "angle": "지역명+업종 키워드 확장 순서와 과도한 지역 나열을 피하는 법",
+    "keywords": [
+      "지역 키워드",
+      "동네 블로그 마케팅"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "todo"
+  },
+  {
+    "id": "blog-photo-without-images",
+    "title": "사진이 없는 업종도 블로그를 꾸준히 할 수 있을까",
+    "angle": "대체 이미지·도식·표로 원고를 채우는 법, 대표가 보낼 사진 고르는 기준",
+    "keywords": [
+      "블로그 이미지",
+      "블로그 사진 없을 때"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "todo"
+  },
+  {
+    "id": "faq-page-for-ai",
+    "title": "AI가 인용하기 좋은 FAQ 페이지 쓰는 법",
+    "angle": "질문 단위 답변, 첫 문장 결론, 구조화 데이터 FAQPage를 실제 사이트에 넣는 순서",
+    "keywords": [
+      "FAQ 페이지",
+      "AI 인용",
+      "FAQPage"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "seo-aeo-geo",
+    "status": "todo"
+  },
+  {
+    "id": "structured-data-basics",
+    "title": "구조화 데이터, 소상공인도 해야 하나요",
+    "angle": "조직·서비스·브레드크럼·FAQ 구조화 데이터가 무엇이고 어떤 것부터 넣는지",
+    "keywords": [
+      "구조화 데이터",
+      "스키마 마크업"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "seo-aeo-geo",
+    "status": "todo"
+  },
+  {
+    "id": "naver-searchadvisor-setup",
+    "title": "네이버 서치어드바이저 등록과 사이트맵 제출 순서",
+    "angle": "소유 확인, 사이트맵·RSS 제출, 수집 요청까지 처음 하는 사업자를 위한 순서",
+    "keywords": [
+      "네이버 서치어드바이저",
+      "사이트맵 제출"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "seo-aeo-geo",
+    "status": "todo"
+  },
+  {
+    "id": "brand-info-consistency",
+    "title": "상호·주소·전화번호가 채널마다 다르면 생기는 일",
+    "angle": "홈페이지·블로그·플레이스 정보 불일치가 검색과 AI 답변에 주는 영향과 정리 방법",
+    "keywords": [
+      "브랜드 정보 일관성",
+      "NAP"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "ai-visibility",
+    "status": "todo"
+  },
+  {
+    "id": "geo-first-month",
+    "title": "AI 검색 최적화 첫 달에는 무엇을 하나요",
+    "angle": "1주 진단부터 4주 비교 보고까지 첫 달 작업을 주차별로 설명",
+    "keywords": [
+      "GEO 진행 과정",
+      "AI 검색 최적화 기간"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "seo-aeo-geo",
+    "status": "todo"
+  },
+  {
+    "id": "llms-txt-what-is",
+    "title": "llms.txt는 꼭 만들어야 하나요",
+    "angle": "llms.txt의 역할과 한계, robots.txt·사이트맵과의 차이를 과장 없이 정리",
+    "keywords": [
+      "llms.txt",
+      "AI 크롤러"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "seo-aeo-geo",
+    "status": "todo"
+  },
+  {
+    "id": "ai-wrong-company-info",
+    "title": "AI가 우리 회사를 잘못 소개할 때 바로잡는 순서",
+    "angle": "오래된 정보·동명 업체 혼동의 원인을 찾고 공식 출처를 정비하는 방법",
+    "keywords": [
+      "AI 잘못된 정보",
+      "브랜드 오인식"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "ai-visibility",
+    "status": "todo"
+  },
+  {
+    "id": "powerlink-negative-keywords",
+    "title": "파워링크 제외 키워드로 새는 광고비 막기",
+    "angle": "검색어 보고서에서 쓸모없는 클릭을 찾아 제외하는 실무 순서",
+    "keywords": [
+      "제외 키워드",
+      "파워링크 최적화"
+    ],
+    "category": "검색광고·플레이스",
+    "service": "naver-search-ads",
+    "status": "todo"
+  },
+  {
+    "id": "place-photo-guide",
+    "title": "네이버 플레이스 사진, 무엇을 몇 장 올려야 할까",
+    "angle": "외관·내부·메뉴·가격표 사진 구성과 갱신 주기",
+    "keywords": [
+      "플레이스 사진",
+      "네이버 플레이스 관리"
+    ],
+    "category": "검색광고·플레이스",
+    "service": "naver-place",
+    "status": "todo"
+  },
+  {
+    "id": "place-review-reply",
+    "title": "플레이스 리뷰 답글, 어떻게 달아야 할까",
+    "angle": "칭찬·불만 리뷰 답글 예시와 하지 말아야 할 대응, 리뷰 조작이 위험한 이유",
+    "keywords": [
+      "플레이스 리뷰 답글",
+      "리뷰 관리"
+    ],
+    "category": "검색광고·플레이스",
+    "service": "naver-place",
+    "status": "todo"
+  },
+  {
+    "id": "ads-call-tracking",
+    "title": "광고에서 들어온 전화 문의, 어떻게 구분하나",
+    "angle": "전화 클릭 이벤트·UTM·상담 기록으로 채널별 문의를 나눠 보는 방법",
+    "keywords": [
+      "전화 문의 추적",
+      "광고 전환 추적"
+    ],
+    "category": "검색광고·플레이스",
+    "service": "analytics",
+    "status": "todo"
+  },
+  {
+    "id": "ga4-basic-for-owners",
+    "title": "대표가 알아야 할 GA4 기본 화면 다섯 가지",
+    "angle": "유입 경로·전환·페이지 보고서를 대표 눈높이에서 읽는 법",
+    "keywords": [
+      "GA4",
+      "구글 애널리틱스"
+    ],
+    "category": "검색광고·플레이스",
+    "service": "analytics",
+    "status": "todo"
+  },
+  {
+    "id": "landing-page-vs-homepage",
+    "title": "광고용 랜딩페이지와 홈페이지, 무엇이 다를까",
+    "angle": "목적·구조·측정 방식 차이와 둘을 함께 쓰는 법",
+    "keywords": [
+      "랜딩페이지",
+      "홈페이지 차이"
+    ],
+    "category": "홈페이지",
+    "service": "website",
+    "status": "todo"
+  },
+  {
+    "id": "contact-form-fields",
+    "title": "상담폼 항목은 몇 개가 적당할까",
+    "angle": "필수·선택 항목 나누기, 개인정보 동의 문구, 접수 알림 설정",
+    "keywords": [
+      "상담폼",
+      "문의 전환"
+    ],
+    "category": "홈페이지",
+    "service": "conversion",
+    "status": "todo"
+  },
+  {
+    "id": "mobile-first-check",
+    "title": "우리 홈페이지 모바일 점검표",
+    "angle": "글자 크기·버튼 크기·하단 고정 상담 버튼 등 휴대폰 기준 점검 항목",
+    "keywords": [
+      "모바일 홈페이지",
+      "반응형"
+    ],
+    "category": "홈페이지",
+    "service": "website",
+    "status": "todo"
+  },
+  {
+    "id": "website-maintenance-contract",
+    "title": "홈페이지 유지보수 계약서에서 확인할 것",
+    "angle": "수정 범위·응답 시간·백업·도메인 소유권·계약 종료 시 인계",
+    "keywords": [
+      "홈페이지 유지보수",
+      "유지보수 계약"
+    ],
+    "category": "홈페이지",
+    "service": "website",
+    "status": "todo"
+  },
+  {
+    "id": "301-redirect-renewal",
+    "title": "리뉴얼할 때 옛 주소 연결(301)을 놓치면 생기는 일",
+    "angle": "주소 이전표 만드는 법과 오픈 후 확인 순서",
+    "keywords": [
+      "301 리디렉션",
+      "홈페이지 이전"
+    ],
+    "category": "홈페이지",
+    "service": "website",
+    "status": "todo"
+  },
+  {
+    "id": "instagram-monthly-plan",
+    "title": "인스타그램 월간 기획안 짜는 법",
+    "angle": "피드·카드뉴스·릴스 비율과 월간 캘린더 예시",
+    "keywords": [
+      "인스타그램 기획",
+      "SNS 콘텐츠 캘린더"
+    ],
+    "category": "SNS·콘텐츠",
+    "service": "sns",
+    "status": "todo"
+  },
+  {
+    "id": "shortform-for-small-business",
+    "title": "소규모 매장 숏폼, 대표가 꼭 출연해야 할까",
+    "angle": "출연형·제품형·공간형 숏폼의 차이와 시작 방법",
+    "keywords": [
+      "숏폼 마케팅",
+      "릴스"
+    ],
+    "category": "SNS·콘텐츠",
+    "service": "shortform",
+    "status": "todo"
+  },
+  {
+    "id": "food-photo-shoot-prep",
+    "title": "음식점 메뉴 촬영 전에 준비할 것",
+    "angle": "컷 리스트·조명·소품·촬영 순서와 채널별 사진 규격",
+    "keywords": [
+      "메뉴 촬영",
+      "음식 사진"
+    ],
+    "category": "SNS·콘텐츠",
+    "service": "photo-video",
+    "status": "todo"
+  },
+  {
+    "id": "detail-page-structure",
+    "title": "스마트스토어 상세페이지, 첫 화면에 무엇을 둘까",
+    "angle": "구매 결정에 필요한 정보 순서와 썸네일 기준",
+    "keywords": [
+      "상세페이지 구성",
+      "스마트스토어"
+    ],
+    "category": "SNS·콘텐츠",
+    "service": "smartstore-detail",
+    "status": "todo"
+  },
+  {
+    "id": "press-release-basics",
+    "title": "보도자료가 기사로 실리려면 무엇이 필요할까",
+    "angle": "기사가 되는 소식의 조건, 보도자료 구성, 매체 게재 조건 확인",
+    "keywords": [
+      "보도자료 작성",
+      "언론보도"
+    ],
+    "category": "SNS·콘텐츠",
+    "service": "press-pr",
+    "status": "todo"
+  },
+  {
+    "id": "clinic-marketing-rules",
+    "title": "병원 마케팅 글에서 피해야 할 표현",
+    "angle": "치료 효과 단정·비교 광고·후기 활용 등 의료광고에서 문제가 되는 유형과 심의 확인",
+    "keywords": [
+      "병원 마케팅",
+      "의료광고"
+    ],
+    "category": "업종별 가이드",
+    "service": "brand-blog",
+    "status": "todo"
+  },
+  {
+    "id": "law-firm-content",
+    "title": "법률사무소 콘텐츠, 사건 유형별로 나눠야 하는 이유",
+    "angle": "사건 유형별 페이지와 비용 안내 FAQ 구성, 광고 규정 확인",
+    "keywords": [
+      "법률사무소 마케팅",
+      "변호사 홈페이지"
+    ],
+    "category": "업종별 가이드",
+    "service": "seo-aeo-geo",
+    "status": "todo"
+  },
+  {
+    "id": "restaurant-opening-checklist",
+    "title": "음식점 오픈 4주 전 온라인 준비 체크리스트",
+    "angle": "플레이스 등록·촬영·블로그·SNS 세팅을 오픈일 역산으로 정리",
+    "keywords": [
+      "음식점 오픈 마케팅",
+      "매장 오픈"
+    ],
+    "category": "업종별 가이드",
+    "service": "store-opening",
+    "status": "todo"
+  },
+  {
+    "id": "pension-booking-channel",
+    "title": "펜션·숙박 예약을 늘리는 채널 조합",
+    "angle": "객실 사진·홈페이지 예약 동선·주변 여행 정보 콘텐츠",
+    "keywords": [
+      "펜션 마케팅",
+      "숙박 홍보"
+    ],
+    "category": "업종별 가이드",
+    "service": "photo-video",
+    "status": "todo"
+  },
+  {
+    "id": "academy-mom-cafe",
+    "title": "학원 홍보, 지역 맘카페에서 지켜야 할 것",
+    "angle": "카페 규정 확인·광고 표시·설명회 홍보 글 구성",
+    "keywords": [
+      "학원 마케팅",
+      "맘카페 홍보"
+    ],
+    "category": "업종별 가이드",
+    "service": "cafe-viral",
+    "status": "todo"
+  },
+  {
+    "id": "franchise-store-consistency",
+    "title": "가맹점마다 다른 사진과 문구, 어떻게 맞출까",
+    "angle": "본사 브랜드 가이드와 매장별 플레이스·블로그 운영 기준",
+    "keywords": [
+      "프랜차이즈 마케팅",
+      "가맹점 관리"
+    ],
+    "category": "업종별 가이드",
+    "service": "franchise",
+    "status": "todo"
+  },
+  {
+    "id": "ecommerce-ad-to-detail",
+    "title": "쇼핑광고 클릭이 구매로 안 이어질 때 볼 곳",
+    "angle": "썸네일·상세페이지 첫 화면·가격 표기 점검",
+    "keywords": [
+      "쇼핑검색 광고",
+      "구매 전환"
+    ],
+    "category": "업종별 가이드",
+    "service": "smartstore-detail",
+    "status": "todo"
+  },
+  {
+    "id": "tax-office-blog",
+    "title": "세무사무소 블로그, 무엇을 주제로 써야 할까",
+    "angle": "사업자 유형별 질문, 신고 일정, 수수료 구조 안내 콘텐츠",
+    "keywords": [
+      "세무사 블로그",
+      "세무 마케팅"
+    ],
+    "category": "업종별 가이드",
+    "service": "brand-blog",
+    "status": "todo"
+  },
+  {
+    "id": "marketing-budget-small",
+    "title": "월 마케팅 예산 100만원, 어디에 먼저 쓸까",
+    "angle": "업종별 우선순위와 광고·콘텐츠 배분 예시(보장 없이)",
+    "keywords": [
+      "마케팅 예산",
+      "소상공인 마케팅"
+    ],
+    "category": "업종별 가이드",
+    "service": "industry-consulting",
+    "status": "todo"
+  },
+  {
+    "id": "agency-contract-checklist",
+    "title": "마케팅 대행 계약 전 확인할 여섯 가지",
+    "angle": "가격·VAT·횟수·디자인 포함·발행 전 확인·보고·해지 조건",
+    "keywords": [
+      "마케팅 대행 계약",
+      "광고대행 계약서"
+    ],
+    "category": "블로그 마케팅",
+    "service": "industry-consulting",
+    "status": "todo"
+  },
+  {
+    "id": "agency-change-handover",
+    "title": "대행사를 바꿀 때 챙겨야 할 계정과 자료",
+    "angle": "블로그·광고·SNS 계정 권한, 원고·이미지 원본, 보고서 인계",
+    "keywords": [
+      "대행사 변경",
+      "계정 인계"
+    ],
+    "category": "업종별 가이드",
+    "service": "industry-consulting",
+    "status": "todo"
+  },
+  {
+    "id": "cafe-viral-what-is",
+    "title": "카페 바이럴은 무엇이고 어디까지가 괜찮은가",
+    "angle": "매체 선정·운영진 정책·광고 표시·조작 금지 원칙",
+    "keywords": [
+      "카페 바이럴",
+      "커뮤니티 마케팅"
+    ],
+    "category": "블로그 마케팅",
+    "service": "cafe-viral",
+    "status": "todo"
+  },
+  {
+    "id": "experience-group-guide",
+    "title": "체험단 모집 안내문에 꼭 들어가야 할 것",
+    "angle": "방문·배송 체험단 조건, 광고 표시 문구, 발행 기한",
+    "keywords": [
+      "체험단 모집",
+      "블로그 체험단"
+    ],
+    "category": "블로그 마케팅",
+    "service": "blog-viral",
+    "status": "todo"
+  },
+  {
+    "id": "ai-search-vs-ads-budget",
+    "title": "검색광고비와 AI 검색 관리비, 어떻게 나눠 쓸까",
+    "angle": "클릭당 과금과 월 관리비 구조 차이, 병행하며 비중 조절하는 법",
+    "keywords": [
+      "검색광고 비용",
+      "AI 검색 최적화 비용"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "seo-aeo-geo",
+    "status": "todo"
+  },
+  {
+    "id": "weekly-report-template",
+    "title": "마케팅 주간 보고서에 꼭 있어야 할 항목",
+    "angle": "완료 작업·노출 확인·이슈·다음 일정으로 구성한 보고 양식",
+    "keywords": [
+      "마케팅 보고서",
+      "주간 보고"
+    ],
+    "category": "검색광고·플레이스",
+    "service": "analytics",
+    "status": "todo"
+  },
+  {
+    "id": "service-page-template",
+    "title": "서비스 소개 페이지 하나에 들어가야 할 열 가지",
+    "angle": "대상·문제·제공 범위·가격·과정·사례·FAQ·CTA 구성",
+    "keywords": [
+      "서비스 페이지",
+      "홈페이지 구성"
+    ],
+    "category": "홈페이지",
+    "service": "website",
+    "status": "todo"
+  },
+  {
+    "id": "blog-vs-homepage",
+    "title": "블로그와 홈페이지, 둘 다 필요한가요",
+    "angle": "역할 차이와 연결 방법, 예산이 적을 때 순서",
+    "keywords": [
+      "블로그 홈페이지 차이",
+      "마케팅 채널"
+    ],
+    "category": "홈페이지",
+    "service": "brand-blog",
+    "status": "todo"
+  }
+]

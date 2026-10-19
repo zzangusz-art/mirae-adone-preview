@@ -1,0 +1,82 @@
+# 미래애드원 홈페이지: 빌드 → GitHub Pages 배포 + 인사이트 글 하루 3편 AI 자동 발행(09:00 · 13:00 · 18:00 KST)
+# 필요한 설정: 저장소 Settings → Secrets and variables → Actions → ANTHROPIC_API_KEY
+# (키가 없으면 글 작성 단계만 건너뛰고 사이트 배포는 그대로 진행)
+# 선택 설정: Variables → PRODUCTION=true (실제 도메인 운영 시, 그 전에는 전 페이지 noindex 미리보기), PREVIEW_URL, BLOG_MODEL (기본 claude-opus-5-5)
+name: site
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 0,4,9 * * *'   # UTC 00·04·09시 = KST 09·13·18시 → 하루 3편
+  workflow_dispatch:
+    inputs:
+      count:
+        description: '이번에 작성할 글 수(0이면 작성 안 함)'
+        type: choice
+        options: ['1', '0', '2', '3']
+        default: '1'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: 인사이트 AI 글 작성
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.count != '0')
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          BLOG_MODEL: ${{ vars.BLOG_MODEL }}
+          COUNT: ${{ inputs.count || '1' }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then echo "::warning::ANTHROPIC_API_KEY 미설정 — 글 작성을 건너뜁니다"; exit 0; fi
+          [ -z "$BLOG_MODEL" ] && unset BLOG_MODEL
+          npm ci --no-audit --no-fund
+          node tools/blog-ai/generate.mjs --count "$COUNT" || echo "::warning::글 작성 실패 — 사이트 배포는 계속합니다"
+          git config user.name "mirae-adone-blog-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/blog
+          if git diff --cached --quiet; then echo "새 글 없음"; else git commit -m "인사이트: AI 글 자동 발행" && git pull --rebase -q origin main && git push; fi
+
+      - name: 빌드
+        run: node build.mjs
+
+      - name: 점검(링크·구조화 데이터·글 검증)
+        run: |
+          node tools/check-site.mjs
+          node tools/blog-ai/generate.mjs --check
+
+      # 기본은 미리보기(noindex). 실제 도메인(www.mirae-adone.com)으로 운영할 때만 Variables 에 PRODUCTION=true
+      - name: 배포용 내보내기
+        env:
+          PRODUCTION: ${{ vars.PRODUCTION }}
+          PREVIEW_URL: ${{ vars.PREVIEW_URL || format('https://{0}.github.io/{1}/', github.repository_owner, github.event.repository.name) }}
+        run: |
+          if [ "$PRODUCTION" = "true" ]; then node tools/export-site.mjs _site; else node tools/export-site.mjs _site --preview "$PREVIEW_URL"; fi
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
