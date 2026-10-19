@@ -614,6 +614,11 @@ export const REVIEWS = [
   { src: 'reviews/chat-06.webp', date: '2024.01', biz: '현장 시공 고객', title: '현장 영상 반영', quote: '확인했습니다 감사합니다', note: '고객이 보낸 현장 영상을 원고에 반영해 전달했습니다.' },
 ];
 export const PARTNER_STRIPS = ['partners/strip-01.webp', 'partners/strip-02.webp', 'partners/strip-03.webp', 'partners/strip-04.webp', 'partners/strip-05.webp'];
+// 협력사 로고 25개(로고 띠를 한 개씩 잘라 낸 것: assets/img/partners/logos/logo-01~25.webp) — 3줄 교차 슬라이드용
+const LOGO_NAMES = ['L.linic', 'OPMS', '동부로지스', '통계논문월드', '교육부', '고용노동부', '한샘', '시사아카데미', '경인태양광', 'Rawelde', '태양라이프', '법률사무소 신성', '신협', '11번가', '쿠팡', '홈그라운드 베이스볼센터', '위드썬바이오', '한국지방재정공제회', '스타에셋', 'GDR 아카데미', '한국의료기기안전정보원', '클럽디 청담', '상호점', '랜드로버', '연세바른병원'];
+export const PARTNER_LOGOS = LOGO_NAMES.map((name, i) => ({ name, src: `partners/logos/logo-${String(i + 1).padStart(2, '0')}.webp` }));
+// 줄마다 서로 다른 로고가 섞이도록 나눈다(→ ← →)
+export const PARTNER_ROWS = [[0, 5, 10, 15, 20, 1, 6, 11, 16], [21, 2, 7, 12, 17, 22, 3, 8], [13, 18, 23, 4, 9, 14, 19, 24]].map(r => r.map(i => PARTNER_LOGOS[i]));
 
 // ───────── FAQ (기획서 14장 공통 12개 + GEO 참고 이미지 10)
 export const FAQ_CATS = ['서비스', '운영', '가격', 'AI 검색', '계약'];

@@ -52,7 +52,7 @@ ${logosMarquee(R)}
 <section class="manifesto" id="manifesto">
   <div class="wrap">
     <p class="eyebrow">WHY MIRAE ADONE</p>
-    <p class="manifesto__t" data-words>광고 영업 전화, 불분명한 계약 조건, 연락이 닿지 않는 담당자 때문에 불안하셨나요? 미래애드원은 직접 기획하고 제작·관리하는 실행형 파트너입니다. 상주 작가와 디자이너, 발행 전 확인, 전용 소통 채널과 정기 보고로 무엇을 어떻게 진행하는지 보여 드립니다.</p>
+    <p class="manifesto__t" data-words>광고 영업 전화, 불분명한 계약 조건,<br>연락이 닿지 않는 담당자 때문에 불안하셨나요?<br>미래애드원은 직접 기획하고 제작·관리하는 실행형 파트너입니다.<br>상주 작가와 디자이너, 발행 전 확인,<br>전용 소통 채널과 정기 보고로 무엇을 어떻게 진행하는지 보여 드립니다.</p>
     <ul class="pillars">${[['chat', '담당자 소통', '1:1 전담 담당자와 전용 단톡방'], ['shield', '발행 전 확인', '원고·디자인을 먼저 보고 승인'], ['pen', '직접 제작', '상주 작가·디자이너가 직접 작업'], ['chart', '정기 보고', '회차별 URL, 1~2주·월간 보고']].map(([ic, k, d], i) => `<li data-reveal style="--d:${i * 70}ms">${icon(ic)}<b>${k}</b><span>${d}</span></li>`).join('')}</ul>
   </div>
 </section>
@@ -71,7 +71,7 @@ ${scrollSequence(R)}
 
 <section class="sec" id="reviews">
   <div class="wrap">
-    ${sectionHead({ eyebrow: 'CLIENT RECORDS', title: '말보다 기록으로<br>보여 드립니다', lead: '기존 홈페이지에 공개했던 실제 카카오톡 운영 기록입니다. 회차별 원고를 보내고, 요청을 반영하고, 확인을 받은 뒤 발행합니다.' })}
+    ${sectionHead({ eyebrow: 'CLIENT RECORDS', title: '말보다 기록으로<br>보여 드립니다', lead: '실제 카카오톡 운영 기록입니다. 회차별 원고를 보내고, 요청을 반영하고, 확인을 받은 뒤 발행합니다.' })}
     ${reviewsCarousel(R)}
     <div class="sub-h" data-reveal><h3>관리 중인 블로그의 실제 통계 화면</h3><p>네이버 블로그 관리자 화면을 그대로 옮겼습니다. 숫자는 각 화면의 해당 월 조회수입니다.</p></div>
     ${blogStatsStrip(R, 4)}
@@ -219,7 +219,7 @@ function serviceExtra(R, s) {
   if (s.slug === 'brand-blog') return `
 <section class="sec" id="how"><div class="wrap">${sectionHead({ eyebrow: 'HOW', title: '찍어내는 포스팅이 아닌<br>업종을 이해한 맞춤 제작', lead: '상담과 업종 분석부터 발행 후 보고까지, 한 업체를 세 사람이 맡아 진행합니다.' })}
 <ol class="flowline">${SEQUENCE.map((q, i) => `<li data-reveal style="--d:${i * 60}ms"><span>${q.n}</span><b>${q.k}</b><p>${q.d}</p></li>`).join('')}</ol></div></section>
-<section class="sec sec--gray" id="records"><div class="wrap">${sectionHead({ eyebrow: 'RECORDS', title: '발행 전 확인, 실제로 이렇게 합니다', lead: '기존 홈페이지에 공개했던 카카오톡 운영 기록입니다.' })}${reviewsCarousel(R)}</div></section>
+<section class="sec sec--gray" id="records"><div class="wrap">${sectionHead({ eyebrow: 'RECORDS', title: '발행 전 확인, 실제로 이렇게 합니다', lead: '고객과 실제로 주고받은 카카오톡 운영 기록입니다.' })}${reviewsCarousel(R)}</div></section>
 <section class="sec" id="why"><div class="wrap">${sectionHead({ eyebrow: 'COMPARE', title: '1회당 금액으로 비교해 보세요' })}<div class="why">${marketChart()}${structureTable()}</div></div></section>
 <section class="sec sec--gray" id="skins"><div class="wrap">${sectionHead({ eyebrow: 'PORTFOLIO', title: '블로그 스킨과 운영 성과' })}${portfolioGrid(R, PORTFOLIO.filter(x => x.cat === 'blog-skin' || x.cat === 'blog-stats'), { group: 'svc-pf', limit: 8 })}</div></section>`;
   if (s.slug === 'seo-aeo-geo' || s.slug === 'ai-visibility') return `
@@ -235,7 +235,7 @@ ${s.slug === 'seo-aeo-geo' ? `<section class="sec sec--gray" id="flow"><div clas
 <section class="sec" id="board"><div class="wrap two two--top"><div>${sectionHead({ eyebrow: 'STATUS', title: '지금 어디까지 왔는지<br>언제든 확인하세요', lead: '진행 단계·이번 작업·다음 일정을 표로 공유합니다. 연락이 닿지 않는 대행이 걱정이셨다면 이 부분을 먼저 보시면 됩니다.' })}</div>${statusBoard()}</div></section>
 <section class="sec sec--gray" id="fit"><div class="wrap">${sectionHead({ eyebrow: 'INDUSTRY', title: '이런 업종에 먼저 권합니다', lead: '네이버 검색 경쟁이 심하거나, 검색광고 비용이 부담되는 업종입니다.' })}${geoIndustries(R)}</div></section>` : ''}`;
   if (s.slug === 'website') return `
-<section class="sec sec--gray" id="works"><div class="wrap">${sectionHead({ eyebrow: 'PORTFOLIO', title: '업종별 제작 사례', lead: '기존 홈페이지에 공개한 제작 사례입니다. 이미지를 누르면 크게 볼 수 있습니다.' })}${portfolioGrid(R, PORTFOLIO.filter(x => x.cat === 'web' || x.cat === 'web-set'), { group: 'svc-pf', limit: 9 })}</div></section>`;
+<section class="sec sec--gray" id="works"><div class="wrap">${sectionHead({ eyebrow: 'PORTFOLIO', title: '업종별 제작 사례', lead: '업종별 홈페이지 제작 사례입니다. 이미지를 누르면 크게 볼 수 있습니다.' })}${portfolioGrid(R, PORTFOLIO.filter(x => x.cat === 'web' || x.cat === 'web-set'), { group: 'svc-pf', limit: 9 })}</div></section>`;
   return '';
 }
 
@@ -328,8 +328,8 @@ ${ctaBand(R)}`;
 export function portfolio() {
   const p = 'portfolio/', R = depthR(p);
   const body = `
-${pageHero({ R, eyebrow: 'PORTFOLIO', title: '말보다 결과물로<br>보여 드립니다', lead: `블로그 운영 성과, 블로그 스킨, 홈페이지, 바이럴, 검색광고, SNS까지 기존 홈페이지에 공개했던 ${PORTFOLIO.length}개의 자료를 분류해 정리했습니다.`, crumbs: crumbNav(R, [['홈', ''], ['포트폴리오', p]]), ctas: quoteBtn('비슷한 작업 상담') })}
-<section class="sec"><div class="wrap">${portfolioGrid(R, PORTFOLIO, { group: 'pf' })}<p class="small center">상호가 보이는 이미지는 기존 홈페이지(mirae-adone.com)에 공개된 자료입니다. 게시 중단을 원하시면 연락 주세요.</p></div></section>
+${pageHero({ R, eyebrow: 'PORTFOLIO', title: '말보다 결과물로<br>보여 드립니다', lead: `블로그 운영 성과, 블로그 스킨, 홈페이지, 바이럴, 검색광고, SNS까지 ${PORTFOLIO.length}개의 작업 사례를 분류해 정리했습니다.`, crumbs: crumbNav(R, [['홈', ''], ['포트폴리오', p]]), ctas: quoteBtn('비슷한 작업 상담') })}
+<section class="sec"><div class="wrap">${portfolioGrid(R, PORTFOLIO, { group: 'pf' })}</div></section>
 ${logosMarquee(R)}
 ${ctaBand(R)}`;
   return { path: p, html: page({ R, current: 'portfolio/', title: T('포트폴리오'), desc: '홈페이지 제작 35건, 블로그 스킨 14건, 블로그 운영 통계, 바이럴·검색광고·SNS 운영 사례를 업종별로 확인하세요.', canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['포트폴리오', url(p)]])] }], body }) };

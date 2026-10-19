@@ -94,15 +94,11 @@
   const hd = $('[data-hd]');
   const darkTop = !!$('.hero, .phero--dark');
   if (!darkTop) hd?.classList.add('is-light');
-  let lastY = scrollY;
   const totop = $('[data-totop]');
+  // 헤더는 항상 고정(스크롤 방향에 따라 숨기지 않음) — 40px 이상 내리면 글래스 배경만 켠다
   function onScroll() {
     const y = scrollY;
     hd?.classList.toggle('is-solid', y > 40);
-    const megaOpen = $('.has-mega.is-open');
-    if (!megaOpen) hd?.classList.toggle('is-hidden', y > 480 && y > lastY + 4);
-    if (y < lastY - 4) hd?.classList.remove('is-hidden');
-    lastY = y;
     totop?.classList.toggle('is-on', y > 900);
   }
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
@@ -283,7 +279,9 @@
   const words = $('[data-words]');
   if (words && !reduce) {
     const keys = ['직접', '실행형', '상주', '발행', '전', '확인', '정기', '보고'];
-    words.innerHTML = words.textContent.trim().split(/\s+/).map(w => `<span class="w${keys.some(k => w.startsWith(k)) ? ' is-key' : ''}">${esc(w)}</span>`).join(' ');
+    // <br> 로 나눈 줄은 그대로 두고 줄 안의 단어만 감싼다
+    const tmp = document.createElement('div');
+    words.innerHTML = words.innerHTML.split(/<br\s*\/?>/i).map(line => { tmp.innerHTML = line; return tmp.textContent.trim().split(/\s+/).map(w => `<span class="w${keys.some(k => w.startsWith(k)) ? ' is-key' : ''}">${esc(w)}</span>`).join(' '); }).join('<br>');
     const ws = $$('.w', words);
     const upd = () => {
       const r = words.getBoundingClientRect(), vh = innerHeight;

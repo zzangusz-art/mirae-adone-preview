@@ -2,7 +2,7 @@
 import {
   COMPANY, STATS, AXES, SERVICES, BLOG_PLANS, BLOG_COMMON, BLOG_SKIN_NOTE, WEB_AI_PLAN, PRICE_SHOW_WEB_AI, OTHER_PRICING,
   MARKET_BLOG, STRUCTURE_COMPARE, CPC, GEO_TIMELINE, REPORT_FIELDS, MONTH1, MONTH2, BOARD_SAMPLE, PROCESS, SEQUENCE, INDUSTRIES,
-  PORTFOLIO, PORTFOLIO_CATS, REVIEWS, PARTNER_STRIPS, FAQ, FAQ_CATS, PROBLEMS, svc,
+  PORTFOLIO, PORTFOLIO_CATS, REVIEWS, PARTNER_ROWS, FAQ, FAQ_CATS, PROBLEMS, svc,
 } from './data.mjs';
 import { esc, won, man, icon, img } from './lib.mjs';
 
@@ -22,10 +22,12 @@ export const quoteBtn = (label = '무료 상담 신청', svcSlug = '', cls = 'bt
 
 export const statsRow = (cls = '') => `<dl class="stats ${cls}">${STATS.map(s => `<div class="stats__i"><dt>${s.label}</dt><dd><b data-count="${s.v}">${s.v.toLocaleString('ko-KR')}</b><span>${s.suffix}</span></dd><small>${s.note}</small></div>`).join('')}</dl>`;
 
+// 3줄 교차 슬라이드: 1·3줄은 오른쪽으로, 2줄은 왼쪽으로 흐른다. 트랙은 같은 로고를 두 번 이어 붙여 -50% 이동으로 끊김 없이 반복
+const logoItem = (R, l, dup) => `<li${dup ? ' aria-hidden="true"' : ''}>${img(R, l.src, dup ? '' : l.name, { frame: false })}</li>`;
 export const logosMarquee = (R, title = '함께한 기업·기관') => `
 <section class="logos" aria-label="${title}">
-  <div class="wrap logos__head"><p>${title}</p><small>기존 홈페이지 「협력업체」 공개 자료</small></div>
-  <div class="marquee" data-marquee><div class="marquee__track">${[...PARTNER_STRIPS, ...PARTNER_STRIPS].map((s, i) => `<img src="${R}assets/img/${s}" width="1325" height="150" alt="${i < PARTNER_STRIPS.length ? '협력 기업·기관 로고' : ''}"${i >= PARTNER_STRIPS.length ? ' aria-hidden="true"' : ''} loading="lazy" decoding="async">`).join('')}</div></div>
+  <div class="wrap logos__head"><p>${title}</p></div>
+  <div class="logos__rows">${PARTNER_ROWS.map((row, k) => `<div class="marquee marquee--${k % 2 ? 'l' : 'r'}" style="--dur:${[52, 60, 48][k]}s" data-marquee><ul class="marquee__track">${row.map(l => logoItem(R, l, false)).join('')}${row.map(l => logoItem(R, l, true)).join('')}</ul></div>`).join('')}</div>
 </section>`;
 
 // ───────── 홈 스크롤 시퀀스 무대(오른쪽 화면). 01~03은 HTML 목업, 04·05는 실제 자료(카톡 운영 기록·블로그 통계)
