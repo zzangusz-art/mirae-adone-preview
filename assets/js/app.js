@@ -64,8 +64,21 @@
     if (!e.isIntersecting) return;
     e.target.classList.add('is-in');
     io.unobserve(e.target);
-  }), { rootMargin: '0px 0px -8% 0px', threshold: .08 });
-  $$('[data-reveal],[data-bars],[data-draw],.tl').forEach(el => io.observe(el));
+  }), { rootMargin: matchMedia('(max-width:1023px)').matches ? '35% 0px 35% 0px' : '0px 0px -8% 0px', threshold: 0 });
+  // 뒤로 가기·새로고침으로 중간에서 시작하면 위쪽 섹션은 애니메이션 없이 바로 보이게(올릴 때 하나씩 늦게 나타나는 문제 방지)
+  const revealEls = $$('[data-reveal],[data-bars],[data-draw],.tl');
+  html.classList.add('no-anim');
+  revealEls.forEach(el => { if (el.getBoundingClientRect().bottom < 0) el.classList.add('is-in'); else io.observe(el); });
+  requestAnimationFrame(() => requestAnimationFrame(() => html.classList.remove('no-anim')));
+  // 브라우저가 스크롤 위치를 로드 뒤에 복원하는 경우(뒤로 가기·새로고침)를 위해 한 번 더
+  const markAbove = () => {
+    const above = revealEls.filter(el => !el.classList.contains('is-in') && el.getBoundingClientRect().bottom < 0);
+    if (!above.length) return;
+    html.classList.add('no-anim'); above.forEach(el => { el.classList.add('is-in'); io.unobserve(el); });
+    requestAnimationFrame(() => requestAnimationFrame(() => html.classList.remove('no-anim')));
+  };
+  addEventListener('load', () => setTimeout(markAbove, 60));
+  addEventListener('pageshow', e => { if (e.persisted) markAbove(); });
   const countIO = new IntersectionObserver(es => es.forEach(e => {
     if (!e.isIntersecting) return;
     const el = e.target, to = +el.dataset.count; countIO.unobserve(el);
@@ -281,7 +294,7 @@
     dots.addEventListener('click', e => { const b = e.target.closest('button'); if (b) go($$('button', dots).indexOf(b)); });
     track.addEventListener('scroll', () => requestAnimationFrame(mark), { passive: true });
     track.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { e.preventDefault(); go(idx() + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); go(idx() - 1); } });
-    addEventListener('resize', draw); draw();
+    let lastW = innerWidth; addEventListener('resize', () => { if (innerWidth !== lastW) { lastW = innerWidth; draw(); } }); draw();
   });
 
   /* ───────── 선언문 단어 하이라이트(스크롤 연동) */
@@ -295,9 +308,11 @@
       const r = words.getBoundingClientRect(), vh = innerHeight;
       const p = Math.min(1, Math.max(0, (vh * .82 - r.top) / (r.height + vh * .35)));
       const n = Math.round(p * ws.length);
-      ws.forEach((w, i) => w.classList.toggle('is-lit', i < n));
+      for (let i = 0; i < n; i++) ws[i].classList.add('is-lit'); // 한 번 읽은 단어는 위로 올려도 그대로
     };
-    addEventListener('scroll', () => requestAnimationFrame(upd), { passive: true }); upd();
+    let near = false, ticking = false;
+    new IntersectionObserver(([e]) => { near = e.isIntersecting; if (near) upd(); }, { rootMargin: '50% 0px' }).observe(words);
+    addEventListener('scroll', () => { if (!near || ticking) return; ticking = true; requestAnimationFrame(() => { ticking = false; upd(); }); }, { passive: true }); upd();
   }
 
   /* ───────── 스크롤 시퀀스 */
@@ -316,15 +331,18 @@
     const desk = matchMedia('(min-height:560px)'); // CSS와 같은 조건: 이 높이 미만이면 고정 없이 세로 나열
     const upd = () => {
       if (!desk.matches) return;
-      const r = pin.getBoundingClientRect(), total = r.height - innerHeight;
+      const r = pin.getBoundingClientRect(), total = r.height - document.documentElement.clientHeight;
       const p = Math.min(1, Math.max(0, -r.top / Math.max(1, total)));
       bar?.style.setProperty('--p', (p * 100).toFixed(1) + '%');
       setStep(Math.min(steps.length - 1, Math.floor(p * steps.length * .999)));
     };
-    addEventListener('scroll', () => requestAnimationFrame(upd), { passive: true }); addEventListener('resize', upd); upd();
+    let near = false, ticking = false, lastW = innerWidth;
+    new IntersectionObserver(([e]) => { near = e.isIntersecting; upd(); }, { rootMargin: '25% 0px' }).observe(pin);
+    addEventListener('scroll', () => { if (!near || ticking) return; ticking = true; requestAnimationFrame(() => { ticking = false; upd(); }); }, { passive: true });
+    addEventListener('resize', () => { if (innerWidth !== lastW) { lastW = innerWidth; upd(); } }); upd();
     steps.forEach((s, i) => s.addEventListener('click', () => {
       if (!desk.matches) return;
-      const top = pin.getBoundingClientRect().top + scrollY, total = pin.offsetHeight - innerHeight;
+      const top = pin.getBoundingClientRect().top + scrollY, total = pin.offsetHeight - document.documentElement.clientHeight;
       scrollTo({ top: top + total * (i + .5) / steps.length, behavior: reduce ? 'auto' : 'smooth' });
     }));
     // 모바일: 문서 화면이 보이면 글자 수 세기
