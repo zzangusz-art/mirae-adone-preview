@@ -106,6 +106,7 @@ function validate(md, { allowed, slugs, titles = [] }) {
   if (meta.service && !D.SERVICES.some(s => s.slug === meta.service)) errs.push(`service 값이 서비스 목록에 없음: ${meta.service}`);
   if (meta.title && (meta.title.length < 12 || meta.title.length > 60)) errs.push('제목은 12~60자');
   if (meta.cover && meta.cover.length > 32) errs.push('cover는 32자 이내');
+  if (meta.cover && !/^[가-힣A-Za-z0-9\s.,·?!%~\-—–()'"“”‘’「」『』:/&+]+$/.test(meta.cover)) errs.push('cover에 썸네일 폰트에 없는 문자(한글·영문·숫자·기본 문장부호만)');
   if (meta.description && (meta.description.length < 40 || meta.description.length > 140)) errs.push('설명은 40~140자');
   for (const t of titles) if (meta.title && sim(meta.title, t) > .72) { errs.push(`기존 글과 제목이 비슷함: ${t}`); break; }
   const len = (body || '').replace(/\s+/g, '').length;
@@ -147,6 +148,7 @@ const SYSTEM = sheet => `당신은 통합 마케팅 회사 미래애드원의 �
 # 문체
 - 존댓말 「-습니다/-입니다」체. 한 문장은 짧게, 한 문단은 2~4문장.
 - 첫 문단에서 질문에 바로 답합니다(결론 먼저). 그다음 이유, 그다음 대표가 오늘 할 수 있는 일.
+- 「포함할 검색어」 중 가장 중요한 하나를 제목과 첫 문단에 자연스럽게 넣고, 나머지는 소제목·본문에 억지스럽지 않게 한 번씩만 씁니다. 같은 검색어를 반복해 채우지 않습니다.
 - 현장에서 실제로 오가는 말투와 구체적인 장면을 씁니다. 같은 문장 구조를 반복하지 않고, 「~하는 것이 중요합니다」로 문단을 끝내지 않습니다.
 - 비교가 필요하면 마크다운 표, 순서가 있으면 번호 목록을 씁니다. 굵은 글씨는 글 전체에서 3번 이하.
 - 사이트 내부 링크는 [사실 목록]에 나온 경로(/services/…/, /industries/…/)와 /pricing/, /contact/, /reviews/, /portfolio/, /faq/, 기존 글 /insights/<slug>/ 만 씁니다. 외부 링크는 꼭 필요할 때만 공식 문서(네이버 서치어드바이저, Google 검색 센터, 공정거래위원회, 국가법령정보센터)로 씁니다.

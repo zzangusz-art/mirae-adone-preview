@@ -170,7 +170,7 @@ export const faqLD = items => ({ '@type': 'FAQPage', mainEntity: items.map(f => 
 
 // ───────── 인사이트 카드
 export const postCard = (R, p, { big = false } = {}) => `<article class="pcard${big ? ' pcard--big' : ''}" data-reveal>
-  <a href="${R}insights/${p.slug}/"><div class="pcard__cover pcard__cover--${p.coverKey}" aria-hidden="true"><span>${esc(p.category)}</span><strong>${esc(p.coverText)}</strong></div>
+  <a href="${R}insights/${p.slug}/">${p.thumb ? `<div class="pcard__thumb">${img(R, p.thumb, `${p.category} — ${p.coverText}`, { eager: big })}</div>` : `<div class="pcard__cover pcard__cover--${p.coverKey}" aria-hidden="true"><span>${esc(p.category)}</span><strong>${esc(p.coverText)}</strong></div>`}
   <div class="pcard__txt"><p class="pcard__meta"><span>${esc(p.category)}</span><time datetime="${p.date}">${p.date.replace(/-/g, '.')}</time><span>${p.minutes}분</span></p><h3>${esc(p.title)}</h3>${big ? `<p>${esc(p.description)}</p>` : ''}</div></a>
 </article>`;
 

@@ -9,7 +9,7 @@ import * as PG from './src/pages.mjs';
 import { ROOT } from './src/lib.mjs';
 import { loadPosts } from './tools/blog/lib.mjs';
 
-const { SITE, COMPANY, SERVICES, INDUSTRIES, BLOG_CATEGORIES, BLOG_PLANS, WEB_AI_PLAN, PRICE_SHOW_WEB_AI, CPC, FAQ } = D;
+const { SITE, COMPANY, SERVICES, INDUSTRIES, BLOG_CATEGORIES, BLOG_PLANS, WEB_AI_PLAN, PRICE_SHOW_WEB_AI, CPC, FAQ, SEO, KEYWORD_LINKS } = D;
 const wr = (rel, s) => { const f = path.join(ROOT, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s); };
 const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' }).format(new Date());
 
@@ -21,7 +21,11 @@ for (const f of GENERATED_FILES) fs.rmSync(path.join(ROOT, f), { force: true });
 
 // 2) 글
 const catIndex = c => Math.max(0, BLOG_CATEGORIES.indexOf(c));
-const POSTS = loadPosts(path.join(ROOT, 'content/blog'), { R: '../../', today }).map(p => ({ ...p, coverKey: catIndex(p.category), coverText: p.cover || p.title }));
+// 썸네일: tools/thumbs/build_thumbs.py 가 만든 assets/img/insights/<slug>.jpg (없으면 CSS 표지로 대신 — 빌드 전에 썸네일 생성기를 먼저 돌린다)
+const thumbOf = slug => fs.existsSync(path.join(ROOT, 'assets/img/insights', slug + '.jpg')) ? `insights/${slug}.jpg` : null;
+const POSTS = loadPosts(path.join(ROOT, 'content/blog'), { R: '../../', today }).map(p => ({ ...p, coverKey: catIndex(p.category), coverText: p.cover || p.title, thumb: thumbOf(p.slug) }));
+const noThumb = POSTS.filter(p => !p.thumb).map(p => p.slug);
+if (noThumb.length) console.warn(`경고: 썸네일 없음 ${noThumb.length}편 (python tools/thumbs/build_thumbs.py 먼저 실행): ${noThumb.join(', ')}`);
 for (const p of POSTS) {
   if (!BLOG_CATEGORIES.includes(p.category)) console.warn(`경고: ${p.file} 카테고리 '${p.category}' 가 목록에 없음`);
   if (p.service && !SERVICES.some(s => s.slug === p.service)) console.warn(`경고: ${p.file} service '${p.service}' 없음`);
@@ -43,7 +47,7 @@ for (const pg of pages) {
 const client = {
   services: SERVICES.map(s => ({ slug: s.slug, name: s.name, short: s.short })),
   cpc: CPC.rows, operate: PRICE_SHOW_WEB_AI ? WEB_AI_PLAN.operate.price : null,
-  posts: POSTS.map(p => ({ slug: p.slug, title: p.title, date: p.date, category: p.category, minutes: p.minutes, coverKey: p.coverKey, coverText: p.coverText, d: p.description })),
+  posts: POSTS.map(p => ({ slug: p.slug, title: p.title, date: p.date, category: p.category, minutes: p.minutes, coverKey: p.coverKey, coverText: p.coverText, d: p.description, thumb: p.thumb })),
 };
 wr('assets/js/data.js', `/* 빌드 생성 파일 — 수정은 src/data.mjs */\nwindow.MA=${JSON.stringify(client)};\n`);
 
@@ -63,7 +67,7 @@ wr('robots.txt', `User-agent: *\nAllow: /\n\n# AI 검색·답변 서비스 크�
 const won = n => n.toLocaleString('ko-KR') + '원';
 wr('llms.txt', `# ${COMPANY.name} (${COMPANY.nameEn})
 
-> ${COMPANY.slogan} 상주 작가·디자이너·마케터가 직접 만드는 브랜드 블로그 관리대행, 홈페이지 제작, SEO·AEO·GEO(AI 검색 최적화), 네이버 검색광고·플레이스, SNS 등 18개 마케팅 서비스를 운영하는 서울 송파구의 마케팅 회사입니다.
+> 미래애드원은 상주 작가·디자이너·마케터가 직접 만드는 블로그관리대행(브랜드 블로그 운영대행), 홈페이지 제작, AEO·GEO 마케팅(AI 검색 최적화), 네이버 블로그 광고·검색광고·플레이스, 바이럴 마케팅, SNS 등 18개 서비스를 운영하는 서울 송파구의 온라인광고대행사입니다. 슬로건: ${COMPANY.slogan}
 
 ## 회사 정보
 - 상호: ${COMPANY.name} / 대표: ${COMPANY.ceo} / 사업자등록번호: ${COMPANY.bizNo}
@@ -78,11 +82,17 @@ ${PRICE_SHOW_WEB_AI ? `- 홈페이지 + AI 검색 ${WEB_AI_PLAN.build.name}: ${w
 - 네이버 검색광고: 매체비와 운영 수수료 분리 안내. 그 밖의 서비스는 상담 후 견적.
 - AI 검색·검색 노출은 최적화 작업과 리포트를 제공하며 특정 순위·노출을 보장하지 않습니다.
 
+## 이런 검색어에 답하는 페이지
+${KEYWORD_LINKS.map(([t, h]) => `- ${t}: ${SITE}${h}`).join('\n')}
+- 홈페이지 제작·병원 홈페이지: ${SITE}services/website/ · ${SITE}industries/medical/
+- 블로그운영대행·블로그광고대행·블로그 홍보: ${SITE}services/brand-blog/ · ${SITE}services/blog-viral/
+
 ## 주요 페이지
 - [서비스 전체](${SITE}services/)
 ${SERVICES.map(s => `- [${s.name}](${SITE}services/${s.slug}/): ${s.copy}`).join('\n')}
 - [가격 안내](${SITE}pricing/)
 - [업종별 솔루션](${SITE}industries/)
+${INDUSTRIES.map(x => `- [${(SEO[x.slug] && SEO[x.slug].h1) || x.name + ' 마케팅'}](${SITE}industries/${x.slug}/)`).join('\n')}
 - [포트폴리오](${SITE}portfolio/)
 - [고객 후기·운영 기록](${SITE}reviews/)
 - [회사소개](${SITE}about/)
@@ -90,7 +100,7 @@ ${SERVICES.map(s => `- [${s.name}](${SITE}services/${s.slug}/): ${s.copy}`).join
 - [상담 신청](${SITE}contact/)
 
 ## 자주 묻는 질문
-${FAQ.slice(0, 10).map(f => `- ${f.q} ${f.a}`).join('\n')}
+${FAQ.slice(0, 16).map(f => `- ${f.q} ${f.a}`).join('\n')}
 
 ## 최근 인사이트
 ${POSTS.slice(0, 15).map(p => `- [${p.title}](${SITE}insights/${p.slug}/): ${p.description}`).join('\n') || '- 준비 중'}

@@ -1,0 +1,135 @@
+[
+ {
+  "theme": "cost",
+  "license": "cc0 1.0",
+  "source": "stocksnap",
+  "creator": "Negative Space",
+  "landing": "https://stocksnap.io/photo/money-coins-SDM03P88BO",
+  "note": "스타터즈 프로젝트(starters-platform/assets/bg)에서 재사용"
+ },
+ {
+  "theme": "legal",
+  "license": "cc0 1.0",
+  "source": "rawpixel",
+  "creator": null,
+  "landing": "https://www.rawpixel.com/image/5921176/judges-gavel-free-public-domain-cc0-photo",
+  "note": "스타터즈 프로젝트(starters-platform/assets/bg)에서 재사용"
+ },
+ {
+  "theme": "contract",
+  "license": "cc0 1.0",
+  "source": "rawpixel",
+  "creator": null,
+  "landing": "https://www.rawpixel.com/image/5904897/photo-image-public-domain-hand-person",
+  "note": "스타터즈 프로젝트(starters-platform/assets/bg)에서 재사용"
+ },
+ {
+  "theme": "writing",
+  "license": "cc0 1.0",
+  "source": "stocksnap",
+  "creator": "Cathryn Lavery",
+  "landing": "https://stocksnap.io/photo/journal-notepad-DPKNIIN5X3",
+  "note": "스타터즈 프로젝트(starters-platform/assets/bg)에서 재사용"
+ },
+ {
+  "theme": "meeting",
+  "license": "cc0 1.0",
+  "source": "rawpixel",
+  "creator": null,
+  "landing": "https://www.rawpixel.com/image/3336872/free-photo-image-desk-meeting-men",
+  "note": "스타터즈 프로젝트(starters-platform/assets/bg)에서 재사용"
+ },
+ {
+  "theme": "marketing",
+  "license": "cc0 1.0",
+  "source": "wikimedia",
+  "creator": "Syced",
+  "landing": "https://commons.wikimedia.org/w/index.php?curid=183982075",
+  "note": "스타터즈 프로젝트(starters-platform/assets/bg)에서 재사용"
+ },
+ {
+  "theme": "storefront",
+  "license": "cc0 1.0",
+  "source": "rawpixel",
+  "creator": null,
+  "landing": "https://www.rawpixel.com/image/3337294/free-photo-image-games-store-car-neon-new-york",
+  "note": "스타터즈 프로젝트(starters-platform/assets/bg)에서 재사용"
+ },
+ {
+  "theme": "cafe",
+  "license": "cc0 1.0",
+  "source": "rawpixel",
+  "creator": null,
+  "landing": "https://www.rawpixel.com/image/3303548/free-photo-image-espresso-machine-alloy-wheel-barista",
+  "note": "스타터즈 프로젝트(starters-platform/assets/bg)에서 재사용"
+ },
+ {
+  "theme": "kitchen",
+  "license": "cc0 1.0",
+  "source": "rawpixel",
+  "creator": null,
+  "landing": "https://www.rawpixel.com/image/3285053/free-photo-image-cooking-chef-kitchen",
+  "note": "스타터즈 프로젝트(starters-platform/assets/bg)에서 재사용"
+ },
+ {
+  "theme": "food",
+  "license": "cc0 1.0",
+  "source": "rawpixel",
+  "creator": null,
+  "landing": "https://www.rawpixel.com/image/5905404/photo-image-public-domain-kitchen-food",
+  "note": "스타터즈 프로젝트(starters-platform/assets/bg)에서 재사용"
+ },
+ {
+  "theme": "city",
+  "license": "cc0 1.0",
+  "source": "rawpixel",
+  "creator": null,
+  "landing": "https://www.rawpixel.com/image/3283614/free-photo-image-sydney-city-aerial-view",
+  "note": "스타터즈 프로젝트(starters-platform/assets/bg)에서 재사용"
+ },
+ {
+  "theme": "data",
+  "license": "cc0 1.0",
+  "source": "stocksnap",
+  "creator": "Build Tier List",
+  "landing": "https://stocksnap.io/photo/futuristic-technology-YWJQBD3VIX",
+  "note": "스타터즈 프로젝트(starters-platform/assets/bg)에서 재사용"
+ },
+ {
+  "theme": "trend",
+  "license": "cc0 1.0",
+  "source": "stocksnap",
+  "creator": "Tim Sullivan",
+  "landing": "https://stocksnap.io/photo/diamond-plate-ZRHJGSLPMZ",
+  "note": "스타터즈 프로젝트(starters-platform/assets/bg)에서 재사용"
+ },
+ {
+  "theme": "texture",
+  "license": "cc0 1.0",
+  "source": "stocksnap",
+  "creator": "One Idea LLC",
+  "landing": "https://stocksnap.io/photo/black-square-IVPA4CTPAM",
+  "note": "스타터즈 프로젝트(starters-platform/assets/bg)에서 재사용"
+ },
+ {
+  "theme": "web",
+  "license": "자사 제작물",
+  "source": "미래애드원 기존 홈페이지 포트폴리오(홈페이지 제작 사례 화면 4장 콜라주, 흐림 처리)",
+  "creator": "미래애드원",
+  "landing": "https://www.mirae-adone.com/"
+ },
+ {
+  "theme": "blog",
+  "license": "자사 제작물",
+  "source": "미래애드원 기존 홈페이지 포트폴리오(블로그 스킨 화면 4장 콜라주, 흐림 처리)",
+  "creator": "미래애드원",
+  "landing": "https://www.mirae-adone.com/"
+ },
+ {
+  "theme": "search",
+  "license": "자사 제작물",
+  "source": "미래애드원 기존 홈페이지 포트폴리오(블로그 바이럴 검색 결과 화면 4장 콜라주, 흐림 처리)",
+  "creator": "미래애드원",
+  "landing": "https://www.mirae-adone.com/"
+ }
+]

@@ -1,5 +1,5 @@
 // 공통 레이아웃: <head>, 헤더(메가 메뉴), 푸터, 레이어(드로어·모달·토스트·상담폼), 아이콘 스프라이트
-import { SITE, COMPANY, NAV, AXES, SERVICES, BLOG_PLANS, INDUSTRIES } from './data.mjs';
+import { SITE, COMPANY, NAV, AXES, SERVICES, BLOG_PLANS, INDUSTRIES, KEYWORDS, KEYWORD_LINKS, NAVER_SITE_VERIFICATION } from './data.mjs';
 import { esc, icon, ld, man } from './lib.mjs';
 
 const SPRITE = `<svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -35,6 +35,7 @@ const SPRITE = `<svg width="0" height="0" style="position:absolute" aria-hidden=
 <symbol id="i-store" viewBox="0 0 24 24"><path d="M4 9l1.5-5h13L20 9M4 9h16v1.5a2.7 2.7 0 01-5.3 0 2.7 2.7 0 01-5.4 0 2.7 2.7 0 01-5.3 0zM5.5 13v7h13v-7M10 20v-4h4v4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
 <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6zM9 8V6.5a3 3 0 016 0V8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
 <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5C6.5 4.5 9.5 4.5 12 6c2.5-1.5 5.5-1.5 8-.5v13c-2.5-1-5.5-1-8 .5-2.5-1.5-5.5-1.5-8-.5zM12 6v13.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-6.5 8 6.5M6 9.5V20h12V9.5M10 20v-5.5h4V20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
 <symbol id="i-quote" viewBox="0 0 24 24"><path d="M10 7H6.5A2.5 2.5 0 004 9.5V13h4v4h-.5M20 7h-3.5A2.5 2.5 0 0014 9.5V13h4v4h-.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </defs></svg>`;
 
@@ -43,7 +44,7 @@ export const MEGA_FEATURE = () => {
   return `<a class="mega__feature" href="{R}services/brand-blog/"><span class="mega__tag">공개 가격</span><strong>브랜드 블로그 월 ${p.count}회 ${man(p.price)}부터</strong><span>상주 작가·디자이너 직접 제작 · VAT 별도</span><span class="mega__go">가격 보기 ${icon('arrow')}</span></a>`;
 };
 
-export function head({ R, title, desc, canonical, og = 'og.jpg', jsonld = [], extraHead = '' }) {
+export function head({ R, title, desc, canonical, og = 'og.jpg', jsonld = [], extraHead = '', kw = [] }) {
   return `<!doctype html>
 <html lang="ko">
 <head>
@@ -51,6 +52,7 @@ export function head({ R, title, desc, canonical, og = 'og.jpg', jsonld = [], ex
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
+${kw.length ? `<meta name="keywords" content="${esc(kw.join(', '))}">\n` : ''}<meta name="naver-site-verification" content="${NAVER_SITE_VERIFICATION}">
 <link rel="canonical" href="${canonical}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="${COMPANY.name}">
@@ -108,6 +110,7 @@ export function footer(R) {
       ${col('회사', [['about/', '회사소개'], ['portfolio/', '포트폴리오'], ['reviews/', '고객 후기'], ['pricing/', '가격 안내'], ['insights/', '인사이트']])}
       ${col('고객지원', [['contact/', '상담 신청'], ['faq/', '자주 묻는 질문'], ['privacy/', '개인정보처리방침'], [COMPANY.brochure, '회사소개서'], [COMPANY.naverBlog, '네이버 블로그']])}
     </div>
+    <nav class="ft__kw" aria-label="주요 서비스 키워드"><p>주요 서비스</p><ul>${KEYWORD_LINKS.map(([t, h]) => `<li><a href="${R}${h}">${t}</a></li>`).join('')}</ul></nav>
     <div class="ft__biz">
       <p><span>상호 ${COMPANY.name}</span><span>대표 ${COMPANY.ceo}</span><span>사업자등록번호 ${COMPANY.bizNo}</span></p>
       <p><span>${COMPANY.address}</span><span>대표번호 ${COMPANY.phone}</span></p>
@@ -189,8 +192,8 @@ export function layers(R) {
 <button class="totop glass" type="button" aria-label="맨 위로" data-totop>${icon('chev')}</button>`;
 }
 
-export function page({ R, current = '', title, desc, canonical, jsonld = [], body, bodyClass = '', og, extraHead = '' }) {
-  return `${head({ R, title, desc, canonical, og, jsonld, extraHead })}
+export function page({ R, current = '', title, desc, canonical, jsonld = [], body, bodyClass = '', og, extraHead = '', kw = [] }) {
+  return `${head({ R, title, desc, canonical, og, jsonld, extraHead, kw })}
 <body class="${bodyClass}">
 ${header(R, current)}
 <main id="main">
@@ -208,11 +211,13 @@ ${layers(R)}
 }
 
 export const ORG = {
-  '@type': ['Organization', 'ProfessionalService'], '@id': SITE + '#org', name: COMPANY.name, alternateName: COMPANY.nameEn, url: SITE,
+  '@type': ['Organization', 'ProfessionalService'], '@id': SITE + '#org', name: COMPANY.name, alternateName: [COMPANY.nameEn, 'MIRAEADONE', '미래애드원 광고대행사'], url: SITE,
   logo: SITE + 'assets/img/brand/icon-512.png', image: SITE + 'assets/img/og.jpg', telephone: COMPANY.phone, founder: { '@type': 'Person', name: COMPANY.ceo },
   address: { '@type': 'PostalAddress', streetAddress: '중대로 146 유나프라자 8층', addressLocality: '송파구', addressRegion: '서울특별시', addressCountry: 'KR' },
-  taxID: COMPANY.bizNo, sameAs: [COMPANY.naverBlog], areaServed: 'KR',
-  description: '상주 작가·디자이너가 직접 만드는 브랜드 블로그 관리대행, 홈페이지 제작, SEO·AEO·GEO(AI 검색 최적화), 네이버 검색광고·플레이스, SNS를 운영하는 통합 마케팅 회사.',
+  taxID: COMPANY.bizNo, sameAs: [COMPANY.naverBlog], areaServed: 'KR', slogan: COMPANY.slogan,
+  knowsAbout: KEYWORDS,
+  hasOfferCatalog: { '@type': 'OfferCatalog', name: '미래애드원 마케팅 서비스', itemListElement: SERVICES.map(s => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: s.name, url: `${SITE}services/${s.slug}/` } })) },
+  description: '미래애드원은 상주 작가·디자이너가 직접 만드는 블로그관리대행(브랜드 블로그 운영대행), 홈페이지 제작, AEO·GEO 마케팅(AI 검색 최적화), 네이버 검색광고·플레이스, 바이럴 마케팅, SNS를 운영하는 서울 송파구의 온라인광고대행사다.',
 };
 export const WEBSITE = { '@type': 'WebSite', '@id': SITE + '#web', url: SITE, name: COMPANY.name, inLanguage: 'ko-KR', publisher: { '@id': SITE + '#org' } };
 export const crumbs = list => ({ '@type': 'BreadcrumbList', itemListElement: list.map(([name, url], i) => ({ '@type': 'ListItem', position: i + 1, name, item: url })) });

@@ -34,6 +34,11 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: 썸네일 도구 설치
+        run: pip install --quiet pillow==12.3.0
 
       - name: 인사이트 AI 글 작성
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.count != '0')
@@ -46,10 +51,15 @@ jobs:
           [ -z "$BLOG_MODEL" ] && unset BLOG_MODEL
           npm ci --no-audit --no-fund
           node tools/blog-ai/generate.mjs --count "$COUNT" || echo "::warning::글 작성 실패 — 사이트 배포는 계속합니다"
+          python tools/thumbs/build_thumbs.py
           git config user.name "mirae-adone-blog-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add content/blog
+          git add content/blog assets/img/insights
           if git diff --cached --quiet; then echo "새 글 없음"; else git commit -m "인사이트: AI 글 자동 발행" && git pull --rebase -q origin main && git push; fi
+
+      # 손으로 올린 글 등 썸네일이 없는 글이 있으면 이번 배포용으로 만든다(이미 있는 것은 건너뜀)
+      - name: 썸네일(누락분)
+        run: python tools/thumbs/build_thumbs.py
 
       - name: 빌드
         run: node build.mjs

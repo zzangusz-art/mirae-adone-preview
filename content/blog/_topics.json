@@ -60,6 +60,174 @@
     "note": "사람이 작성한 첫 글"
   },
   {
+    "id": "kw-blog-agency-choose",
+    "title": "블로그관리대행 업체 고르는 법, 견적서에서 볼 다섯 가지",
+    "angle": "블로그관리대행을 처음 맡기는 대표가 업체를 비교할 때 볼 기준(발행 횟수·원고 분량·디자인·발행 전 확인·보고)",
+    "keywords": [
+      "블로그관리대행",
+      "블로그 관리대행 업체",
+      "블로그 대행 비용"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "todo",
+    "priority": "keyword"
+  },
+  {
+    "id": "kw-blog-operate-vs-ad",
+    "title": "블로그운영대행과 블로그광고대행, 무엇이 다를까",
+    "angle": "자사 브랜드 블로그 운영과 체험단·기자단 같은 광고성 블로그의 차이, 업종별로 무엇부터 할지",
+    "keywords": [
+      "블로그운영대행",
+      "블로그광고대행",
+      "브랜드 블로그"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "todo",
+    "priority": "keyword"
+  },
+  {
+    "id": "kw-aeo-geo-marketing",
+    "title": "AEO GEO 마케팅, 우리 회사도 지금 해야 할까",
+    "angle": "AEO·GEO 마케팅이 필요한 업종과 아직 이른 경우, 시작 전에 점검할 것",
+    "keywords": [
+      "AEO GEO 마케팅",
+      "GEO 마케팅",
+      "AI 검색 최적화"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "seo-aeo-geo",
+    "status": "todo",
+    "priority": "keyword"
+  },
+  {
+    "id": "kw-naver-blog-ad",
+    "title": "네이버 블로그 광고, 방법별 비용 구조와 맞는 업종",
+    "angle": "브랜드 블로그 운영·체험단·파워컨텐츠 등 네이버 블로그 광고 방식의 차이와 비용 구조",
+    "keywords": [
+      "네이버 블로그 광고",
+      "블로그 광고",
+      "파워컨텐츠"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "todo",
+    "priority": "keyword"
+  },
+  {
+    "id": "kw-hospital-marketing",
+    "title": "병원 마케팅, 개원 초기에 먼저 할 일과 피할 표현",
+    "angle": "진료 과목별 블로그·플레이스·홈페이지 순서와 의료광고에서 문제 되는 표현",
+    "keywords": [
+      "병원 마케팅",
+      "병원 블로그",
+      "의료광고"
+    ],
+    "category": "업종별 가이드",
+    "service": "brand-blog",
+    "status": "todo",
+    "priority": "keyword"
+  },
+  {
+    "id": "kw-hospital-homepage",
+    "title": "병원 홈페이지 제작 전에 정해야 할 구성과 체크리스트",
+    "angle": "진료 과목·의료진·비용 안내·예약 동선 등 병원 홈페이지 필수 구성과 의료광고 규정",
+    "keywords": [
+      "병원 홈페이지",
+      "병원 홈페이지 제작",
+      "홈페이지 제작"
+    ],
+    "category": "홈페이지",
+    "service": "website",
+    "status": "todo",
+    "priority": "keyword"
+  },
+  {
+    "id": "kw-academy-blog",
+    "title": "학원 블로그 마케팅, 학부모가 실제로 찾는 글 주제",
+    "angle": "학원 블로그에 쓸 커리큘럼·강사·상담 후기 활용법과 지역 키워드",
+    "keywords": [
+      "학원 블로그 마케팅",
+      "학원 홍보",
+      "학원 블로그"
+    ],
+    "category": "업종별 가이드",
+    "service": "brand-blog",
+    "status": "todo",
+    "priority": "keyword"
+  },
+  {
+    "id": "kw-interior-blog",
+    "title": "인테리어 블로그 마케팅, 시공 사례 글은 어떻게 써야 문의가 올까",
+    "angle": "공정별 사진·견적 기준·자재 설명으로 구성하는 인테리어 시공 사례 글",
+    "keywords": [
+      "인테리어 블로그 마케팅",
+      "인테리어 업체 홍보",
+      "리모델링 블로그"
+    ],
+    "category": "업종별 가이드",
+    "service": "brand-blog",
+    "status": "todo",
+    "priority": "keyword"
+  },
+  {
+    "id": "kw-realestate-blog",
+    "title": "부동산 블로그 마케팅, 표시·광고 규정 지키며 쓰는 법",
+    "angle": "중개사무소 블로그 주제와 공인중개사법상 표시·광고 명시사항, 허위 매물 주의",
+    "keywords": [
+      "부동산 블로그 마케팅",
+      "부동산 마케팅",
+      "중개사무소 홍보"
+    ],
+    "category": "업종별 가이드",
+    "service": "brand-blog",
+    "status": "todo",
+    "priority": "keyword"
+  },
+  {
+    "id": "kw-viral-marketing",
+    "title": "바이럴 마케팅, 효과를 보는 방식과 위험한 방식",
+    "angle": "체험단·기자단·카페 바이럴의 차이, 광고 표시와 조작 금지 기준",
+    "keywords": [
+      "바이럴 마케팅",
+      "블로그 바이럴",
+      "카페 바이럴"
+    ],
+    "category": "블로그 마케팅",
+    "service": "blog-viral",
+    "status": "todo",
+    "priority": "keyword"
+  },
+  {
+    "id": "kw-online-ad-agency",
+    "title": "온라인광고대행사 고를 때 계약 전에 확인할 것",
+    "angle": "온라인광고대행사 비교 기준(가격 공개·담당자·보고·계정 소유·해지 조건)",
+    "keywords": [
+      "온라인광고대행사",
+      "광고대행사 선택",
+      "마케팅 대행사"
+    ],
+    "category": "업종별 가이드",
+    "service": "industry-consulting",
+    "status": "todo",
+    "priority": "keyword"
+  },
+  {
+    "id": "kw-blog-promotion",
+    "title": "블로그 홍보, 글을 올렸는데 아무도 안 볼 때 점검할 것",
+    "angle": "키워드 선정·제목·발행 주기·이미지 구성 등 블로그 홍보가 안 될 때 점검 순서",
+    "keywords": [
+      "블로그 홍보",
+      "블로그 마케팅",
+      "블로그 노출"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "todo",
+    "priority": "keyword"
+  },
+  {
     "id": "blog-topic-planning",
     "title": "브랜드 블로그 주제가 떨어질 때 쓰는 기획법",
     "angle": "매달 15~40회 글감을 어떻게 찾는지, 업종 질문·계절·지역 키워드로 주제 캘린더를 짜는 실무 방법",

@@ -392,7 +392,10 @@
     const PER = +grid.dataset.per || 9, all = DATA.posts.slice(1); // 첫 글은 상단 대표 글
     let cat = '', q = '', shown = Math.min(PER, all.length);
     const moreBtn = $('[data-ins-more]'), empty = $('[data-ins-empty]');
-    const card = p => `<article class="pcard is-in"><a href="${ROOT}insights/${p.slug}/"><div class="pcard__cover pcard__cover--${p.coverKey}" aria-hidden="true"><span>${esc(p.category)}</span><strong>${esc(p.coverText)}</strong></div><div class="pcard__txt"><p class="pcard__meta"><span>${esc(p.category)}</span><time datetime="${p.date}">${p.date.replace(/-/g, '.')}</time><span>${p.minutes}분</span></p><h3>${esc(p.title)}</h3></div></a></article>`;
+    const cover = p => p.thumb
+      ? `<div class="pcard__thumb"><span class="sk" style="aspect-ratio:1200/675"><img src="${ROOT}assets/img/${p.thumb}" width="1200" height="675" alt="${esc(p.category + ' — ' + p.coverText)}" loading="lazy" decoding="async"></span></div>`
+      : `<div class="pcard__cover pcard__cover--${p.coverKey}" aria-hidden="true"><span>${esc(p.category)}</span><strong>${esc(p.coverText)}</strong></div>`;
+    const card = p => `<article class="pcard is-in"><a href="${ROOT}insights/${p.slug}/">${cover(p)}<div class="pcard__txt"><p class="pcard__meta"><span>${esc(p.category)}</span><time datetime="${p.date}">${p.date.replace(/-/g, '.')}</time><span>${p.minutes}분</span></p><h3>${esc(p.title)}</h3></div></a></article>`;
     const skel = n => Array.from({ length: n }, () => '<div class="skel-card" aria-hidden="true"><i></i><i style="height:12px;width:40%"></i><i style="height:16px;width:85%"></i><i style="height:16px;width:60%;margin-bottom:20px"></i></div>').join('');
     const list = () => all.filter(p => (!cat || p.category === cat) && (!q || (p.title + p.d + p.category).toLowerCase().includes(q)));
     const render = (append = false) => {
@@ -402,6 +405,7 @@
       setTimeout(() => {
         $$('.skel-card', grid).forEach(s => s.remove());
         grid.insertAdjacentHTML('beforeend', L.slice(from, shown).map(card).join(''));
+        wireSkeletons(grid);
         empty.hidden = L.length > 0; moreBtn.hidden = shown >= L.length;
       }, append ? 260 : 180);
     };

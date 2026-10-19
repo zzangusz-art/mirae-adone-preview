@@ -8,6 +8,7 @@ category: AI 검색·SEO
 tags: GEO, AEO, SEO, AI 검색 최적화, 생성형 검색
 service: seo-aeo-geo
 cover: GEO와 SEO, 무엇이 다를까
+thumb_bg: data
 author: 미래애드원 마케팅팀
 ---
 GEO(생성형 검색 최적화)는 ChatGPT나 Gemini 같은 AI가 답변을 만들 때 우리 사이트의 정보를 정확히 읽고 출처로 쓸 수 있게 만드는 작업입니다. SEO가 검색 결과 목록에서 잘 보이게 하는 일이라면, GEO는 AI가 대신 써 주는 답 안에 우리 브랜드가 들어갈 수 있도록 근거를 마련하는 일입니다. 두 작업은 겹치는 부분이 많아서 따로 떼기보다 함께 진행하는 편이 효율적입니다.
