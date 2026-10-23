@@ -28,7 +28,18 @@ export function home(posts) {
   ];
   const wall = wallCols.map((c, i) => `<div class="wall__col" style="--i:${i}">${[...c, ...c].map(s => `<img src="assets/img/${s}" alt="" loading="${i < 2 ? 'eager' : 'lazy'}" decoding="async">`).join('')}</div>`).join('');
   const body = `
-<section class="hero" data-hero>
+<section class="hfilm" data-hfilm aria-label="미래애드원 소개 영상">
+  <div class="hfilm__stage">
+    <video class="hfilm__v" muted playsinline preload="none" poster="assets/video/hero-poster.webp" data-src="assets/video/hero-1080.mp4" data-src4k="assets/video/hero-2160.mp4" data-src-m="assets/video/hero-m.mp4" data-poster-m="assets/video/hero-poster-m.webp" aria-label="미래애드원 10초 소개 영상: 검색창, 키워드, 직접 만든 작업물, 실제 ChatGPT 답변 화면, 운영 수치, 18개 서비스, 로고"></video>
+    <div class="hfilm__bar" aria-hidden="true"></div>
+    <div class="hfilm__ctl">
+      <button class="hfilm__btn" type="button" data-hfilm-sound aria-pressed="false">${icon('mute')}<span>소리 켜기</span></button>
+      <button class="hfilm__btn" type="button" data-hfilm-replay hidden>${icon('replay')}<span>다시 보기</span></button>
+    </div>
+    <a class="hfilm__cue" href="#banner" aria-label="메인 배너로 내려가기"><span>SCROLL</span><i></i></a>
+  </div>
+</section>
+<section class="hero hero--after" id="banner" data-hero>
   <div class="wall" aria-hidden="true"><div class="wall__in">${wall}</div></div>
   <div class="hero__shade" aria-hidden="true"></div>
   <div class="wrap hero__in">

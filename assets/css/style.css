@@ -1466,3 +1466,32 @@ html.no-anim [data-reveal],html.no-anim .tl li,html.no-anim .mchart__range,html.
 
 /* ── HOW WE WORK: 제목 바로 아래에서 단계가 시작되도록(가운데 정렬로 생기던 빈칸 제거) */
 @media (min-width:1024px){.seq__grid{align-items:start;padding-top:8px}}
+
+/* =========================================================
+   히어로 필름(10초) → 스크롤하면 기존 배너가 아래에서 올라와 덮는다 (2026-10-23)
+   ========================================================= */
+.hfilm{position:relative;height:175svh;background:#060B16}
+.hfilm__stage{position:sticky;top:0;height:100svh;overflow:hidden;background:#060B16}
+.hfilm__v{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:50% 45%;will-change:transform}
+.js .hfilm__v{transform:scale(calc(1 - .08 * var(--p, 0)));border-radius:calc(28px * var(--p, 0));filter:brightness(calc(1 - .45 * var(--p, 0)))}
+.hfilm__bar{position:absolute;left:0;bottom:0;height:3px;width:calc(var(--fp, 0) * 100%);background:linear-gradient(90deg,var(--blue-2),var(--orange));z-index:2}
+.hfilm__ctl{position:absolute;right:clamp(16px,3vw,40px);bottom:clamp(18px,3.2vw,40px);z-index:3;display:flex;gap:8px;opacity:calc(1 - var(--p, 0) * 2.5)}
+.hfilm__btn{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px;border-radius:99px;background:rgba(6,11,22,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:14px;font-weight:600;transition:background .25s}
+.hfilm__btn:hover{background:rgba(6,11,22,.8)}
+.hfilm__btn .i{width:18px;height:18px}
+.hfilm__cue{position:absolute;left:50%;bottom:clamp(18px,3.2vw,40px);z-index:3;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.75);font-size:11px;font-weight:700;letter-spacing:.3em;opacity:calc(1 - var(--p, 0) * 3);transition:color .3s}
+.hfilm__cue i{width:1px;height:38px;background:linear-gradient(rgba(255,255,255,.8),transparent);animation:cueLine 1.8s var(--ease) infinite;transform-origin:top}
+@keyframes cueLine{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+.hfilm.is-ended .hfilm__cue{color:#fff}
+.hfilm.is-ended .hfilm__cue span{animation:cueBlink 1.4s ease-in-out infinite}
+@keyframes cueBlink{50%{opacity:.35}}
+/* 기존 배너: 필름 위로 올라오는 판 */
+.hero--after{margin-top:-75svh;z-index:2;border-radius:32px 32px 0 0;box-shadow:0 -30px 80px -20px rgba(0,0,0,.55)}
+.js .hero--after:not(.is-shown) .hero__l{animation-play-state:paused}
+@media (max-width:767px){
+  .hfilm{height:160svh}
+  .hero--after{margin-top:-60svh;border-radius:24px 24px 0 0}
+  .hfilm__ctl{bottom:auto;top:calc(var(--hd) + 14px);right:var(--gut)}
+  .hfilm__btn{height:40px;padding:0 13px;font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){.js .hfilm__v{transform:none;filter:none}}

@@ -227,6 +227,38 @@
     const n = e.target.closest('[data-lb]'); if (n) lbGo(+n.dataset.lb);
   });
 
+  /* ───────── 히어로 필름: 화면·회선에 맞는 영상 선택, 소리·다시 보기, 스크롤하면 줄어들며 배너가 올라옴 */
+  $$('[data-hfilm]').forEach(sec => {
+    const v = $('video', sec), snd = $('[data-hfilm-sound]', sec), rep = $('[data-hfilm-replay]', sec), banner = $('#banner');
+    const conn = navigator.connection || {}, saveData = conn.saveData || /2g/.test(conn.effectiveType || '');
+    const portrait = matchMedia('(max-aspect-ratio: 4/5)').matches && innerWidth < 900;
+    const big = !portrait && screen.width * (devicePixelRatio || 1) >= 2400 && !saveData && conn.effectiveType !== '3g';
+    const src = ROOT + (portrait ? v.dataset.srcM : big ? v.dataset.src4k : v.dataset.src);
+    if (portrait) v.poster = ROOT + v.dataset.posterM;
+    const start = () => { if (!v.getAttribute('src')) v.src = src; v.play().catch(() => { rep.hidden = false; }); };
+    if (!reduce && !saveData) { v.preload = 'auto'; start(); } else rep.hidden = false;
+    v.addEventListener('timeupdate', () => sec.style.setProperty('--fp', (v.currentTime / (v.duration || 10)).toFixed(4)));
+    v.addEventListener('ended', () => { rep.hidden = false; sec.classList.add('is-ended'); });
+    rep.addEventListener('click', () => { if (!v.getAttribute('src')) v.src = src; v.currentTime = 0; v.play(); rep.hidden = true; sec.classList.remove('is-ended'); });
+    snd.addEventListener('click', () => {
+      const on = v.muted; v.muted = !on;
+      snd.setAttribute('aria-pressed', String(on));
+      $('span', snd).textContent = on ? '소리 끄기' : '소리 켜기';
+      $('use', snd).setAttribute('href', on ? '#i-sound' : '#i-mute');
+      if (on && (v.ended || v.paused)) { if (!v.getAttribute('src')) v.src = src; v.currentTime = 0; v.play(); rep.hidden = true; sec.classList.remove('is-ended'); }
+      toast(on ? '소리를 켰습니다' : '소리를 껐습니다', 'ok', 1600);
+    });
+    // 화면 밖이면 멈추고, 돌아오면 이어서(끝난 뒤에는 그대로)
+    new IntersectionObserver(([e]) => { if (!e.isIntersecting) v.pause(); else if (!v.ended && v.getAttribute('src') && !reduce) v.play().catch(() => {}); }, { threshold: 0 }).observe(sec);
+    // 스크롤 진행도(--p): 필름이 머무는 구간에서만 계산
+    let near = true, ticking = false;
+    const upd = () => { const max = sec.offsetHeight - document.documentElement.clientHeight; sec.style.setProperty('--p', Math.min(1, Math.max(0, scrollY / Math.max(1, max))).toFixed(4)); };
+    new IntersectionObserver(([e]) => { near = e.isIntersecting; if (near) upd(); }, { rootMargin: '20% 0px' }).observe(sec);
+    addEventListener('scroll', () => { if (!near || ticking) return; ticking = true; requestAnimationFrame(() => { ticking = false; upd(); }); }, { passive: true }); upd();
+    // 배너가 올라오기 시작하면 제목 등장 효과 시작
+    if (banner) new IntersectionObserver(([e], o) => { if (e.isIntersecting) { banner.classList.add('is-shown'); o.disconnect(); } }, { threshold: .25 }).observe(banner);
+  });
+
   /* ───────── 홈페이지 레퍼런스: 페이지 넘기기 · 크게 보기 */
   $$('[data-wc]').forEach(p => {
     const view = $('[data-wc-open]', p), vimg = $('img', view), url = $('[data-wc-url]', p), phone = $('.wc__screen img', p);
