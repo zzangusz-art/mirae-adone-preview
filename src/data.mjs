@@ -685,3 +685,52 @@ export const NAV = [
 ];
 
 export const svc = slug => SERVICES.find(s => s.slug === slug);
+
+// ───────── 홈페이지 제작 레퍼런스(직접 만들고 운영하는 사이트, 화면은 2026-10-23 캡처 · src/webcases.json)
+export const WEBCASE_META = {
+  mirae: { kind: '온라인광고대행사', host: 'mirae-adone.com', live: '', status: '리뉴얼 오픈 준비', facts: ['45페이지 · 서비스 18종 상세', '블로그 하루 3편 자동 발행', '페이지별 구조화 데이터 · llms.txt'] },
+  saenru: { kind: 'AI 빌더 플랫폼 · AEO·GEO 컨설팅', host: 'saenru.com', live: 'https://saenru.com/', status: '운영 중', facts: ['국문·영문 2개 언어', '블로그 국·영 동시 발행', 'AI 노출 자가 진단 화면'] },
+  starterz: { kind: '프랜차이즈 창업·구축 플랫폼', host: 'starterz.kr', live: 'https://starterz.kr/', status: '운영 중', facts: ['플랫폼 · 자가 진단 · 블로그', '가격 공개형 상품 구성', 'AI 검색 답변 인용 확인'] },
+  quick: { kind: '퀵서비스 · 화물 운송', host: '퀵서비스다.kr', live: '', status: '오픈 준비', facts: ['19페이지 · 차종별 요금 안내', '차량 제원 비교 · 빠른 접수', '블로그 하루 3편 자동 발행'] },
+  paroot: { kind: '대학로 공연 제작사', host: 'paroot.kr', live: '', status: '오픈 준비', facts: ['공연 상세 6편 · 예매 연결', '4K 히어로 필름', '블로그 하루 3편 자동 발행'] },
+};
+
+// ───────── AI 검색 실제 녹화(로그인하지 않은 ChatGPT, 2026-10-23, 화면 그대로 · motion/tools/record_chatgpt.mjs)
+export const AI_RECORDINGS = [
+  { key: 'mirae', label: '미래애드원', q: '미래애드원 어떤 회사야?', video: 'ai-mirae', note: '답변 출처: 미래애드원 공식 홈페이지' },
+  { key: 'starterz', label: '스타터즈', sub: '운영 고객', q: '스타터즈 프랜차이즈 어떤 회사야?', video: 'ai-starterz', note: '답변 출처: starterz.kr 사업 소개·서비스 안내' },
+];
+
+// ───────── 작업 전후 변화(측정: tools/measure/compare.mjs, 2026-10-23 · 원시 HTML 기준)
+export const CASE_CHANGES = [
+  {
+    key: 'starterz', name: '스타터즈', kind: '프랜차이즈 창업·구축 플랫폼', status: '운영 중',
+    before: 'cases/starterz-before.webp', after: 'cases/starterz-after.webp',
+    timeline: [
+      ['2026.07.28', 'ChatGPT·Perplexity에 업체 추천 질문 3개를 물었을 때 한 번도 나오지 않음'],
+      ['2026.08.10', '검색·AI 구조 점검 80점(SEO 85 · AEO 80 · GEO 75)'],
+      ['2026.08.11', 'ChatGPT가 「프랜차이즈 만들기 업체 추천」 답변에서 스타터즈를 언급하고 starterz.kr을 출처로 인용'],
+      ['2026.10.23', '같은 질문을 5번 물어 1번은 첫 번째 추천으로 나옴. 회사 이름을 물으면 공식 홈페이지를 근거로 답함'],
+    ],
+    foot: 'AI 답변은 물을 때마다 달라집니다. 날짜별로 직접 물어 본 결과를 적었습니다.',
+  },
+  {
+    key: 'mirae', name: '미래애드원', kind: '온라인광고대행사', status: '리뉴얼 오픈 준비',
+    before: 'cases/mirae-before.webp', after: 'webcases/mirae/home-d.webp',
+    rows: [['제목 태그(H1)', '0개', '1개'], ['구조화 데이터 유형', '0종', '8종'], ['AI 검색 봇 규칙', '명시 없음', '허용 명시'], ['llms.txt(AI용 사이트 요약)', '없음', '있음'], ['사이트맵 등록 페이지', '1개', '44개'], ['AI가 바로 읽는 본문', '6,808자', '13,066자']],
+  },
+  {
+    key: 'quick', name: '퀵서비스다', kind: '퀵서비스 · 화물 운송', status: '오픈 준비',
+    before: 'cases/quick-before.webp', after: 'webcases/quick/home-d.webp',
+    rows: [['제목 태그(H1)', '0개', '1개'], ['구조화 데이터 유형', '0종', '17종'], ['FAQ 구조화 데이터', '없음', '있음'], ['AI 검색 봇 규칙', '명시 없음', '허용 명시'], ['llms.txt(AI용 사이트 요약)', '없음', '있음'], ['AI가 바로 읽는 본문', '1,078자', '10,911자']],
+  },
+  {
+    key: 'paroot', name: '파릇', kind: '대학로 공연 제작사', status: '오픈 준비',
+    before: 'cases/paroot-before.webp', after: 'webcases/paroot/home-d.webp',
+    rows: [['제목 태그(H1)', '0개', '1개'], ['구조화 데이터 유형', '3종', '15종'], ['FAQ 구조화 데이터', '없음', '있음'], ['AI 검색 봇 규칙', '명시 없음', '허용 명시'], ['사이트맵 등록 페이지', '15개', '18개'], ['AI가 바로 읽는 본문', '3,634자', '16,891자']],
+  },
+];
+
+// ───────── 협력 언론사(기존 홈페이지 「협력 언론사」 목록, 로고 35개 · assets/img/press/logos)
+export const PRESS_LOGOS = ['그린포스트코리아', '뉴스펭귄', 'JTBC', '더팩트', '데일리안', '메트로신문', '벤처스퀘어', '블로터앤미디어', '세이프타임즈', '시사위크', '아이뉴스24', '위키트리', '이코노타임즈', 'e-대학저널', '인베스팅닷컴', '', '쿠키뉴스', '택스워치', '프라임경제', '프레시안', '헬로디디', '더스쿠프', '코리아헤럴드', '알바와바', '미디어오늘', '미디어펜', '일요신문', '스포츠투데이', 'CBC뉴스', '토큰포스트', 'TV데일리', 'AI타임스', '', '이모작뉴스', '케미컬뉴스']
+  .map((name, i) => ({ name, src: `press/logos/press-${String(i + 1).padStart(2, '0')}.webp` }));

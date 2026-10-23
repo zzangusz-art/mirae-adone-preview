@@ -1,0 +1,280 @@
+{
+ "captured": "2026-10-23",
+ "sites": [
+  {
+   "key": "mirae",
+   "name": "미래애드원",
+   "long": "webcases/mirae/home-long.webp",
+   "pages": [
+    {
+     "slug": "home",
+     "label": "메인",
+     "url": "https://zzangusz-art.github.io/mirae-adone-preview/",
+     "desktop": "webcases/mirae/home-d.webp",
+     "thumb": "webcases/mirae/home-t.webp",
+     "mobile": "webcases/mirae/home-m.webp"
+    },
+    {
+     "slug": "services",
+     "label": "서비스",
+     "url": "https://zzangusz-art.github.io/mirae-adone-preview/services/",
+     "desktop": "webcases/mirae/services-d.webp",
+     "thumb": "webcases/mirae/services-t.webp",
+     "mobile": "webcases/mirae/services-m.webp"
+    },
+    {
+     "slug": "services-website",
+     "label": "홈페이지 제작·운영",
+     "url": "https://zzangusz-art.github.io/mirae-adone-preview/services/website/",
+     "desktop": "webcases/mirae/services-website-d.webp",
+     "thumb": "webcases/mirae/services-website-t.webp",
+     "mobile": null
+    },
+    {
+     "slug": "pricing",
+     "label": "가격",
+     "url": "https://zzangusz-art.github.io/mirae-adone-preview/pricing/",
+     "desktop": "webcases/mirae/pricing-d.webp",
+     "thumb": "webcases/mirae/pricing-t.webp",
+     "mobile": "webcases/mirae/pricing-m.webp"
+    },
+    {
+     "slug": "portfolio",
+     "label": "포트폴리오",
+     "url": "https://zzangusz-art.github.io/mirae-adone-preview/portfolio/",
+     "desktop": "webcases/mirae/portfolio-d.webp",
+     "thumb": "webcases/mirae/portfolio-t.webp",
+     "mobile": null
+    },
+    {
+     "slug": "insights",
+     "label": "인사이트",
+     "url": "https://zzangusz-art.github.io/mirae-adone-preview/insights/",
+     "desktop": "webcases/mirae/insights-d.webp",
+     "thumb": "webcases/mirae/insights-t.webp",
+     "mobile": null
+    }
+   ]
+  },
+  {
+   "key": "saenru",
+   "name": "세느루",
+   "long": "webcases/saenru/home-long.webp",
+   "pages": [
+    {
+     "slug": "home",
+     "label": "메인",
+     "url": "https://saenru.com/",
+     "desktop": "webcases/saenru/home-d.webp",
+     "thumb": "webcases/saenru/home-t.webp",
+     "mobile": "webcases/saenru/home-m.webp"
+    },
+    {
+     "slug": "ai",
+     "label": "AI 컨설팅",
+     "url": "https://saenru.com/ai/",
+     "desktop": "webcases/saenru/ai-d.webp",
+     "thumb": "webcases/saenru/ai-t.webp",
+     "mobile": "webcases/saenru/ai-m.webp"
+    },
+    {
+     "slug": "seo-aeo-geo",
+     "label": "SEO·AEO·GEO",
+     "url": "https://saenru.com/ai/seo-aeo-geo/",
+     "desktop": "webcases/saenru/seo-aeo-geo-d.webp",
+     "thumb": "webcases/saenru/seo-aeo-geo-t.webp",
+     "mobile": null
+    },
+    {
+     "slug": "about",
+     "label": "소개",
+     "url": "https://saenru.com/about/",
+     "desktop": "webcases/saenru/about-d.webp",
+     "thumb": "webcases/saenru/about-t.webp",
+     "mobile": "webcases/saenru/about-m.webp"
+    },
+    {
+     "slug": "blog",
+     "label": "블로그",
+     "url": "https://saenru.com/blog/",
+     "desktop": "webcases/saenru/blog-d.webp",
+     "thumb": "webcases/saenru/blog-t.webp",
+     "mobile": null
+    },
+    {
+     "slug": "blog-post",
+     "label": "블로그 글",
+     "url": "https://saenru.com/blog/posts/2026-10-23-seo-aeo-geo-diy-vs-agency.html",
+     "desktop": "webcases/saenru/blog-post-d.webp",
+     "thumb": "webcases/saenru/blog-post-t.webp",
+     "mobile": null
+    }
+   ]
+  },
+  {
+   "key": "starterz",
+   "name": "스타터즈",
+   "long": "webcases/starterz/home-long.webp",
+   "pages": [
+    {
+     "slug": "home",
+     "label": "메인",
+     "url": "https://starterz.kr/",
+     "desktop": "webcases/starterz/home-d.webp",
+     "thumb": "webcases/starterz/home-t.webp",
+     "mobile": "webcases/starterz/home-m.webp"
+    },
+    {
+     "slug": "platform",
+     "label": "플랫폼",
+     "url": "https://starterz.kr/platform",
+     "desktop": "webcases/starterz/platform-d.webp",
+     "thumb": "webcases/starterz/platform-t.webp",
+     "mobile": "webcases/starterz/platform-m.webp"
+    },
+    {
+     "slug": "blog",
+     "label": "블로그",
+     "url": "https://blog.starterz.kr/",
+     "desktop": "webcases/starterz/blog-d.webp",
+     "thumb": "webcases/starterz/blog-t.webp",
+     "mobile": "webcases/starterz/blog-m.webp"
+    },
+    {
+     "slug": "sec-services",
+     "label": "이 네 가지를 같이 합니다",
+     "url": "https://starterz.kr/#services",
+     "desktop": "webcases/starterz/sec-services-d.webp",
+     "thumb": "webcases/starterz/sec-services-t.webp",
+     "mobile": null
+    },
+    {
+     "slug": "sec-pricing",
+     "label": "가격부터 공개합니다",
+     "url": "https://starterz.kr/#pricing",
+     "desktop": "webcases/starterz/sec-pricing-d.webp",
+     "thumb": "webcases/starterz/sec-pricing-t.webp",
+     "mobile": null
+    },
+    {
+     "slug": "sec-franchises",
+     "label": "전국 프랜차이즈 가맹점 모집 현황",
+     "url": "https://starterz.kr/#franchises",
+     "desktop": "webcases/starterz/sec-franchises-d.webp",
+     "thumb": "webcases/starterz/sec-franchises-t.webp",
+     "mobile": null
+    }
+   ]
+  },
+  {
+   "key": "quick",
+   "name": "퀵서비스다",
+   "long": "webcases/quick/home-long.webp",
+   "pages": [
+    {
+     "slug": "home",
+     "label": "메인",
+     "url": "https://zzangusz-art.github.io/quickservice-preview/",
+     "desktop": "webcases/quick/home-d.webp",
+     "thumb": "webcases/quick/home-t.webp",
+     "mobile": "webcases/quick/home-m.webp"
+    },
+    {
+     "slug": "motorcycle",
+     "label": "오토바이 퀵",
+     "url": "https://zzangusz-art.github.io/quickservice-preview/services/motorcycle/",
+     "desktop": "webcases/quick/motorcycle-d.webp",
+     "thumb": "webcases/quick/motorcycle-t.webp",
+     "mobile": "webcases/quick/motorcycle-m.webp"
+    },
+    {
+     "slug": "pricing",
+     "label": "요금",
+     "url": "https://zzangusz-art.github.io/quickservice-preview/pricing/",
+     "desktop": "webcases/quick/pricing-d.webp",
+     "thumb": "webcases/quick/pricing-t.webp",
+     "mobile": "webcases/quick/pricing-m.webp"
+    },
+    {
+     "slug": "vehicles",
+     "label": "차량 제원",
+     "url": "https://zzangusz-art.github.io/quickservice-preview/vehicles/",
+     "desktop": "webcases/quick/vehicles-d.webp",
+     "thumb": "webcases/quick/vehicles-t.webp",
+     "mobile": null
+    },
+    {
+     "slug": "business",
+     "label": "기업 고객",
+     "url": "https://zzangusz-art.github.io/quickservice-preview/business/",
+     "desktop": "webcases/quick/business-d.webp",
+     "thumb": "webcases/quick/business-t.webp",
+     "mobile": null
+    },
+    {
+     "slug": "blog",
+     "label": "물류 가이드",
+     "url": "https://zzangusz-art.github.io/quickservice-preview/blog/",
+     "desktop": "webcases/quick/blog-d.webp",
+     "thumb": "webcases/quick/blog-t.webp",
+     "mobile": null
+    }
+   ]
+  },
+  {
+   "key": "paroot",
+   "name": "파릇",
+   "long": "webcases/paroot/home-long.webp",
+   "pages": [
+    {
+     "slug": "home",
+     "label": "메인",
+     "url": "https://zzangusz-art.github.io/paroot-preview/",
+     "desktop": "webcases/paroot/home-d.webp",
+     "thumb": "webcases/paroot/home-t.webp",
+     "mobile": "webcases/paroot/home-m.webp"
+    },
+    {
+     "slug": "shows",
+     "label": "전체 공연",
+     "url": "https://zzangusz-art.github.io/paroot-preview/shows/",
+     "desktop": "webcases/paroot/shows-d.webp",
+     "thumb": "webcases/paroot/shows-t.webp",
+     "mobile": "webcases/paroot/shows-m.webp"
+    },
+    {
+     "slug": "hanbbeumsai",
+     "label": "한뼘사이",
+     "url": "https://zzangusz-art.github.io/paroot-preview/shows/hanbbeumsai/",
+     "desktop": "webcases/paroot/hanbbeumsai-d.webp",
+     "thumb": "webcases/paroot/hanbbeumsai-t.webp",
+     "mobile": "webcases/paroot/hanbbeumsai-m.webp"
+    },
+    {
+     "slug": "about",
+     "label": "파릇 소개",
+     "url": "https://zzangusz-art.github.io/paroot-preview/about/",
+     "desktop": "webcases/paroot/about-d.webp",
+     "thumb": "webcases/paroot/about-t.webp",
+     "mobile": null
+    },
+    {
+     "slug": "visit",
+     "label": "오시는 길",
+     "url": "https://zzangusz-art.github.io/paroot-preview/visit/",
+     "desktop": "webcases/paroot/visit-d.webp",
+     "thumb": "webcases/paroot/visit-t.webp",
+     "mobile": null
+    },
+    {
+     "slug": "blog",
+     "label": "연극 가이드",
+     "url": "https://zzangusz-art.github.io/paroot-preview/blog/",
+     "desktop": "webcases/paroot/blog-d.webp",
+     "thumb": "webcases/paroot/blog-t.webp",
+     "mobile": null
+    }
+   ]
+  }
+ ]
+}

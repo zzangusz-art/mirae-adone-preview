@@ -208,7 +208,7 @@
     return $$(`[data-lightbox="${group}"]`).filter(b => !b.closest('.is-hide')).map(b => {
       const img = $('img', b), fig = b.closest('figure, article');
       const cap = fig?.querySelector('figcaption')?.textContent || fig?.querySelector('h3')?.textContent || img.alt;
-      return { src: img.currentSrc || img.src, alt: img.alt, cap, w: img.getAttribute('width'), h: img.getAttribute('height'), btn: b };
+      return { src: b.dataset.full || img.currentSrc || img.src, alt: img.alt, cap, w: b.dataset.w || img.getAttribute('width'), h: b.dataset.h || img.getAttribute('height'), btn: b };
     });
   }
   function lbRender() {
@@ -225,6 +225,136 @@
     const b = e.target.closest('[data-lightbox]');
     if (b) { e.preventDefault(); const items = lbItems(b.dataset.lightbox); lb = { items, i: Math.max(0, items.findIndex(x => x.btn === b)) }; openModal('', { lightbox: true }); lbRender(); return; }
     const n = e.target.closest('[data-lb]'); if (n) lbGo(+n.dataset.lb);
+  });
+
+  /* ───────── 홈페이지 레퍼런스: 페이지 넘기기 · 크게 보기 */
+  $$('[data-wc]').forEach(p => {
+    const view = $('[data-wc-open]', p), vimg = $('img', view), url = $('[data-wc-url]', p), phone = $('.wc__screen img', p);
+    const name = $('.wc__side h3', p)?.textContent || '';
+    const btns = $$('[data-wc-page]', p);
+    let cur = btns.find(b => b.getAttribute('aria-pressed') === 'true') || btns[0], ticket = 0;
+    const show = b => {
+      if (b === cur) return;
+      cur = b; const t = ++ticket;
+      btns.forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      view.classList.add('is-swap');
+      const im = new Image(); im.src = b.dataset.desk;
+      const done = () => {
+        if (t !== ticket) return;
+        vimg.src = b.dataset.desk; vimg.width = +b.dataset.w; vimg.height = +b.dataset.h; vimg.alt = `${name} ${b.dataset.label} 화면`;
+        view.classList.toggle('is-long', !!b.dataset.long);
+        requestAnimationFrame(() => view.classList.remove('is-swap'));
+      };
+      (im.decode ? im.decode() : Promise.resolve()).then(done, done);
+      url.textContent = b.dataset.url;
+      if (phone && b.dataset.mob) phone.src = b.dataset.mob;
+    };
+    btns.forEach(b => b.addEventListener('click', () => show(b)));
+    view.addEventListener('click', () => {
+      const items = btns.filter(b => !b.dataset.long).map(b => ({ src: b.dataset.desk, alt: `${name} ${b.dataset.label} 화면`, cap: `${name} · ${b.dataset.label}`, w: b.dataset.w, h: b.dataset.h, btn: b }));
+      lb = { items, i: Math.max(0, items.findIndex(x => x.btn === cur)) };
+      openModal('', { lightbox: true }); lbRender();
+    });
+  });
+
+  /* ───────── 작업 전후 비교: 손잡이 끌기(가로만, 세로 스크롤은 그대로) · 키보드는 숨은 범위 입력 */
+  $$('[data-cmp]').forEach(c => {
+    const r = $('[data-cmp-range]', c);
+    const set = v => { v = Math.max(0, Math.min(100, v)); c.style.setProperty('--pos', v + '%'); r.value = Math.round(v); };
+    const at = e => { const b = c.getBoundingClientRect(); set((e.clientX - b.left) / b.width * 100); };
+    r.addEventListener('input', () => set(+r.value));
+    let down = false, decided = false, horiz = false, sx = 0, sy = 0;
+    c.addEventListener('pointerdown', e => {
+      if (e.target === r) return;
+      down = true; sx = e.clientX; sy = e.clientY; decided = e.pointerType === 'mouse'; horiz = decided;
+      if (horiz) { c.setPointerCapture(e.pointerId); c.classList.add('is-drag'); at(e); }
+    });
+    c.addEventListener('pointermove', e => {
+      if (!down) return;
+      if (!decided) {
+        const dx = Math.abs(e.clientX - sx), dy = Math.abs(e.clientY - sy); if (dx + dy < 6) return;
+        decided = true; horiz = dx > dy;
+        if (!horiz) { down = false; return; }
+        c.setPointerCapture(e.pointerId); c.classList.add('is-drag');
+      }
+      if (horiz) at(e);
+    });
+    const end = () => { down = false; c.classList.remove('is-drag'); };
+    c.addEventListener('pointerup', end); c.addEventListener('pointercancel', end);
+    if (!reduce) new IntersectionObserver(([e], o) => { if (e.isIntersecting) { c.classList.add('is-hint'); o.disconnect(); } }, { threshold: .5 }).observe(c);
+  });
+
+  /* ───────── AI 검색 실제 녹화: 화면에 보일 때만 재생 */
+  $$('[data-airec]').forEach(w => {
+    const v = $('[data-airec-video]', w), tabs = $$('[data-airec-tab]', w), tg = $('[data-airec-toggle]', w), q = $('[data-airec-q]', w), note = $('[data-airec-note]', w);
+    let wanted = !reduce, inView = false, src = '';
+    const pick = b => (Math.min(innerWidth, 1600) * (devicePixelRatio || 1) > 1400 ? b.dataset.hi : b.dataset.lo);
+    const sel = () => tabs.find(t => t.getAttribute('aria-pressed') === 'true') || tabs[0];
+    const sync = () => {
+      if (inView && wanted) {
+        const want = pick(sel());
+        if (src !== want) { src = want; v.src = want; }
+        v.play().catch(() => {});
+      } else v.pause();
+      tg.innerHTML = icon(wanted ? 'pause' : 'play'); tg.setAttribute('aria-label', wanted ? '일시정지' : '재생');
+    };
+    tabs.forEach(b => b.addEventListener('click', () => {
+      tabs.forEach(t => t.setAttribute('aria-pressed', String(t === b)));
+      q.textContent = `「${b.dataset.q}」`; note.textContent = b.dataset.note;
+      v.poster = b.dataset.poster; src = ''; wanted = true; sync();
+    }));
+    tg.addEventListener('click', () => { wanted = !wanted; sync(); });
+    new IntersectionObserver(([e]) => { inView = e.isIntersecting; sync(); }, { threshold: .2 }).observe(v);
+  });
+
+  /* ───────── AI 답변 설계 슬라이드: 질문 입력 → 답변 → 코드·표가 차례로 */
+  $$('[data-aisl]').forEach(w => {
+    const slides = $$('[data-aisl-slide]', w), dots = $$('[data-aisl-to]', w), input = $('[data-aisl-input]', w), PH = input.textContent;
+    slides.forEach(s => {
+      const c = $('[data-aisl-type]', s); if (!c) return;
+      s._nodes = []; const tw = document.createTreeWalker(c, NodeFilter.SHOW_TEXT); let n;
+      while ((n = tw.nextNode())) s._nodes.push([n, n.textContent]);
+    });
+    let i = 0, run = 0, inView = false, timer = 0, wake = null;
+    const wait = (ms, id) => new Promise(res => { timer = setTimeout(() => { if (id === run) res(); }, ms); });
+    const visible = () => inView ? Promise.resolve() : new Promise(r => { wake = r; });
+    async function play(k) {
+      const id = ++run; clearTimeout(timer);
+      i = (k + slides.length) % slides.length;
+      slides.forEach((s, j) => { const on = j === i; s.classList.toggle('is-on', on); on ? s.removeAttribute('aria-hidden') : s.setAttribute('aria-hidden', 'true'); s.classList.remove('is-q', 'is-a', 'is-b', 'is-done'); });
+      dots.forEach((d, j) => j === i ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current'));
+      const s = slides[i], seq = $('[data-aisl-seq]', s), code = $('[data-aisl-type]', s);
+      const full = () => { s._nodes?.forEach(([n, t]) => { n.textContent = t; }); seq && [...seq.children].forEach(c => c.classList.add('is-in')); s.classList.add('is-q', 'is-a', 'is-b', 'is-done'); };
+      if (reduce) { full(); return; }
+      s._nodes?.forEach(([n]) => { n.textContent = ''; });
+      seq && [...seq.children].forEach(c => c.classList.remove('is-in'));
+      await visible(); if (id !== run) return;
+      input.classList.add('is-typing'); input.textContent = '';
+      for (const ch of $('.aisl__q', s).textContent) { input.textContent += ch; await wait(30, id); }
+      await wait(360, id);
+      input.classList.remove('is-typing'); input.textContent = PH;
+      s.classList.add('is-q'); await wait(480, id);
+      s.classList.add('is-a'); await wait(420, id);
+      s.classList.add('is-b');
+      if (code) {
+        code.classList.add('is-typing');
+        for (const [n, t] of s._nodes) for (let c = 0; c < t.length; c += 2) { n.textContent = t.slice(0, c + 2); await wait(t[c] === '\n' ? 55 : 15, id); }
+        code.classList.remove('is-typing');
+      }
+      if (seq) for (const c of seq.children) { c.classList.add('is-in'); await wait(280, id); }
+      s.classList.add('is-done');
+      await wait(3400, id); await visible(); if (id !== run) return;
+      play(i + 1);
+    }
+    w.addEventListener('click', e => {
+      const g = e.target.closest('[data-aisl-go]'), t = e.target.closest('[data-aisl-to]');
+      if (g) play(i + +g.dataset.aislGo); else if (t) play(+t.dataset.aislTo);
+    });
+    let tx = 0;
+    w.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+    w.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 60) play(i + (dx < 0 ? 1 : -1)); });
+    new IntersectionObserver(([e]) => { inView = e.isIntersecting; if (inView && wake) { const r = wake; wake = null; r(); } }, { threshold: .3 }).observe(w);
+    play(0);
   });
 
   /* ───────── 아코디언 */

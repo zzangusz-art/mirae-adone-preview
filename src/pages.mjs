@@ -11,6 +11,7 @@ import {
   reportChart, reportFieldsTable, monthFlows, geoIndustries, statusBoard,
 } from './blocks.mjs';
 import { esc, won, man, icon, img } from './lib.mjs';
+import { aiRecording, aiSlides, beforeAfter, webCases, pressWall, WEBCASES } from './showcase.mjs';
 
 const depthR = p => (p ? '../'.repeat(p.split('/').filter(Boolean).length) : '');
 const url = p => SITE + p;
@@ -57,6 +58,8 @@ ${logosMarquee(R)}
   </div>
 </section>
 
+${aiRecording(R)}
+
 ${scrollSequence(R)}
 
 <section class="sec sec--gray" id="features">
@@ -68,6 +71,10 @@ ${scrollSequence(R)}
     ${problemTabs(R)}
   </div>
 </section>
+
+${aiSlides()}
+
+${beforeAfter(R)}
 
 <section class="sec" id="reviews">
   <div class="wrap">
@@ -235,6 +242,7 @@ ${s.slug === 'seo-aeo-geo' ? `<section class="sec sec--gray" id="flow"><div clas
 <section class="sec" id="board"><div class="wrap two two--top"><div>${sectionHead({ eyebrow: 'STATUS', title: '지금 어디까지 왔는지<br>언제든 확인하세요', lead: '진행 단계·이번 작업·다음 일정을 표로 공유합니다. 연락이 닿지 않는 대행이 걱정이셨다면 이 부분을 먼저 보시면 됩니다.' })}</div>${statusBoard()}</div></section>
 <section class="sec sec--gray" id="fit"><div class="wrap">${sectionHead({ eyebrow: 'INDUSTRY', title: '이런 업종에 먼저 권합니다', lead: '네이버 검색 경쟁이 심하거나, 검색광고 비용이 부담되는 업종입니다.' })}${geoIndustries(R)}</div></section>` : ''}`;
   if (s.slug === 'website') return `
+${webCases(R)}
 <section class="sec sec--gray" id="works"><div class="wrap">${sectionHead({ eyebrow: 'PORTFOLIO', title: '업종별 제작 사례', lead: '업종별 홈페이지 제작 사례입니다. 이미지를 누르면 크게 볼 수 있습니다.' })}${portfolioGrid(R, PORTFOLIO.filter(x => x.cat === 'web' || x.cat === 'web-set'), { group: 'svc-pf', limit: 9 })}</div></section>`;
   return '';
 }
@@ -243,12 +251,13 @@ export function serviceDetail(s, posts) {
   const p = `services/${s.slug}/`, R = depthR(p);
   const axis = AXES.find(a => a.id === s.axis);
   const related = SERVICES.filter(x => x.axis === s.axis && x.slug !== s.slug).slice(0, 3);
-  const pf = s.portfolio.length && !['brand-blog', 'website'].includes(s.slug) ? PORTFOLIO.filter(x => s.portfolio.includes(x.cat)).slice(0, 6) : [];
+  const pf = s.portfolio.length && !['brand-blog', 'website', 'press-pr'].includes(s.slug) ? PORTFOLIO.filter(x => s.portfolio.includes(x.cat)).slice(0, 6) : [];
+  const toc = [['problem', '이런 상황'], ['scope', '제공 범위'], ...(s.slug === 'website' ? [['web-refs', '레퍼런스']] : []), ['price', '가격'], ['process', '진행'], ...(pf.length || s.slug === 'press-pr' ? [['cases', s.slug === 'press-pr' ? '언론사' : '사례']] : []), ['svc-faq', 'FAQ']];
   const faqs = [...s.faq.map(([q, a]) => ({ q, a })), ...(s.slug === 'brand-blog' ? BLOG_FAQ.map(([q, a]) => ({ q, a })) : FAQ.filter(f => f.c === '계약').slice(0, 2))];
   const relPosts = posts.filter(x => x.service === s.slug).slice(0, 3);
   const body = `
 ${pageHero({ R, eyebrow: `${axis.en} · ${String(s.no).padStart(2, '0')}`, title: esc(SEO[s.slug]?.h1 || s.name), lead: `<strong>${esc(s.copy)}</strong><br>${esc(s.lead)}`, crumbs: crumbNav(R, [['홈', ''], ['서비스', 'services/'], [s.name, p]]), ctas: `${quoteBtn('이 상품으로 상담하기', s.slug)}<a class="btn btn--glass" href="#price">가격·판매 구조</a>`, cls: `phero--svc phero--${s.slug}` })}
-<nav class="subnav glass glass--light" aria-label="이 페이지 목차" data-subnav><a href="#problem">이런 상황</a><a href="#scope">제공 범위</a><a href="#price">가격</a><a href="#process">진행</a><a href="#svc-faq">FAQ</a></nav>
+<nav class="subnav glass glass--light" aria-label="이 페이지 목차" data-subnav>${toc.map(([id, t]) => `<a href="#${id}">${t}</a>`).join('')}</nav>
 <section class="sec" id="problem"><div class="wrap">${sectionHead({ eyebrow: 'PROBLEM', title: '이런 상황이라면' })}<div class="pains">${s.pains.map((t, i) => `<article data-reveal style="--d:${i * 70}ms"><span>${String(i + 1).padStart(2, '0')}</span><p>${esc(t)}</p></article>`).join('')}</div>
 <div class="fit" data-reveal><p>추천 대상</p><ul>${s.targets.map(t => `<li>${icon('check')}${esc(t)}</li>`).join('')}</ul></div></div></section>
 <section class="sec sec--gray" id="scope"><div class="wrap two two--top"><div>${sectionHead({ eyebrow: 'SCOPE', title: '제공 범위', lead: `판매 구조: ${esc(s.model)}` })}</div><ul class="scope" data-reveal>${s.scope.map(t => `<li>${icon('check')}<span>${esc(t)}</span></li>`).join('')}</ul></div></section>
@@ -256,6 +265,7 @@ ${serviceExtra(R, s)}
 ${priceBox(R, s)}
 <section class="sec" id="process"><div class="wrap">${sectionHead({ eyebrow: 'PROCESS', title: '진행 과정' })}<ol class="flowline flowline--sm">${s.process.map((t, i) => `<li data-reveal style="--d:${i * 60}ms"><span>${String(i + 1).padStart(2, '0')}</span><b>${esc(t)}</b></li>`).join('')}</ol>
 <div class="repbox glass glass--light" data-reveal><p>${icon('doc')} 보고서에 들어가는 것</p><ul>${s.report.map(t => `<li>${esc(t)}</li>`).join('')}</ul><button class="link" type="button" data-modal="report">리포트 항목 기준 보기</button></div></div></section>
+${s.slug === 'press-pr' ? `<section class="sec sec--gray" id="cases"><div class="wrap">${sectionHead({ eyebrow: 'MEDIA', title: '협력 언론사', lead: '보도자료를 송출하는 주요 매체입니다. 게재 결과는 기사 URL로 보고합니다.', center: true })}${pressWall(R)}</div></section>` : ''}
 ${pf.length ? `<section class="sec sec--gray" id="cases"><div class="wrap">${sectionHead({ eyebrow: 'CASES', title: '관련 사례' })}${portfolioGrid(R, pf, { filters: false, group: 'svc-pf' })}<div class="center"><a class="btn btn--line" href="${R}portfolio/">포트폴리오 전체 ${icon('arrow')}</a></div></div></section>` : ''}
 <section class="sec" id="svc-faq"><div class="wrap wrap--narrow">${sectionHead({ eyebrow: 'FAQ', title: `${esc(s.short)} 자주 묻는 질문`, center: true })}${faqBlock(faqs, { chips: false, idp: 'sf' })}</div></section>
 ${relPosts.length ? `<section class="sec sec--gray"><div class="wrap">${sectionHead({ eyebrow: 'INSIGHTS', title: '관련 글' })}<div class="pgrid">${relPosts.map(x => postCard(R, x)).join('')}</div></div></section>` : ''}
@@ -328,8 +338,10 @@ ${ctaBand(R)}`;
 export function portfolio() {
   const p = 'portfolio/', R = depthR(p);
   const body = `
-${pageHero({ R, eyebrow: 'PORTFOLIO', title: '말보다 결과물로<br>보여 드립니다', lead: `블로그 운영 성과, 블로그 스킨, 홈페이지, 바이럴, 검색광고, SNS까지 ${PORTFOLIO.length}개의 작업 사례를 분류해 정리했습니다.`, crumbs: crumbNav(R, [['홈', ''], ['포트폴리오', p]]), ctas: quoteBtn('비슷한 작업 상담') })}
-<section class="sec"><div class="wrap">${portfolioGrid(R, PORTFOLIO, { group: 'pf' })}</div></section>
+${pageHero({ R, eyebrow: 'PORTFOLIO', title: '말보다 결과물로<br>보여 드립니다', lead: `직접 만들고 운영하는 홈페이지 ${WEBCASES.sites.length}곳의 실제 화면과 블로그 운영 성과·블로그 스킨·홈페이지·바이럴·검색광고·SNS 작업 사례 ${PORTFOLIO.filter(x => x.cat !== 'press').length}건을 분류해 정리했습니다.`, crumbs: crumbNav(R, [['홈', ''], ['포트폴리오', p]]), ctas: quoteBtn('비슷한 작업 상담') })}
+${webCases(R, { title: '홈페이지 제작·운영<br>레퍼런스' })}
+<section class="sec sec--gray"><div class="wrap">${sectionHead({ eyebrow: 'WORKS', title: '분야별 작업 사례' })}${portfolioGrid(R, PORTFOLIO.filter(x => x.cat !== 'press'), { group: 'pf' })}</div></section>
+<section class="sec"><div class="wrap">${sectionHead({ eyebrow: 'MEDIA', title: '협력 언론사', center: true })}${pressWall(R)}</div></section>
 ${logosMarquee(R)}
 ${ctaBand(R)}`;
   return { path: p, html: page({ R, current: 'portfolio/', title: T('포트폴리오'), desc: '홈페이지 제작 35건, 블로그 스킨 14건, 블로그 운영 통계, 바이럴·검색광고·SNS 운영 사례를 업종별로 확인하세요.', canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['포트폴리오', url(p)]])] }], body }) };
