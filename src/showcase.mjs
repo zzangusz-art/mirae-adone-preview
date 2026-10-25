@@ -12,21 +12,19 @@ const pic = (R, rel, alt, { eager = false, cls = '' } = {}) => {
 
 // ───────── AI 검색 실제 녹화(로그인하지 않은 ChatGPT, 화면 그대로)
 export const aiRecording = R => {
-  const r0 = AI_RECORDINGS[0];
+  const r = AI_RECORDINGS[0], v = `${R}assets/video/${r.video}`;
   return `<section class="sec sec--ink airec-sec" id="ai-proof">
 <div class="wrap">
   ${sectionHead({ eyebrow: 'REAL AI SEARCH', title: 'AI에게 회사 이름을 물으면,<br>홈페이지를 근거로 답합니다', lead: '로그인하지 않은 ChatGPT에 직접 묻고 화면을 그대로 녹화했습니다. 답변에 공식 홈페이지가 출처로 붙는지 확인해 보세요.', center: true })}
   <div class="airec" data-airec>
-    <div class="airec__tabs" role="group" aria-label="녹화 사례">${AI_RECORDINGS.map((r, i) => `<button type="button" aria-pressed="${i === 0}" data-airec-tab data-hi="${R}assets/video/${r.video}-1600.mp4" data-lo="${R}assets/video/${r.video}-800.mp4" data-poster="${R}assets/video/${r.video}-poster.webp" data-q="${esc(r.q)}" data-note="${esc(r.note)}"><b>${esc(r.label)}</b>${r.sub ? `<small>${esc(r.sub)}</small>` : ''}</button>`).join('')}</div>
     <div class="airec__screen" data-reveal>
-      <div class="airec__bar"><span></span><span></span><span></span><p>chatgpt.com</p><em>실제 녹화</em></div>
+      <div class="airec__bar"><span></span><span></span><span></span><p>chatgpt.com</p><em>실제 녹화</em><button class="airec__toggle" type="button" data-airec-toggle aria-label="일시정지">${icon('pause')}</button></div>
       <div class="airec__view">
-        <video muted playsinline loop preload="none" poster="${R}assets/video/${r0.video}-poster.webp" width="2560" height="1600" data-airec-video aria-label="ChatGPT 검색 화면 녹화"></video>
-        <button class="airec__toggle" type="button" data-airec-toggle aria-label="일시정지">${icon('pause')}</button>
+        <video muted playsinline loop preload="none" poster="${v}-d-poster.webp" data-d="${v}-d.mp4" data-m="${v}-m.mp4" data-poster-m="${v}-m-poster.webp" data-airec-video aria-label="ChatGPT에 「${esc(r.q)}」를 묻는 실제 화면 녹화"></video>
       </div>
     </div>
-    <p class="airec__cap"><b data-airec-q>「${esc(r0.q)}」</b><span data-airec-note>${esc(r0.note)}</span></p>
-    <p class="airec__foot">*실제 ChatGPT 검색 녹화 영상(2026.10.23, 로그인하지 않은 상태). AI 답변은 묻는 시점과 환경에 따라 달라질 수 있습니다.</p>
+    <p class="airec__cap"><b>「${esc(r.q)}」</b><span>${esc(r.note)}</span></p>
+    <p class="airec__foot">*실제 ChatGPT 검색 녹화 영상 · 로그인하지 않은 상태 · 1.5배속, 답변을 기다리는 구간은 줄였습니다(PC 2026.10.23, 모바일 2026.10.25). AI 답변은 묻는 시점과 환경에 따라 달라질 수 있습니다.</p>
   </div>
 </div>
 </section>`;
@@ -63,15 +61,15 @@ export const aiSlides = () => {
 <div class="wrap">
   ${sectionHead({ eyebrow: 'AEO · GEO', title: '이렇게 AI의 답이 되도록<br>설계합니다', lead: '검색 결과를 넘어 AI 답변까지. 미래애드원이 실제로 하는 작업을 화면으로 옮겼습니다.', center: true })}
   <div class="aisl" data-aisl data-reveal>
-    <div class="aisl__win">
-      <div class="aisl__top"><b>AI 검색</b><small>설명용 예시 화면</small><span class="aisl__av" aria-hidden="true">M</span></div>
-      <div class="aisl__body">${S.map((s, i) => `<article class="aisl__slide${i === 0 ? ' is-on' : ''}" data-aisl-slide aria-label="${i + 1}. ${esc(s.k)}"${i ? ' aria-hidden="true"' : ''}>
+    <div class="aisl__stage">${S.map((s, i) => `<article class="aisl__slide${i === 0 ? ' is-on' : ' is-next'}" data-aisl-slide style="--o:${i}" aria-label="${i + 1}. ${esc(s.k)}"${i ? ' aria-hidden="true"' : ''}>
+      <div class="aisl__top"><b>AI 검색</b><small>설명용 예시 화면</small><span class="aisl__step">${String(i + 1).padStart(2, '0')} ${esc(s.k)}</span><span class="aisl__av" aria-hidden="true">M</span></div>
+      <div class="aisl__body">
         <p class="aisl__q">${esc(s.q)}</p>
         <p class="aisl__a">${esc(s.a)}</p>
         ${slideBody(s)}
-      </article>`).join('')}</div>
+      </div>
       <div class="aisl__input" aria-hidden="true">${icon('plus')}<p data-aisl-input>무엇이든 물어보세요</p><span class="aisl__send">${icon('arrow')}</span></div>
-    </div>
+    </article>`).join('')}</div>
     <button class="aisl__nav aisl__nav--prev" type="button" data-aisl-go="-1" aria-label="이전 화면">${icon('left')}</button>
     <button class="aisl__nav aisl__nav--next" type="button" data-aisl-go="1" aria-label="다음 화면">${icon('right')}</button>
     <ol class="aisl__dots">${S.map((s, i) => `<li><button type="button" data-aisl-to="${i}"${i === 0 ? ' aria-current="true"' : ''}><span>${String(i + 1).padStart(2, '0')}</span>${esc(s.k)}</button></li>`).join('')}</ol>
@@ -92,12 +90,12 @@ export const beforeAfter = R => `<section class="sec sec--gray" id="changes">
 <div class="wrap">
   ${sectionHead({ eyebrow: 'BEFORE / AFTER', title: '홈페이지·AEO·GEO 작업 후,<br>이렇게 달라졌습니다', lead: '홈페이지 제작과 AEO·GEO 작업 전후를 같은 기준으로 비교했습니다. 화면 가운데 손잡이를 좌우로 움직여 보세요.' })}
   <div class="chg" data-tabs>
-    <div class="chg__tabs" role="tablist" aria-label="전후 비교 사례">${CASE_CHANGES.map((c, i) => `<button role="tab" type="button" id="chg-t-${c.key}" aria-controls="chg-p-${c.key}" aria-selected="${i === 0}"${i ? ' tabindex="-1"' : ''}><b>${esc(c.name)}</b><small>${esc(c.status)}</small></button>`).join('')}</div>
+    <div class="chg__tabs" role="tablist" aria-label="전후 비교 사례">${CASE_CHANGES.map((c, i) => `<button role="tab" type="button" id="chg-t-${c.key}" aria-controls="chg-p-${c.key}" aria-selected="${i === 0}"${i ? ' tabindex="-1"' : ''}><b>예시 ${i + 1}</b><small>${esc(c.kind)}</small></button>`).join('')}</div>
     ${CASE_CHANGES.map((c, i) => `<div class="chg__panel" role="tabpanel" id="chg-p-${c.key}" aria-labelledby="chg-t-${c.key}"${i ? ' hidden' : ''}>
-      ${compare(R, c)}
+      ${compare(R, { ...c, name: `예시 ${i + 1}` })}
       <div class="chg__side">
-        <p class="chg__kind">${esc(c.kind)}</p>
-        <h3>${esc(c.name)}</h3>
+        <p class="chg__kind">예시 ${i + 1} · ${esc(c.status)}</p>
+        <h3>${esc(c.kind)}</h3>
         ${c.timeline ? `<ol class="chg__tl">${c.timeline.map(([d, t], j) => `<li${j === c.timeline.length - 1 ? ' class="is-now"' : ''}><time>${d}</time><p>${esc(t)}</p></li>`).join('')}</ol>`
         : `<table class="chg__tbl"><thead><tr><th scope="col">항목</th><th scope="col">작업 전</th><th scope="col">작업 후</th></tr></thead><tbody>${c.rows.map(([k, b, a]) => `<tr><th scope="row">${esc(k)}</th><td>${esc(b)}</td><td><b>${esc(a)}</b></td></tr>`).join('')}</tbody></table>`}
         <p class="chg__foot">${esc(c.foot || '2026.10.23 측정. 각 홈페이지 첫 화면의 원시 HTML(자바스크립트 실행 전) 기준이며, 작업 후 값은 오픈 전 운영용 빌드입니다. 순위·유입 같은 성과가 아니라 검색엔진과 AI가 읽는 구조를 비교했습니다.')}</p>

@@ -54,6 +54,22 @@ export const scrollSequence = R => {
 </section>`;
 };
 
+// HOW WE WORK — 벤토 그리드(01 넓게, 02 오른쪽, 03~05 아래 세 칸). 화면 목업은 seqScreens 그대로
+export const howBento = R => {
+  const screens = seqScreens(R);
+  return `
+<section class="sec how" id="how">
+  <div class="wrap">
+    ${sectionHead({ eyebrow: 'HOW WE WORK', title: '광고를 맡긴 뒤,<br>실제로 일어나는 일', lead: '누가 쓰고, 누가 디자인하고, 언제 올라가는지. 계약 이후의 과정을 순서대로 보여 드립니다.' })}
+    <ol class="hbento">${SEQUENCE.map((s, i) => `<li class="hb hb--${i + 1}" data-reveal style="--d:${i * 70}ms">
+      <div class="hb__head"><span class="hb__n">${s.n}</span><p class="hb__k">${s.k}</p></div>
+      <h3>${s.h}</h3><p class="hb__d">${s.d}</p>
+      <div class="hb__v" aria-hidden="${i < 3}">${screens[i]}</div>
+    </li>`).join('')}</ol>
+  </div>
+</section>`;
+};
+
 export const serviceCard = (R, s, { quick = false } = {}) => `<article class="scard" data-axis="${s.axis}">
   <a class="scard__a" href="${R}services/${s.slug}/"><span class="scard__no">${String(s.no).padStart(2, '0')}</span>${s.isNew ? '<span class="badge badge--new">NEW</span>' : ''}<h3>${esc(s.name)}</h3><p>${esc(s.copy)}</p><span class="scard__model">${esc(s.model)}</span></a>
   ${quick ? `<button class="scard__quick" type="button" data-svc-quick="${s.slug}" aria-label="${esc(s.name)} 빠르게 보기">${icon('plus')}</button>` : ''}

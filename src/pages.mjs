@@ -5,7 +5,7 @@ import {
 } from './data.mjs';
 import { page, ORG, WEBSITE, crumbs, crumbNav, quoteForm } from './layout.mjs';
 import {
-  sectionHead, pageHero, quoteBtn, statsRow, logosMarquee, scrollSequence, serviceCard, axesBento, featuredDuo, problemTabs,
+  sectionHead, pageHero, quoteBtn, statsRow, logosMarquee, howBento, serviceCard, axesBento, featuredDuo, problemTabs,
   reviewsCarousel, reviewCards, blogStatsStrip, blogPlans, webAiPlan, otherPricing, marketChart, structureTable, cpcCalculator, checklist,
   industryTabs, faqBlock, faqList, faqLD, postCard, ctaBand, processSteps, portfolioGrid, chatDemo, costStructure, keywordCards, geoTimeline,
   reportChart, reportFieldsTable, monthFlows, geoIndustries, statusBoard,
@@ -71,7 +71,7 @@ ${logosMarquee(R)}
 
 ${aiRecording(R)}
 
-${scrollSequence(R)}
+${howBento(R)}
 
 <section class="sec sec--gray" id="features">
   <div class="wrap">

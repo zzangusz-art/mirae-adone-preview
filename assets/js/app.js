@@ -252,8 +252,9 @@
     new IntersectionObserver(([e]) => { if (!e.isIntersecting) v.pause(); else if (!v.ended && v.getAttribute('src') && !reduce) v.play().catch(() => {}); }, { threshold: 0 }).observe(sec);
     // 스크롤 진행도(--p): 필름이 머무는 구간에서만 계산
     let near = true, ticking = false;
-    const upd = () => { const max = sec.offsetHeight - document.documentElement.clientHeight; sec.style.setProperty('--p', Math.min(1, Math.max(0, scrollY / Math.max(1, max))).toFixed(4)); };
-    new IntersectionObserver(([e]) => { near = e.isIntersecting; if (near) upd(); }, { rootMargin: '20% 0px' }).observe(sec);
+    const dockEl = $('.dock');
+    const upd = () => { const max = sec.offsetHeight - document.documentElement.clientHeight, p = Math.min(1, Math.max(0, scrollY / Math.max(1, max))); sec.style.setProperty('--p', p.toFixed(4)); dockEl?.classList.toggle('is-film', p < .8); };
+    new IntersectionObserver(([e]) => { near = e.isIntersecting; if (near) upd(); else dockEl?.classList.remove('is-film'); }, { rootMargin: '20% 0px' }).observe(sec);
     addEventListener('scroll', () => { if (!near || ticking) return; ticking = true; requestAnimationFrame(() => { ticking = false; upd(); }); }, { passive: true }); upd();
     // 배너가 올라오기 시작하면 제목 등장 효과 시작
     if (banner) new IntersectionObserver(([e], o) => { if (e.isIntersecting) { banner.classList.add('is-shown'); o.disconnect(); } }, { threshold: .25 }).observe(banner);
@@ -316,55 +317,56 @@
     if (!reduce) new IntersectionObserver(([e], o) => { if (e.isIntersecting) { c.classList.add('is-hint'); o.disconnect(); } }, { threshold: .5 }).observe(c);
   });
 
-  /* ───────── AI 검색 실제 녹화: 화면에 보일 때만 재생 */
+  /* ───────── AI 검색 실제 녹화: 화면에 보일 때만 재생, 폭에 맞는 녹화(PC=답변 영역, 모바일=모바일 화면) */
   $$('[data-airec]').forEach(w => {
-    const v = $('[data-airec-video]', w), tabs = $$('[data-airec-tab]', w), tg = $('[data-airec-toggle]', w), q = $('[data-airec-q]', w), note = $('[data-airec-note]', w);
-    let wanted = !reduce, inView = false, src = '';
-    const pick = b => (Math.min(innerWidth, 1600) * (devicePixelRatio || 1) > 1400 ? b.dataset.hi : b.dataset.lo);
-    const sel = () => tabs.find(t => t.getAttribute('aria-pressed') === 'true') || tabs[0];
+    const v = $('[data-airec-video]', w), tg = $('[data-airec-toggle]', w);
+    const mob = matchMedia('(max-width:640px)').matches;
+    if (mob) { v.poster = v.dataset.posterM; w.classList.add('is-m'); }
+    let wanted = !reduce, inView = false;
     const sync = () => {
-      if (inView && wanted) {
-        const want = pick(sel());
-        if (src !== want) { src = want; v.src = want; }
-        v.play().catch(() => {});
-      } else v.pause();
+      if (inView && wanted) { if (!v.getAttribute('src')) v.src = mob ? v.dataset.m : v.dataset.d; v.play().catch(() => {}); }
+      else v.pause();
       tg.innerHTML = icon(wanted ? 'pause' : 'play'); tg.setAttribute('aria-label', wanted ? '일시정지' : '재생');
     };
-    tabs.forEach(b => b.addEventListener('click', () => {
-      tabs.forEach(t => t.setAttribute('aria-pressed', String(t === b)));
-      q.textContent = `「${b.dataset.q}」`; note.textContent = b.dataset.note;
-      v.poster = b.dataset.poster; src = ''; wanted = true; sync();
-    }));
     tg.addEventListener('click', () => { wanted = !wanted; sync(); });
     new IntersectionObserver(([e]) => { inView = e.isIntersecting; sync(); }, { threshold: .2 }).observe(v);
   });
 
-  /* ───────── AI 답변 설계 슬라이드: 질문 입력 → 답변 → 코드·표가 차례로 */
+  /* ───────── AI 답변 설계 슬라이드: 가운데 카드에서 질문 입력 → 답변 → 코드·표, 다음 카드는 오른쪽에 미리 보임 */
   $$('[data-aisl]').forEach(w => {
-    const slides = $$('[data-aisl-slide]', w), dots = $$('[data-aisl-to]', w), input = $('[data-aisl-input]', w), PH = input.textContent;
+    const slides = $$('[data-aisl-slide]', w), dots = $$('[data-aisl-to]', w);
     slides.forEach(s => {
+      s._input = $('[data-aisl-input]', s); s._ph = s._input.textContent;
       const c = $('[data-aisl-type]', s); if (!c) return;
       s._nodes = []; const tw = document.createTreeWalker(c, NodeFilter.SHOW_TEXT); let n;
       while ((n = tw.nextNode())) s._nodes.push([n, n.textContent]);
     });
+    const full = s => { s._nodes?.forEach(([n, t]) => { n.textContent = t; }); $$('[data-aisl-seq]>*', s).forEach(c => c.classList.add('is-in')); s.classList.add('is-q', 'is-a', 'is-b', 'is-done'); s._input.classList.remove('is-typing'); s._input.textContent = s._ph; };
     let i = 0, run = 0, inView = false, timer = 0, wake = null;
     const wait = (ms, id) => new Promise(res => { timer = setTimeout(() => { if (id === run) res(); }, ms); });
     const visible = () => inView ? Promise.resolve() : new Promise(r => { wake = r; });
     async function play(k) {
       const id = ++run; clearTimeout(timer);
       i = (k + slides.length) % slides.length;
-      slides.forEach((s, j) => { const on = j === i; s.classList.toggle('is-on', on); on ? s.removeAttribute('aria-hidden') : s.setAttribute('aria-hidden', 'true'); s.classList.remove('is-q', 'is-a', 'is-b', 'is-done'); });
+      slides.forEach((s, j) => {
+        const o = j - i, on = o === 0;
+        s.style.setProperty('--o', o);
+        s.classList.toggle('is-on', on); s.classList.toggle('is-far', Math.abs(o) > 1);
+        on ? s.removeAttribute('aria-hidden') : s.setAttribute('aria-hidden', 'true');
+        if (!on) full(s);
+      });
       dots.forEach((d, j) => j === i ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current'));
-      const s = slides[i], seq = $('[data-aisl-seq]', s), code = $('[data-aisl-type]', s);
-      const full = () => { s._nodes?.forEach(([n, t]) => { n.textContent = t; }); seq && [...seq.children].forEach(c => c.classList.add('is-in')); s.classList.add('is-q', 'is-a', 'is-b', 'is-done'); };
-      if (reduce) { full(); return; }
+      const s = slides[i], seq = $('[data-aisl-seq]', s), code = $('[data-aisl-type]', s), input = s._input;
+      if (reduce) { full(s); return; }
+      s.classList.remove('is-q', 'is-a', 'is-b', 'is-done');
       s._nodes?.forEach(([n]) => { n.textContent = ''; });
       seq && [...seq.children].forEach(c => c.classList.remove('is-in'));
       await visible(); if (id !== run) return;
+      await wait(450, id);
       input.classList.add('is-typing'); input.textContent = '';
       for (const ch of $('.aisl__q', s).textContent) { input.textContent += ch; await wait(30, id); }
       await wait(360, id);
-      input.classList.remove('is-typing'); input.textContent = PH;
+      input.classList.remove('is-typing'); input.textContent = s._ph;
       s.classList.add('is-q'); await wait(480, id);
       s.classList.add('is-a'); await wait(420, id);
       s.classList.add('is-b');
@@ -379,12 +381,12 @@
       play(i + 1);
     }
     w.addEventListener('click', e => {
-      const g = e.target.closest('[data-aisl-go]'), t = e.target.closest('[data-aisl-to]');
-      if (g) play(i + +g.dataset.aislGo); else if (t) play(+t.dataset.aislTo);
+      const g = e.target.closest('[data-aisl-go]'), t = e.target.closest('[data-aisl-to]'), card = e.target.closest('[data-aisl-slide]:not(.is-on)');
+      if (g) play(i + +g.dataset.aislGo); else if (t) play(+t.dataset.aislTo); else if (card) play(slides.indexOf(card));
     });
-    let tx = 0;
-    w.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
-    w.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 60) play(i + (dx < 0 ? 1 : -1)); });
+    let tx = 0, ty = 0;
+    w.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+    w.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty; if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) play(i + (dx < 0 ? 1 : -1)); });
     new IntersectionObserver(([e]) => { inView = e.isIntersecting; if (inView && wake) { const r = wake; wake = null; r(); } }, { threshold: .3 }).observe(w);
     play(0);
   });
@@ -511,6 +513,13 @@
     const mIO = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) typeCount($('[data-typecount]', e.target) || document.createElement('b')); }), { threshold: .5 });
     $$('.seq__m .scr--doc', seq).forEach(el => mIO.observe(el));
   }
+
+  /* ───────── HOW WE WORK 벤토: 원고 카드가 보이면 글자 수 세기 */
+  $$('.hbento [data-typecount]').forEach(el => new IntersectionObserver(([e], o) => {
+    if (!e.isIntersecting) return; o.disconnect();
+    if (reduce) { el.textContent = '1,512'; return; }
+    const t0 = performance.now(); const f = t => { const k = Math.min(1, (t - t0) / 1600); el.textContent = Math.round(1512 * k).toLocaleString('ko-KR'); if (k < 1) requestAnimationFrame(f); }; requestAnimationFrame(f);
+  }, { threshold: .4 }).observe(el.closest('.hb')));
 
   /* ───────── 히어로 벽 — 화면 밖이면 애니메이션 멈춤 */
   const hero = $('[data-hero]');

@@ -695,11 +695,10 @@ export const WEBCASE_META = {
   paroot: { kind: '대학로 공연 제작사', host: 'paroot.kr', live: '', status: '오픈 준비', facts: ['공연 상세 6편 · 예매 연결', '4K 히어로 필름', '블로그 하루 3편 자동 발행'] },
 };
 
-// ───────── AI 검색 실제 녹화(로그인하지 않은 ChatGPT, 2026-10-23, 화면 그대로 · motion/tools/record_chatgpt.mjs)
+// ───────── AI 검색 실제 녹화(로그인하지 않은 ChatGPT, PC 2026-10-23·모바일 2026-10-25 · record_chatgpt.mjs → encode_rec2.py: 답변 영역만, 대기 구간 줄임, 1.5배속)
 export const AI_RECORDINGS = [
   { key: 'mirae', label: '미래애드원', q: '미래애드원 어떤 회사야?', video: 'ai-mirae', note: '답변 출처: 미래애드원 공식 홈페이지' },
-  { key: 'starterz', label: '스타터즈', sub: '운영 고객', q: '스타터즈 프랜차이즈 어떤 회사야?', video: 'ai-starterz', note: '답변 출처: starterz.kr 사업 소개·서비스 안내' },
-];
+]
 
 // ───────── 작업 전후 변화(측정: tools/measure/compare.mjs, 2026-10-23 · 원시 HTML 기준)
 export const CASE_CHANGES = [
@@ -709,7 +708,7 @@ export const CASE_CHANGES = [
     timeline: [
       ['2026.07.28', 'ChatGPT·Perplexity에 업체 추천 질문 3개를 물었을 때 한 번도 나오지 않음'],
       ['2026.08.10', '검색·AI 구조 점검 80점(SEO 85 · AEO 80 · GEO 75)'],
-      ['2026.08.11', 'ChatGPT가 「프랜차이즈 만들기 업체 추천」 답변에서 스타터즈를 언급하고 starterz.kr을 출처로 인용'],
+      ['2026.08.11', 'ChatGPT가 「프랜차이즈 만들기 업체 추천」 답변에서 이 브랜드를 언급하고 공식 홈페이지를 출처로 인용'],
       ['2026.10.23', '같은 질문을 5번 물어 1번은 첫 번째 추천으로 나옴. 회사 이름을 물으면 공식 홈페이지를 근거로 답함'],
     ],
     foot: 'AI 답변은 물을 때마다 달라집니다. 날짜별로 직접 물어 본 결과를 적었습니다.',
