@@ -6,6 +6,7 @@ date: 2026-10-27
 time: 13:00
 category: 업종별 가이드
 tags: 병원 마케팅, 병원 블로그, 의료광고, 개원 마케팅
+keyword: 병원 마케팅
 service: brand-blog
 cover: 개원 첫 달, 순서와 문구부터
 author: 미래애드원 마케팅팀

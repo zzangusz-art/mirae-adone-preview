@@ -6,6 +6,7 @@ date: 2026-10-27
 time: 18:00
 category: 홈페이지
 tags: 병원 홈페이지, 병원 홈페이지 제작, 홈페이지 제작, 의료광고
+keyword: 병원 홈페이지
 service: website
 cover: 병원 홈페이지, 메뉴부터 정하세요
 author: 미래애드원 마케팅팀

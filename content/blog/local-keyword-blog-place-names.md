@@ -6,6 +6,7 @@ date: 2026-10-31
 time: 13:00
 category: 블로그 마케팅
 tags: 지역 키워드, 동네 블로그 마케팅, 지역명 키워드, 로컬 검색
+keyword: 지역 키워드 블로그
 service: brand-blog
 cover: 동네 이름, 어디까지 넣어야 할까
 author: 미래애드원 마케팅팀

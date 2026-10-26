@@ -6,6 +6,7 @@ date: 2026-11-01
 time: 13:00
 category: AI 검색·SEO
 tags: 구조화 데이터, 스키마 마크업, 홈페이지 SEO, 소상공인 홈페이지
+keyword: 구조화 데이터
 service: seo-aeo-geo
 cover: 구조화 데이터, 무엇부터 넣을까
 author: 미래애드원 마케팅팀

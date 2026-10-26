@@ -6,6 +6,7 @@ date: 2026-11-02
 time: 09:00
 category: AI 검색·SEO
 tags: 브랜드 정보 일관성, NAP, 네이버 플레이스, AI 검색
+keyword: 상호 주소 전화번호 일관성
 service: ai-visibility
 cover: 채널마다 다른 주소, 지금 맞추세요
 author: 미래애드원 마케팅팀

@@ -688,10 +688,10 @@ export const svc = slug => SERVICES.find(s => s.slug === slug);
 
 // ───────── 홈페이지 제작 레퍼런스(직접 만들고 운영하는 사이트, 화면은 2026-10-23 캡처 · src/webcases.json)
 export const WEBCASE_META = {
-  ex1: { abc: 'B', kind: '온라인광고대행사', live: false, status: '리뉴얼 오픈 준비', facts: ['45페이지 · 서비스 18종 상세', '블로그 하루 3편 자동 발행', '페이지별 구조화 데이터 · llms.txt'] },
+  ex1: { abc: 'B', kind: '온라인광고대행사', live: false, status: '리뉴얼 오픈 준비', facts: ['45페이지 · 서비스 18종 상세', 'SEO·AEO·GEO ALWAYS 관리 시스템', '브랜딩 인블로그 발행', '페이지별 구조화 데이터 · llms.txt'] },
   ex2: { abc: 'A', kind: '프랜차이즈 창업·구축 플랫폼', live: true, status: '운영 중', facts: ['플랫폼 · 자가 진단 · 블로그', '가격 공개형 상품 구성', 'AI 검색 답변 인용 확인'] },
-  ex3: { abc: 'C', kind: '퀵서비스 · 화물 운송', live: false, status: '오픈 준비', facts: ['19페이지 · 차종별 요금 안내', '차량 제원 비교 · 빠른 접수', '블로그 하루 3편 자동 발행'] },
-  ex4: { abc: 'D', kind: '대학로 공연 제작사', live: false, status: '오픈 준비', facts: ['공연 상세 6편 · 예매 연결', '4K 히어로 필름', '블로그 하루 3편 자동 발행'] },
+  ex3: { abc: 'C', kind: '퀵서비스 · 화물 운송', live: false, status: '오픈 준비', facts: ['19페이지 · 차종별 요금 안내', '차량 제원 비교 · 빠른 접수', 'SEO·AEO·GEO ALWAYS 관리 시스템', '브랜딩 인블로그 발행'] },
+  ex4: { abc: 'D', kind: '대학로 공연 제작사', live: false, status: '오픈 준비', facts: ['공연 상세 6편 · 예매 연결', '4K 히어로 필름', 'SEO·AEO·GEO ALWAYS 관리 시스템', '브랜딩 인블로그 발행'] },
 };
 
 // ───────── AI 검색 실제 녹화(로그인하지 않은 ChatGPT, PC 2026-10-23·모바일 2026-10-25 · record_chatgpt.mjs → encode_rec2.py: 답변 영역만, 대기 구간 줄임, 1.5배속)

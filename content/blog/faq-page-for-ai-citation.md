@@ -6,6 +6,7 @@ date: 2026-11-01
 time: 09:00
 category: AI 검색·SEO
 tags: FAQ 페이지, AI 인용, FAQPage, 구조화 데이터
+keyword: FAQ 페이지 작성
 service: seo-aeo-geo
 cover: AI가 가져다 쓰는 FAQ 쓰는 법
 author: 미래애드원 마케팅팀

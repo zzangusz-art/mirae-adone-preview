@@ -146,7 +146,7 @@ export const marketChart = () => {
 </figure>`;
 };
 
-export const structureTable = () => `<div class="cmp" data-reveal><table><thead><tr>${STRUCTURE_COMPARE.cols.map((c, i) => `<th scope="col"${i === 2 ? ' class="is-ours"' : ''}>${c}</th>`).join('')}</tr></thead><tbody>${STRUCTURE_COMPARE.rows.map(r => `<tr><th scope="row">${r[0]}</th><td data-label="일반적인 구조"><span>${r[1]}</span></td><td class="is-ours" data-label="${STRUCTURE_COMPARE.cols[2]}"><span>${icon('check')}${r[2]}</span></td></tr>`).join('')}</tbody></table></div>`;
+export const structureTable = () => `<div class="cmp cmp--structure" data-reveal><table><thead><tr>${STRUCTURE_COMPARE.cols.map((c, i) => `<th scope="col"${i === 2 ? ' class="is-ours"' : ''}>${c}</th>`).join('')}</tr></thead><tbody>${STRUCTURE_COMPARE.rows.map(r => `<tr><th scope="row">${r[0]}</th><td data-label="일반적인 구조"><span>${r[1]}</span></td><td class="is-ours" data-label="${STRUCTURE_COMPARE.cols[2]}"><span>${icon('check')}${r[2]}</span></td></tr>`).join('')}</tbody></table></div>`;
 
 export const cpcCalculator = () => `<div class="calc glass glass--light" data-calc data-reveal>
   <div class="calc__in">

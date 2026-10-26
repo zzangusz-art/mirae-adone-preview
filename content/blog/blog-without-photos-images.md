@@ -6,6 +6,7 @@ date: 2026-10-31
 time: 18:00
 category: 블로그 마케팅
 tags: 블로그 이미지, 블로그 사진 없을 때, 정보형 이미지, 블로그 사진 고르기
+keyword: 블로그 사진
 service: brand-blog
 cover: 사진 없는 업종의 블로그 채우는 법
 author: 미래애드원 마케팅팀

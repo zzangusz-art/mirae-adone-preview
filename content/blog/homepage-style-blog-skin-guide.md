@@ -6,6 +6,7 @@ date: 2026-10-30
 time: 13:00
 category: 블로그 마케팅
 tags: 홈페이지형 블로그, 블로그 스킨, 블로그 카테고리, 하단 배너
+keyword: 홈페이지형 블로그
 service: brand-blog
 cover: 홈페이지형 블로그, 첫 화면에 넣을 것
 author: 미래애드원 마케팅팀

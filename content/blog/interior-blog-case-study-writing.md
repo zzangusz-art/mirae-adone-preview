@@ -6,6 +6,7 @@ date: 2026-10-28
 time: 13:00
 category: 업종별 가이드
 tags: 인테리어 블로그 마케팅, 인테리어 업체 홍보, 리모델링 블로그, 시공 사례
+keyword: 인테리어 블로그 마케팅
 service: brand-blog
 cover: 완공 사진보다 공정 기록이 먼저
 author: 미래애드원 마케팅팀

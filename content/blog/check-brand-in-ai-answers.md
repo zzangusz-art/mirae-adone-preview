@@ -6,6 +6,7 @@ date: 2026-10-19
 time: 13:00
 category: AI 검색·SEO
 tags: ChatGPT 노출 확인, AI 검색 가시성, Gemini, 브랜드 언급
+keyword: ChatGPT 노출 확인
 service: ai-visibility
 cover: AI 답변 속 우리 브랜드 찾기
 author: 미래애드원 마케팅팀

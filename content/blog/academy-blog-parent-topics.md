@@ -6,6 +6,7 @@ date: 2026-10-28
 time: 09:00
 category: 업종별 가이드
 tags: 학원 블로그 마케팅, 학원 홍보, 학원 블로그, 학부모 상담
+keyword: 학원 블로그 마케팅
 service: brand-blog
 cover: 학부모가 상담 전에 읽는 학원 글
 author: 미래애드원 마케팅팀

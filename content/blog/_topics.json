@@ -447,14 +447,18 @@
   {
     "id": "ai-wrong-company-info",
     "title": "AI가 우리 회사를 잘못 소개할 때 바로잡는 순서",
-    "angle": "오래된 정보·동명 업체 혼동의 원인을 찾고 공식 출처를 정비하는 방법",
+    "angle": "ChatGPT·Gemini 등이 주소·서비스·가격을 틀리게 말할 때: 무엇을 어떻게 기록하고, 공식 사이트·플레이스·블로그 정보를 어떤 순서로 맞추고, 바뀌었는지 다시 확인하는 법. 「AI에 우리 회사가 나오는지 확인」·「상호·주소·전화번호 일관성」 글과 겹치지 않게 「바로잡기」에 집중. 노출·수정 보장 없음.",
     "keywords": [
       "AI 잘못된 정보",
       "브랜드 오인식"
     ],
     "category": "AI 검색·SEO",
     "service": "ai-visibility",
-    "status": "todo"
+    "status": "done",
+    "keyword": "AI 잘못된 정보 수정",
+    "slug": "ai-wrong-company-info-fix",
+    "date": "2026-11-04",
+    "time": "18:00"
   },
   {
     "id": "powerlink-negative-keywords",
@@ -519,14 +523,18 @@
   {
     "id": "landing-page-vs-homepage",
     "title": "광고용 랜딩페이지와 홈페이지, 무엇이 다를까",
-    "angle": "목적·구조·측정 방식 차이와 둘을 함께 쓰는 법",
+    "angle": "검색광고·SNS 광고를 받을 페이지로 랜딩페이지와 홈페이지 중 무엇을 쓸지, 랜딩페이지 구성(첫 화면 약속, 근거, 문의 버튼), 상담폼 항목, 전환 추적. 사실 목록의 문의·예약 전환 개선 서비스 반영.",
     "keywords": [
       "랜딩페이지",
       "홈페이지 차이"
     ],
     "category": "홈페이지",
-    "service": "website",
-    "status": "todo"
+    "service": "conversion",
+    "status": "done",
+    "keyword": "랜딩페이지",
+    "slug": "landing-page-vs-homepage",
+    "date": "2026-11-06",
+    "time": "18:00"
   },
   {
     "id": "contact-form-fields",
@@ -555,14 +563,18 @@
   {
     "id": "website-maintenance-contract",
     "title": "홈페이지 유지보수 계약서에서 확인할 것",
-    "angle": "수정 범위·응답 시간·백업·도메인 소유권·계약 종료 시 인계",
+    "angle": "유지보수 범위(수정 횟수, 보안·백업, 호스팅·도메인 갱신, 장애 대응 시간), 소유권과 자료 인계, 월 비용에 무엇이 포함되는지. 「홈페이지 제작 비용」·「리뉴얼 점검」 글과 겹치지 않게 제작 이후 관리에 집중.",
     "keywords": [
       "홈페이지 유지보수",
       "유지보수 계약"
     ],
     "category": "홈페이지",
     "service": "website",
-    "status": "todo"
+    "status": "done",
+    "keyword": "홈페이지 유지보수",
+    "slug": "website-maintenance-contract-checklist",
+    "date": "2026-11-06",
+    "time": "09:00"
   },
   {
     "id": "301-redirect-renewal",
@@ -646,67 +658,88 @@
     ],
     "category": "업종별 가이드",
     "service": "brand-blog",
-    "status": "todo"
+    "status": "merged",
+    "note": "hospital-marketing-opening-guide 와 검색어 겹침(병원 마케팅·피할 표현)"
   },
   {
     "id": "law-firm-content",
-    "title": "법률사무소 콘텐츠, 사건 유형별로 나눠야 하는 이유",
-    "angle": "사건 유형별 페이지와 비용 안내 FAQ 구성, 광고 규정 확인",
+    "title": "법률사무소 블로그, 사건 유형별로 나눠야 문의가 오는 이유",
+    "angle": "이혼·형사·민사처럼 사건 유형별로 카테고리와 글을 나누는 이유, 의뢰인이 묻는 질문 단위 글, 변호사 광고 규정 확인(결과 약속 금지), 상담 연결. 사실 목록의 법률 업종 항목 반영.",
     "keywords": [
       "법률사무소 마케팅",
       "변호사 홈페이지"
     ],
     "category": "업종별 가이드",
-    "service": "seo-aeo-geo",
-    "status": "todo"
+    "service": "brand-blog",
+    "status": "done",
+    "keyword": "법률사무소 마케팅",
+    "slug": "law-firm-blog-case-types",
+    "date": "2026-11-04",
+    "time": "13:00"
   },
   {
     "id": "restaurant-opening-checklist",
-    "title": "음식점 오픈 4주 전 온라인 준비 체크리스트",
-    "angle": "플레이스 등록·촬영·블로그·SNS 세팅을 오픈일 역산으로 정리",
+    "title": "음식점 오픈 4주 전, 온라인으로 먼저 준비할 것",
+    "angle": "오픈 전 주차별 온라인 준비(플레이스 등록 정보, 메뉴·가격 사진, 블로그 첫 글, 체험단 일정과 광고 표시, 오픈 직후 리뷰 응대). 업종 특성과 주의점은 사실 목록의 음식점 업종 항목을 따른다.",
     "keywords": [
       "음식점 오픈 마케팅",
       "매장 오픈"
     ],
     "category": "업종별 가이드",
     "service": "store-opening",
-    "status": "todo"
+    "status": "done",
+    "keyword": "음식점 오픈 마케팅",
+    "slug": "restaurant-opening-online-checklist",
+    "date": "2026-11-03",
+    "time": "18:00"
   },
   {
     "id": "pension-booking-channel",
     "title": "펜션·숙박 예약을 늘리는 채널 조합",
-    "angle": "객실 사진·홈페이지 예약 동선·주변 여행 정보 콘텐츠",
+    "angle": "펜션·숙박 업종이 예약으로 이어지는 채널 조합(플레이스, 블로그 후기·체험단과 광고 표시, 인스타그램 사진, 자체 예약 안내), 시즌별 운영. 사실 목록의 숙박 업종 항목 반영.",
     "keywords": [
       "펜션 마케팅",
       "숙박 홍보"
     ],
     "category": "업종별 가이드",
-    "service": "photo-video",
-    "status": "todo"
+    "service": "industry-consulting",
+    "status": "done",
+    "keyword": "펜션 마케팅",
+    "slug": "pension-booking-channel-mix",
+    "date": "2026-11-05",
+    "time": "13:00"
   },
   {
     "id": "academy-mom-cafe",
     "title": "학원 홍보, 지역 맘카페에서 지켜야 할 것",
-    "angle": "카페 규정 확인·광고 표시·설명회 홍보 글 구성",
+    "angle": "지역 맘카페에서 학원을 알릴 때 카페 규칙·광고 표시·후기 조작 금지, 학부모가 반응하는 정보, 블로그와 연결. 「학원 블로그 마케팅」 글과 겹치지 않게 카페 커뮤니티에 집중. 성적·합격 약속 금지.",
     "keywords": [
       "학원 마케팅",
       "맘카페 홍보"
     ],
     "category": "업종별 가이드",
     "service": "cafe-viral",
-    "status": "todo"
+    "status": "done",
+    "keyword": "학원 맘카페 홍보",
+    "slug": "academy-mom-cafe-rules",
+    "date": "2026-11-05",
+    "time": "18:00"
   },
   {
     "id": "franchise-store-consistency",
     "title": "가맹점마다 다른 사진과 문구, 어떻게 맞출까",
-    "angle": "본사 브랜드 가이드와 매장별 플레이스·블로그 운영 기준",
+    "angle": "본사와 가맹점 채널(플레이스·블로그·SNS)의 사진·메뉴명·가격·문구를 맞추는 방법, 본사 가이드와 가맹점 자율 영역 나누기, 정기 점검. 사실 목록의 프랜차이즈 업종·서비스 항목 반영.",
     "keywords": [
       "프랜차이즈 마케팅",
       "가맹점 관리"
     ],
     "category": "업종별 가이드",
     "service": "franchise",
-    "status": "todo"
+    "status": "done",
+    "keyword": "프랜차이즈 마케팅",
+    "slug": "franchise-store-content-consistency",
+    "date": "2026-11-06",
+    "time": "13:00"
   },
   {
     "id": "ecommerce-ad-to-detail",
@@ -754,7 +787,8 @@
     ],
     "category": "블로그 마케팅",
     "service": "industry-consulting",
-    "status": "todo"
+    "status": "merged",
+    "note": "online-ad-agency-contract-checklist 와 검색어 겹침(대행 계약서)"
   },
   {
     "id": "agency-change-handover",
@@ -831,13 +865,62 @@
   {
     "id": "blog-vs-homepage",
     "title": "블로그와 홈페이지, 둘 다 필요한가요",
-    "angle": "역할 차이와 연결 방법, 예산이 적을 때 순서",
+    "angle": "블로그와 홈페이지의 역할 차이(찾아오게 하는 곳과 결정하게 하는 곳), 업종·단계별로 무엇부터 할지, 둘을 연결하는 방법. 홈페이지형 블로그 스킨 글과 겹치지 않게.",
     "keywords": [
       "블로그 홈페이지 차이",
       "마케팅 채널"
     ],
     "category": "홈페이지",
+    "service": "website",
+    "status": "done",
+    "keyword": "블로그 홈페이지 차이",
+    "slug": "blog-vs-homepage-both-needed",
+    "date": "2026-11-05",
+    "time": "09:00"
+  },
+  {
+    "id": "homepage-build-cost-quote",
+    "title": "홈페이지 제작 비용, 견적서에서 금액이 갈리는 항목",
+    "angle": "처음 홈페이지를 맡기는 대표가 견적서를 비교할 때 금액 차이가 생기는 항목(페이지 수, 디자인 방식, 반응형, 게시판·예약 기능, 원고·사진을 누가 만드는지, 유지보수, 도메인·호스팅)을 짚는다. 회사 사실은 사실 목록의 홈페이지+AI 검색 패키지 가격과 견적서 기재 원칙만. 리뉴얼 점검 글과 겹치지 않게 「처음 만드는」 관점.",
+    "keywords": [
+      "홈페이지 제작"
+    ],
+    "keyword": "홈페이지 제작",
+    "category": "홈페이지",
+    "service": "website",
+    "status": "done",
+    "slug": "homepage-build-cost-quote",
+    "date": "2026-11-03",
+    "time": "09:00"
+  },
+  {
+    "id": "brand-blog-what-is",
+    "title": "브랜드 블로그, 개인 블로그와 운영 방식이 다른 다섯 가지",
+    "angle": "브랜드 블로그의 정의와 운영 원칙(계정 소유, 글의 말투와 기준, 카테고리 설계, 발행 주기, 담당자와 확인 절차). 블로그 대행 비용·업체 선택·주제 기획·홈페이지형 스킨 글과 겹치지 않게 「브랜드 블로그란 무엇이고 어떻게 굴러가나」.",
+    "keywords": [
+      "브랜드 블로그"
+    ],
+    "keyword": "브랜드 블로그",
+    "category": "블로그 마케팅",
     "service": "brand-blog",
-    "status": "todo"
+    "status": "done",
+    "slug": "brand-blog-what-is",
+    "date": "2026-11-03",
+    "time": "13:00"
+  },
+  {
+    "id": "blog-marketing-fit-check",
+    "title": "블로그 마케팅, 우리 업종에 맞는지 먼저 판단하는 기준",
+    "angle": "블로그 마케팅이 잘 맞는 업종과 덜 맞는 업종, 시작 전 판단 기준(고객이 검색으로 찾는지, 고민 기간이 긴 상품인지, 지역성, 보여 줄 사례·사진), 기대할 수 있는 것과 없는 것. 「블로그 홍보(노출 안 될 때 점검)」 글과 겹치지 않게 시작 전 판단에 집중.",
+    "keywords": [
+      "블로그 마케팅"
+    ],
+    "keyword": "블로그 마케팅",
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "done",
+    "slug": "blog-marketing-fit-check",
+    "date": "2026-11-04",
+    "time": "09:00"
   }
 ]

@@ -6,6 +6,7 @@ date: 2026-10-26
 time: 18:00
 category: AI 검색·SEO
 tags: AEO GEO 마케팅, GEO 마케팅, AI 검색 최적화, AEO
+keyword: AEO GEO 마케팅
 service: seo-aeo-geo
 cover: AI 검색 대비, 지금인가 나중인가
 author: 미래애드원 마케팅팀

@@ -6,6 +6,7 @@ date: 2026-11-02
 time: 13:00
 category: AI 검색·SEO
 tags: GEO 진행 과정, AI 검색 최적화 기간, AI 검색 최적화, 질문셋 측정
+keyword: AI 검색 최적화 기간
 service: seo-aeo-geo
 cover: AI 검색 최적화, 첫 달 4주의 흐름
 author: 미래애드원 마케팅팀

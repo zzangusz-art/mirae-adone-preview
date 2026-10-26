@@ -6,6 +6,7 @@ date: 2026-10-19
 time: 09:00
 category: 홈페이지
 tags: 홈페이지 리뉴얼, 홈페이지 제작, 모바일 홈페이지, 상담 전환
+keyword: 홈페이지 리뉴얼
 service: website
 cover: 새로 만들기 전에 이것부터
 author: 미래애드원 마케팅팀

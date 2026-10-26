@@ -6,6 +6,7 @@ date: 2026-10-18
 time: 13:00
 category: AI 검색·SEO
 tags: GEO, AEO, SEO, AI 검색 최적화, 생성형 검색
+keyword: GEO SEO 차이
 service: seo-aeo-geo
 cover: GEO와 SEO, 무엇이 다를까
 thumb_bg: data

@@ -6,6 +6,7 @@ date: 2026-10-27
 time: 09:00
 category: 블로그 마케팅
 tags: 네이버 블로그 광고, 블로그 광고, 파워컨텐츠, 체험단 비용
+keyword: 네이버 블로그 광고
 service: brand-blog
 cover: 월정액, 캠페인, 클릭당 과금
 author: 미래애드원 마케팅팀

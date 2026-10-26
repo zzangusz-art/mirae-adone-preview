@@ -6,6 +6,7 @@ date: 2026-10-19
 time: 18:00
 category: 블로그 마케팅
 tags: 체험단 광고 표시, 협찬 표기, 블로그 바이럴, 추천보증 심사지침
+keyword: 체험단 광고 표시
 service: blog-viral
 cover: 협찬 표시, 제목과 첫 부분에
 author: 미래애드원 마케팅팀

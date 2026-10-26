@@ -6,6 +6,7 @@ date: 2026-10-31
 time: 09:00
 category: 블로그 마케팅
 tags: 블로그 보고서, 블로그 성과, 블로그 대행 보고, 키워드 노출 확인
+keyword: 블로그 대행 보고서
 service: brand-blog
 cover: 블로그 보고서, 조회수보다 먼저 볼 것
 author: 미래애드원 마케팅팀

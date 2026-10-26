@@ -6,6 +6,7 @@ date: 2026-10-28
 time: 18:00
 category: 업종별 가이드
 tags: 부동산 블로그 마케팅, 부동산 마케팅, 중개사무소 홍보, 중개대상물 표시광고
+keyword: 부동산 블로그 마케팅
 service: brand-blog
 cover: 중개사무소 블로그, 규정부터 챙기세요
 author: 미래애드원 마케팅팀

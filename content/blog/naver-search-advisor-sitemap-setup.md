@@ -6,6 +6,7 @@ date: 2026-11-01
 time: 18:00
 category: AI 검색·SEO
 tags: 네이버 서치어드바이저, 사이트맵 제출, 홈페이지 등록, 네이버 웹검색
+keyword: 네이버 서치어드바이저
 service: seo-aeo-geo
 cover: 서치어드바이저, 순서대로 등록하기
 author: 미래애드원 마케팅팀

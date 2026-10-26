@@ -6,6 +6,7 @@ date: 2026-10-29
 time: 09:00
 category: 블로그 마케팅
 tags: 바이럴 마케팅, 블로그 바이럴, 카페 바이럴, 체험단, 기자단
+keyword: 바이럴 마케팅
 service: blog-viral
 cover: 바이럴, 쌓이는 방식과 위험한 방식
 author: 미래애드원 마케팅팀

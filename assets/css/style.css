@@ -1594,3 +1594,12 @@ html.no-anim [data-reveal],html.no-anim .tl li,html.no-anim .mchart__range,html.
 .mega__inner.glass--light{background:rgba(255,255,255,.97);-webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);box-shadow:0 30px 60px -20px rgba(10,19,34,.35),0 0 0 1px rgba(15,23,42,.06)}
 .mega__inner.glass--light::before{opacity:.35}
 .mega__col a{color:var(--ink)}
+
+/* 비교표(중간 단계 많은 구조 vs 미래애드원): 한 줄·가운데 정렬 — 표가 넓게 쓰이도록 시장 그래프와 위아래로 배치 */
+@media (min-width:641px){
+  .cmp--structure th,.cmp--structure td{text-align:center;vertical-align:middle}
+}
+@media (min-width:900px){
+  .why{grid-template-columns:1fr}
+  .cmp--structure th,.cmp--structure td{white-space:nowrap;padding:16px 20px}
+}

@@ -6,6 +6,7 @@ date: 2026-10-26
 time: 13:00
 category: 블로그 마케팅
 tags: 블로그운영대행, 블로그광고대행, 브랜드 블로그, 체험단, 기자단
+keyword: 블로그운영대행, 블로그광고대행
 service: brand-blog
 cover: 우리 계정에 쌓을까, 남의 글로 알릴까
 author: 미래애드원 마케팅팀

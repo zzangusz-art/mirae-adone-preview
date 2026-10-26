@@ -6,6 +6,7 @@ date: 2026-10-30
 time: 18:00
 category: 블로그 마케팅
 tags: 블로그 대행 검수, 블로그 발행 전 확인, 블로그 대행 계약서, 원고 승인
+keyword: 블로그 대행 검수
 service: brand-blog
 cover: 블로그 대행, 발행 전에 받아 보세요
 author: 미래애드원 마케팅팀

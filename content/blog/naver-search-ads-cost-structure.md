@@ -6,6 +6,7 @@ date: 2026-10-18
 time: 18:00
 category: 검색광고·플레이스
 tags: 네이버 검색광고, 파워링크 비용, 클릭당 비용, 광고 대행 수수료
+keyword: 네이버 검색광고 비용
 service: naver-search-ads
 cover: 매체비와 수수료는 따로 보세요
 author: 미래애드원 마케팅팀

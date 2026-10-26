@@ -6,6 +6,7 @@ date: 2026-10-26
 time: 09:00
 category: 블로그 마케팅
 tags: 블로그관리대행, 블로그 관리대행 업체, 블로그 대행 비용, 브랜드 블로그
+keyword: 블로그관리대행
 service: brand-blog
 cover: 견적서에서 먼저 볼 다섯 줄
 author: 미래애드원 마케팅팀

@@ -6,6 +6,7 @@ date: 2026-10-29
 time: 18:00
 category: 블로그 마케팅
 tags: 블로그 홍보, 블로그 마케팅, 블로그 노출, 블로그 키워드
+keyword: 블로그 홍보
 service: brand-blog
 cover: 아무도 안 보는 블로그, 점검 순서
 author: 미래애드원 마케팅팀

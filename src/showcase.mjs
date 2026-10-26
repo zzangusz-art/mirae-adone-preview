@@ -110,16 +110,16 @@ export const webCases = (R, { id = 'web-refs', gray = false, title = '직접 만
   const path = u => decodeURIComponent(u || '/');
   return `<section class="sec${gray ? ' sec--gray' : ''}" id="${id}">
 <div class="wrap">
-  ${sectionHead({ eyebrow: 'WEB REFERENCES', title, lead: `메인부터 서브 페이지까지 실제 화면을 그대로 담았습니다. ${sites.length}개 사이트, ${total}개 화면을 눌러서 넘겨 보세요.` })}
+  ${sectionHead({ eyebrow: 'WEB REFERENCES', title, lead: `메인부터 서브 페이지까지 실제 화면을 그대로 담았습니다.<br>${sites.length}개 사이트, ${total}개 화면을 눌러서 넘겨 보세요.` })}
   <div class="wc" data-tabs>
     <div class="wc__tabs" role="tablist" aria-label="홈페이지 레퍼런스">${sites.map((s, i) => `<button role="tab" type="button" id="${id}-t-${s.key}" aria-controls="${id}-p-${s.key}" aria-selected="${i === 0}"${i ? ' tabindex="-1"' : ''}><b>${WEBCASE_META[s.key].abc}업체</b><small>${esc(WEBCASE_META[s.key].kind)}</small></button>`).join('')}</div>
     ${sites.map((s, i) => {
-      const m = WEBCASE_META[s.key], P = pagesOf(s), first = s.pages[0], nm = `${m.abc}업체`;
+      const m = WEBCASE_META[s.key], P = pagesOf(s), first = s.pages[0], nm = `${m.abc}업체`, start = P[0]; // 긴 캡처가 있으면 그것부터
       return `<div class="wc__panel" role="tabpanel" id="${id}-p-${s.key}" aria-labelledby="${id}-t-${s.key}"${i ? ' hidden' : ''} data-wc>
       <div class="wc__stage">
         <div class="wc__browser">
           <div class="wc__bar"><span></span><span></span><span></span><p data-wc-url>${esc(path(first.url))}</p></div>
-          <button class="wc__view" type="button" data-wc-open aria-label="${nm} 화면 크게 보기">${pic(R, first.desktop, `${nm}(${m.kind}) ${first.label} 화면`, { eager: false })}<span class="wc__zoom">${icon('search')} 크게 보기</span></button>
+          <button class="wc__view${start.long ? ' is-long' : ''}" type="button" data-wc-open aria-label="${nm} 화면 크게 보기">${pic(R, start.desktop, `${nm}(${m.kind}) ${start.label} 화면`, { eager: false })}<span class="wc__zoom">${icon('search')} 크게 보기</span></button>
         </div>
         ${first.mobile ? `<div class="wc__phone" aria-hidden="true"><span class="wc__notch"></span><div class="wc__screen">${pic(R, first.mobile, '')}</div></div>` : ''}
       </div>
@@ -128,7 +128,7 @@ export const webCases = (R, { id = 'web-refs', gray = false, title = '직접 만
         <h3>${esc(m.kind)}</h3>
         <ul class="wc__facts">${m.facts.map(f => `<li>${icon('check')}${esc(f)}</li>`).join('')}</ul>
       </div>
-      <ol class="wc__pages" aria-label="${nm} 페이지">${P.map((p, j) => `<li><button type="button" data-wc-page aria-pressed="${p.slug === first.slug && !p.long}" data-desk="${R}assets/img/${p.desktop}" data-mob="${p.mobile ? `${R}assets/img/${p.mobile}` : ''}" data-url="${esc(path(p.url))}" data-label="${esc(p.label)}"${p.long ? ' data-long="1"' : ''} data-w="${imgSize(p.desktop).w}" data-h="${imgSize(p.desktop).h}">${pic(R, p.thumb, '')}<span>${p.long ? `${icon('play')} ` : ''}${esc(p.label)}</span></button></li>`).join('')}</ol>
+      <ol class="wc__pages" aria-label="${nm} 페이지">${P.map((p, j) => `<li><button type="button" data-wc-page aria-pressed="${p === start}" data-desk="${R}assets/img/${p.desktop}" data-mob="${p.mobile ? `${R}assets/img/${p.mobile}` : ''}" data-url="${esc(path(p.url))}" data-label="${esc(p.label)}"${p.long ? ' data-long="1"' : ''} data-w="${imgSize(p.desktop).w}" data-h="${imgSize(p.desktop).h}">${pic(R, p.thumb, '')}<span>${p.long ? `${icon('play')} ` : ''}${esc(p.label)}</span></button></li>`).join('')}</ol>
     </div>`;
     }).join('')}
   </div>

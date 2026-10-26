@@ -2,61 +2,6 @@
  "captured": "2026-10-23",
  "sites": [
   {
-   "key": "ex2",
-   "name": "",
-   "long": "webcases/ex2/home-long.webp",
-   "pages": [
-    {
-     "slug": "home",
-     "label": "메인",
-     "url": "/",
-     "desktop": "webcases/ex2/home-d.webp",
-     "thumb": "webcases/ex2/home-t.webp",
-     "mobile": "webcases/ex2/home-m.webp"
-    },
-    {
-     "slug": "platform",
-     "label": "플랫폼",
-     "url": "/platform",
-     "desktop": "webcases/ex2/platform-d.webp",
-     "thumb": "webcases/ex2/platform-t.webp",
-     "mobile": "webcases/ex2/platform-m.webp"
-    },
-    {
-     "slug": "blog",
-     "label": "블로그",
-     "url": "/",
-     "desktop": "webcases/ex2/blog-d.webp",
-     "thumb": "webcases/ex2/blog-t.webp",
-     "mobile": "webcases/ex2/blog-m.webp"
-    },
-    {
-     "slug": "sec-services",
-     "label": "이 네 가지를 같이 합니다",
-     "url": "/#services",
-     "desktop": "webcases/ex2/sec-services-d.webp",
-     "thumb": "webcases/ex2/sec-services-t.webp",
-     "mobile": null
-    },
-    {
-     "slug": "sec-pricing",
-     "label": "가격부터 공개합니다",
-     "url": "/#pricing",
-     "desktop": "webcases/ex2/sec-pricing-d.webp",
-     "thumb": "webcases/ex2/sec-pricing-t.webp",
-     "mobile": null
-    },
-    {
-     "slug": "sec-franchises",
-     "label": "전국 프랜차이즈 가맹점 모집 현황",
-     "url": "/#franchises",
-     "desktop": "webcases/ex2/sec-franchises-d.webp",
-     "thumb": "webcases/ex2/sec-franchises-t.webp",
-     "mobile": null
-    }
-   ]
-  },
-  {
    "key": "ex1",
    "name": "",
    "long": "webcases/ex1/home-long.webp",
@@ -107,6 +52,61 @@
      "url": "/insights/",
      "desktop": "webcases/ex1/insights-d.webp",
      "thumb": "webcases/ex1/insights-t.webp",
+     "mobile": null
+    }
+   ]
+  },
+  {
+   "key": "ex2",
+   "name": "",
+   "long": "webcases/ex2/home-long.webp",
+   "pages": [
+    {
+     "slug": "home",
+     "label": "메인",
+     "url": "/",
+     "desktop": "webcases/ex2/home-d.webp",
+     "thumb": "webcases/ex2/home-t.webp",
+     "mobile": "webcases/ex2/home-m.webp"
+    },
+    {
+     "slug": "platform",
+     "label": "플랫폼",
+     "url": "/platform",
+     "desktop": "webcases/ex2/platform-d.webp",
+     "thumb": "webcases/ex2/platform-t.webp",
+     "mobile": "webcases/ex2/platform-m.webp"
+    },
+    {
+     "slug": "blog",
+     "label": "블로그",
+     "url": "/",
+     "desktop": "webcases/ex2/blog-d.webp",
+     "thumb": "webcases/ex2/blog-t.webp",
+     "mobile": "webcases/ex2/blog-m.webp"
+    },
+    {
+     "slug": "sec-services",
+     "label": "이 네 가지를 같이 합니다",
+     "url": "/#services",
+     "desktop": "webcases/ex2/sec-services-d.webp",
+     "thumb": "webcases/ex2/sec-services-t.webp",
+     "mobile": null
+    },
+    {
+     "slug": "sec-pricing",
+     "label": "가격부터 공개합니다",
+     "url": "/#pricing",
+     "desktop": "webcases/ex2/sec-pricing-d.webp",
+     "thumb": "webcases/ex2/sec-pricing-t.webp",
+     "mobile": null
+    },
+    {
+     "slug": "sec-franchises",
+     "label": "전국 프랜차이즈 가맹점 모집 현황",
+     "url": "/#franchises",
+     "desktop": "webcases/ex2/sec-franchises-d.webp",
+     "thumb": "webcases/ex2/sec-franchises-t.webp",
      "mobile": null
     }
    ]

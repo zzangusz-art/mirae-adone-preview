@@ -6,6 +6,7 @@ date: 2026-11-02
 time: 18:00
 category: AI 검색·SEO
 tags: llms.txt, AI 크롤러, robots.txt, 사이트맵
+keyword: llms.txt
 service: seo-aeo-geo
 cover: llms.txt, 꼭 만들어야 할까
 author: 미래애드원 마케팅팀

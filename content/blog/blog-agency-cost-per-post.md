@@ -6,6 +6,7 @@ date: 2026-10-18
 time: 09:00
 category: 블로그 마케팅
 tags: 블로그 관리대행 비용, 블로그 대행 가격, 브랜드 블로그
+keyword: 블로그 관리대행 비용
 service: brand-blog
 cover: 월 금액 말고 1회당 금액으로
 author: 미래애드원 마케팅팀

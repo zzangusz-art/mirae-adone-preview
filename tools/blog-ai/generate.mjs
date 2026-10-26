@@ -98,11 +98,14 @@ const OK_LINK = /mirae-adone\.com|searchadvisor\.naver\.com|developers\.google\.
 const bigrams = s => { const t = s.replace(/\s+/g, ''); const set = new Set(); for (let i = 0; i < t.length - 1; i++) set.add(t.slice(i, i + 2)); return set; };
 const sim = (a, b) => { const A = bigrams(a), B = bigrams(b); let n = 0; for (const x of A) if (B.has(x)) n++; return n / Math.max(1, Math.min(A.size, B.size)); };
 
-function validate(md, { allowed, slugs, titles = [] }) {
+const kwNorm = k => String(k || '').split(/[,，]/).map(x => x.replace(/[\s·]/g, '').toLowerCase()).filter(Boolean);
+// keywords: 다른 글들의 1순위 검색어(정규화) → 글 / when: slug → 'YYYY-MM-DD HH:MM'(내부 링크가 이 글보다 늦게 공개되는 글을 가리키면 안 됨)
+function validate(md, { allowed, slugs, titles = [], keywords = new Map(), when = new Map() }) {
   const errs = [];
   let meta, body;
   try { ({ meta, body } = parseFrontmatter(md)); } catch (e) { return { ok: false, errs: ['머리말 형식 오류: ' + e.message] }; }
-  for (const k of ['title', 'description', 'slug', 'category', 'tags', 'cover']) if (!meta[k] || (Array.isArray(meta[k]) && !meta[k].length)) errs.push(`머리말 ${k} 누락`);
+  for (const k of ['title', 'description', 'slug', 'category', 'tags', 'cover', 'keyword']) if (!meta[k] || (Array.isArray(meta[k]) && !meta[k].length)) errs.push(`머리말 ${k} 누락`);
+  for (const k of kwNorm(Array.isArray(meta.keyword) ? meta.keyword.join(',') : meta.keyword)) if (keywords.has(k)) errs.push(`1순위 검색어가 다른 글과 겹침: ${k} ↔ ${keywords.get(k)}`);
   if (meta.slug && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(meta.slug)) errs.push('slug는 영문 소문자·숫자·하이픈만');
   if (meta.slug && slugs.has(meta.slug)) errs.push(`이미 있는 slug: ${meta.slug}`);
   if (meta.category && !D.BLOG_CATEGORIES.includes(meta.category)) errs.push(`category는 ${D.BLOG_CATEGORIES.join('/')} 중 하나`);
@@ -128,6 +131,8 @@ function validate(md, { allowed, slugs, titles = [] }) {
       || (/^\/industries\/([a-z-]+)\/$/.test(u) && D.INDUSTRIES.some(s => `/industries/${s.slug}/` === u))
       || (/^\/insights\/([a-z0-9-]+)\/$/.test(u) && slugs.has(u.split('/')[2]));
     if (!okPath) errs.push(`없는 내부 주소: ${u}`);
+    const mine = meta.date ? `${meta.date} ${meta.time || '00:00'}` : null, target = /^\/insights\/([a-z0-9-]+)\/$/.test(u) ? when.get(u.split('/')[2]) : null;
+    if (mine && target && target > mine) errs.push(`아직 공개 전인 글로 링크: ${u} (${target} 공개)`);
   }
   const unknown = new Set();
   for (const m of body.matchAll(/(\d[\d,]*(?:\.\d+)?)\s*(만원|원|%|퍼센트|개월|주|일|년|건|명|시간|회|클릭|배)/g)) {
@@ -164,6 +169,7 @@ description: (40~140자, 글의 답을 한 문장으로)
 slug: (영문 소문자-하이픈, 주제 뜻이 드러나게)
 category: (${D.BLOG_CATEGORIES.join(' | ')} 중 하나)
 tags: (쉼표로 구분 3~5개)
+keyword: (이 글이 1순위로 노리는 검색어 하나 — 아래 「이미 쓰인 1순위 검색어」와 겹치면 안 됨)
 service: (가장 관련 있는 서비스 slug 하나 — [사실 목록]의 /services/<slug>/ 에서)
 cover: (카드 표지에 쓸 2줄 이내 짧은 문구, 32자 이내)
 ---
@@ -196,6 +202,9 @@ function userMsg(topic, posts, today) {
 
 이미 발행된 글(같은 내용을 반복하지 말고, 관련 있으면 내부 링크로 연결):
 ${posts.slice(0, 60).map(p => `- ${p.title} → /insights/${p.slug}/`).join('\n') || '- 없음'}
+
+이미 쓰인 1순위 검색어(이것과 같은 검색어를 노리지 말 것):
+${[...new Set(loadPosts(BLOG).map(p => p.keyword).filter(Boolean))].join(', ')}
 
 위 형식대로 글 한 편을 써 주세요.`;
 }
@@ -234,6 +243,8 @@ async function writeOne(client, topics, sheet, allowed) {
   const system = SYSTEM(sheet);
   const messages = [{ role: 'user', content: userMsg(topic, posts, date) }];
   const slugs = new Set(posts.map(p => p.slug)), titles = posts.map(p => p.title);
+  const all = loadPosts(BLOG), keywords = new Map(), when = new Map();
+  for (const p of all) { for (const k of kwNorm(p.keyword)) keywords.set(k, p.slug); when.set(p.slug, `${p.date} ${p.time || '00:00'}`); }
   console.log(`주제: ${topic.id} — ${topic.title}`);
 
   let out, v;
@@ -242,7 +253,7 @@ async function writeOne(client, topics, sheet, allowed) {
     if (out.refused) { console.log(`거절됨(${out.res.stop_details?.category ?? '분류 없음'}) — 이 주제는 건너뜁니다.`); topic.status = 'skipped'; topic.note = 'refusal'; return true; }
     const u = out.res.usage;
     console.log(`응답 ${attempt}차: 입력 ${u.input_tokens} / 캐시 읽기 ${u.cache_read_input_tokens ?? 0} / 출력 ${u.output_tokens} 토큰, 모델 ${out.res.model}`);
-    v = validate(out.text, { allowed, slugs, titles });
+    v = validate(out.text.replace(/^---\n/, `---\ndate: ${date}\ntime: ${time}\n`), { allowed, slugs, titles, keywords, when });
     if (v.ok) break;
     console.log('검증 실패:\n  - ' + v.errs.join('\n  - '));
     if (attempt === 1) {
@@ -255,7 +266,7 @@ async function writeOne(client, topics, sheet, allowed) {
   try { ({ meta, body } = parseFrontmatter(out.text)); } catch { meta = { title: topic.title, tags: [] }; body = out.text; }
   const slug = meta.slug && /^[a-z0-9-]+$/.test(meta.slug) ? meta.slug : topic.id;
   const front = ['---', `title: ${meta.title}`, `description: ${meta.description || ''}`, `slug: ${slug}`, `date: ${date}`, `time: ${time}`,
-    `category: ${meta.category || topic.category}`, `tags: ${(meta.tags || []).join(', ')}`, `service: ${meta.service || topic.service || ''}`, `cover: ${meta.cover || ''}`,
+    `category: ${meta.category || topic.category}`, `tags: ${(meta.tags || []).join(', ')}`, `keyword: ${Array.isArray(meta.keyword) ? meta.keyword.join(', ') : meta.keyword || ''}`, `service: ${meta.service || topic.service || ''}`, `cover: ${meta.cover || ''}`,
     `author: ${D.BLOG_AUTHOR}`, `generated: ${MODEL} ${date}`, `topic: ${topic.id}`, '---'].join('\n');
   const md = `${front}\n${body}\n`;
 
@@ -282,7 +293,9 @@ async function main() {
   if (opt('--check-file')) {
     const f = path.resolve(opt('--check-file')), md = fs.readFileSync(f, 'utf8'), me = parseFrontmatter(md).meta.slug;
     const posts = loadPosts(BLOG), slugs = new Set(posts.map(p => p.slug).filter(s => s !== me));
-    const v = validate(md, { allowed, slugs, titles: posts.filter(p => p.slug !== me).map(p => p.title) });
+    const keywords = new Map(), when = new Map();
+    for (const p of posts) { when.set(p.slug, `${p.date} ${p.time || '00:00'}`); if (p.slug !== me) for (const k of kwNorm(p.keyword)) keywords.set(k, p.slug); }
+    const v = validate(md, { allowed, slugs, titles: posts.filter(p => p.slug !== me).map(p => p.title), keywords, when });
     console.log(`${v.ok ? 'OK' : 'NG'} ${path.basename(f)} (${v.len ?? '?'}자)${v.ok ? '' : '\n  - ' + v.errs.join('\n  - ')}`);
     process.exit(v.ok ? 0 : 1);
   }
@@ -292,7 +305,9 @@ async function main() {
     const slugs = new Set(posts.map(p => p.slug));
     for (const f of fs.readdirSync(BLOG).filter(f => f.endsWith('.md') && !f.startsWith('_'))) {
       const md = fs.readFileSync(path.join(BLOG, f), 'utf8');
-      const v = validate(md, { allowed, slugs: new Set([...slugs].filter(s => s + '.md' !== f && s !== parseFrontmatter(md).meta.slug)), titles: [] });
+      const me = parseFrontmatter(md).meta.slug, keywords = new Map(), when = new Map();
+      for (const p of posts) { when.set(p.slug, `${p.date} ${p.time || '00:00'}`); if (p.slug !== me) for (const k of kwNorm(p.keyword)) keywords.set(k, p.slug); }
+      const v = validate(md, { allowed, slugs: new Set([...slugs].filter(s => s + '.md' !== f && s !== me)), titles: [], keywords, when });
       console.log(`${v.ok ? 'OK ' : 'NG '} ${f} (${v.len ?? '?'}자)${v.ok ? '' : '\n    - ' + v.errs.join('\n    - ')}`);
       if (!v.ok) bad++;
     }
