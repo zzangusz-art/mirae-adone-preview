@@ -70,8 +70,11 @@
     ],
     "category": "블로그 마케팅",
     "service": "brand-blog",
-    "status": "todo",
-    "priority": "keyword"
+    "status": "done",
+    "priority": "keyword",
+    "slug": "blog-agency-quote-five-checks",
+    "date": "2026-10-26",
+    "time": "09:00"
   },
   {
     "id": "kw-blog-operate-vs-ad",
@@ -84,8 +87,11 @@
     ],
     "category": "블로그 마케팅",
     "service": "brand-blog",
-    "status": "todo",
-    "priority": "keyword"
+    "status": "done",
+    "priority": "keyword",
+    "slug": "blog-operation-vs-blog-ad-agency",
+    "date": "2026-10-26",
+    "time": "13:00"
   },
   {
     "id": "kw-aeo-geo-marketing",
@@ -98,8 +104,11 @@
     ],
     "category": "AI 검색·SEO",
     "service": "seo-aeo-geo",
-    "status": "todo",
-    "priority": "keyword"
+    "status": "done",
+    "priority": "keyword",
+    "slug": "aeo-geo-marketing-when-to-start",
+    "date": "2026-10-26",
+    "time": "18:00"
   },
   {
     "id": "kw-naver-blog-ad",
@@ -112,8 +121,11 @@
     ],
     "category": "블로그 마케팅",
     "service": "brand-blog",
-    "status": "todo",
-    "priority": "keyword"
+    "status": "done",
+    "priority": "keyword",
+    "slug": "naver-blog-ad-cost-by-type",
+    "date": "2026-10-27",
+    "time": "09:00"
   },
   {
     "id": "kw-hospital-marketing",
@@ -126,8 +138,11 @@
     ],
     "category": "업종별 가이드",
     "service": "brand-blog",
-    "status": "todo",
-    "priority": "keyword"
+    "status": "done",
+    "priority": "keyword",
+    "slug": "hospital-marketing-opening-guide",
+    "date": "2026-10-27",
+    "time": "13:00"
   },
   {
     "id": "kw-hospital-homepage",
@@ -140,8 +155,11 @@
     ],
     "category": "홈페이지",
     "service": "website",
-    "status": "todo",
-    "priority": "keyword"
+    "status": "done",
+    "priority": "keyword",
+    "slug": "hospital-website-structure-checklist",
+    "date": "2026-10-27",
+    "time": "18:00"
   },
   {
     "id": "kw-academy-blog",
@@ -154,8 +172,11 @@
     ],
     "category": "업종별 가이드",
     "service": "brand-blog",
-    "status": "todo",
-    "priority": "keyword"
+    "status": "done",
+    "priority": "keyword",
+    "slug": "academy-blog-parent-topics",
+    "date": "2026-10-28",
+    "time": "09:00"
   },
   {
     "id": "kw-interior-blog",
@@ -168,8 +189,11 @@
     ],
     "category": "업종별 가이드",
     "service": "brand-blog",
-    "status": "todo",
-    "priority": "keyword"
+    "status": "done",
+    "priority": "keyword",
+    "slug": "interior-blog-case-study-writing",
+    "date": "2026-10-28",
+    "time": "13:00"
   },
   {
     "id": "kw-realestate-blog",
@@ -182,8 +206,11 @@
     ],
     "category": "업종별 가이드",
     "service": "brand-blog",
-    "status": "todo",
-    "priority": "keyword"
+    "status": "done",
+    "priority": "keyword",
+    "slug": "real-estate-blog-ad-rules",
+    "date": "2026-10-28",
+    "time": "18:00"
   },
   {
     "id": "kw-viral-marketing",
@@ -196,8 +223,11 @@
     ],
     "category": "블로그 마케팅",
     "service": "blog-viral",
-    "status": "todo",
-    "priority": "keyword"
+    "status": "done",
+    "priority": "keyword",
+    "slug": "viral-marketing-safe-vs-risky",
+    "date": "2026-10-29",
+    "time": "09:00"
   },
   {
     "id": "kw-online-ad-agency",
@@ -210,8 +240,11 @@
     ],
     "category": "업종별 가이드",
     "service": "industry-consulting",
-    "status": "todo",
-    "priority": "keyword"
+    "status": "done",
+    "priority": "keyword",
+    "slug": "online-ad-agency-contract-checklist",
+    "date": "2026-10-29",
+    "time": "13:00"
   },
   {
     "id": "kw-blog-promotion",
@@ -224,8 +257,11 @@
     ],
     "category": "블로그 마케팅",
     "service": "brand-blog",
-    "status": "todo",
-    "priority": "keyword"
+    "status": "done",
+    "priority": "keyword",
+    "slug": "blog-promotion-no-views-checklist",
+    "date": "2026-10-29",
+    "time": "18:00"
   },
   {
     "id": "blog-topic-planning",
@@ -237,7 +273,10 @@
     ],
     "category": "블로그 마케팅",
     "service": "brand-blog",
-    "status": "todo"
+    "status": "done",
+    "slug": "blog-topic-calendar-planning",
+    "date": "2026-10-30",
+    "time": "09:00"
   },
   {
     "id": "homepage-style-blog-skin",
@@ -249,7 +288,10 @@
     ],
     "category": "블로그 마케팅",
     "service": "brand-blog",
-    "status": "todo"
+    "status": "done",
+    "slug": "homepage-style-blog-skin-guide",
+    "date": "2026-10-30",
+    "time": "13:00"
   },
   {
     "id": "blog-before-publish-approval",
@@ -261,7 +303,10 @@
     ],
     "category": "블로그 마케팅",
     "service": "brand-blog",
-    "status": "todo"
+    "status": "done",
+    "slug": "blog-pre-publish-approval-contract",
+    "date": "2026-10-30",
+    "time": "18:00"
   },
   {
     "id": "blog-report-how-to-read",
@@ -273,7 +318,10 @@
     ],
     "category": "블로그 마케팅",
     "service": "brand-blog",
-    "status": "todo"
+    "status": "done",
+    "slug": "blog-report-what-to-check",
+    "date": "2026-10-31",
+    "time": "09:00"
   },
   {
     "id": "local-keyword-blog",
@@ -285,7 +333,10 @@
     ],
     "category": "블로그 마케팅",
     "service": "brand-blog",
-    "status": "todo"
+    "status": "done",
+    "slug": "local-keyword-blog-place-names",
+    "date": "2026-10-31",
+    "time": "13:00"
   },
   {
     "id": "blog-photo-without-images",
@@ -297,7 +348,10 @@
     ],
     "category": "블로그 마케팅",
     "service": "brand-blog",
-    "status": "todo"
+    "status": "done",
+    "slug": "blog-without-photos-images",
+    "date": "2026-10-31",
+    "time": "18:00"
   },
   {
     "id": "faq-page-for-ai",
@@ -310,7 +364,10 @@
     ],
     "category": "AI 검색·SEO",
     "service": "seo-aeo-geo",
-    "status": "todo"
+    "status": "done",
+    "slug": "faq-page-for-ai-citation",
+    "date": "2026-11-01",
+    "time": "09:00"
   },
   {
     "id": "structured-data-basics",
@@ -322,7 +379,10 @@
     ],
     "category": "AI 검색·SEO",
     "service": "seo-aeo-geo",
-    "status": "todo"
+    "status": "done",
+    "slug": "structured-data-small-business",
+    "date": "2026-11-01",
+    "time": "13:00"
   },
   {
     "id": "naver-searchadvisor-setup",
@@ -334,7 +394,10 @@
     ],
     "category": "AI 검색·SEO",
     "service": "seo-aeo-geo",
-    "status": "todo"
+    "status": "done",
+    "slug": "naver-search-advisor-sitemap-setup",
+    "date": "2026-11-01",
+    "time": "18:00"
   },
   {
     "id": "brand-info-consistency",
@@ -346,7 +409,10 @@
     ],
     "category": "AI 검색·SEO",
     "service": "ai-visibility",
-    "status": "todo"
+    "status": "done",
+    "slug": "business-name-address-phone-consistency",
+    "date": "2026-11-02",
+    "time": "09:00"
   },
   {
     "id": "geo-first-month",
@@ -358,7 +424,10 @@
     ],
     "category": "AI 검색·SEO",
     "service": "seo-aeo-geo",
-    "status": "todo"
+    "status": "done",
+    "slug": "ai-search-optimization-first-month",
+    "date": "2026-11-02",
+    "time": "13:00"
   },
   {
     "id": "llms-txt-what-is",
@@ -370,7 +439,10 @@
     ],
     "category": "AI 검색·SEO",
     "service": "seo-aeo-geo",
-    "status": "todo"
+    "status": "done",
+    "slug": "llms-txt-do-you-need-it",
+    "date": "2026-11-02",
+    "time": "18:00"
   },
   {
     "id": "ai-wrong-company-info",

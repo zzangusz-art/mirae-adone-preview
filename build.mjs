@@ -12,6 +12,7 @@ import { loadPosts } from './tools/blog/lib.mjs';
 const { SITE, COMPANY, SERVICES, INDUSTRIES, BLOG_CATEGORIES, BLOG_PLANS, WEB_AI_PLAN, PRICE_SHOW_WEB_AI, CPC, FAQ, SEO, KEYWORD_LINKS } = D;
 const wr = (rel, s) => { const f = path.join(ROOT, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s); };
 const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' }).format(new Date());
+const nowTime = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date()).replace(/^24/, '00');
 
 // 1) 이전 빌드 결과 지우기 (소스·에셋은 건드리지 않음)
 const GENERATED_DIRS = ['about', 'services', 'industries', 'pricing', 'portfolio', 'reviews', 'faq', 'contact', 'privacy', 'insights'];
@@ -23,7 +24,7 @@ for (const f of GENERATED_FILES) fs.rmSync(path.join(ROOT, f), { force: true });
 const catIndex = c => Math.max(0, BLOG_CATEGORIES.indexOf(c));
 // 썸네일: tools/thumbs/build_thumbs.py 가 만든 assets/img/insights/<slug>.jpg (없으면 CSS 표지로 대신 — 빌드 전에 썸네일 생성기를 먼저 돌린다)
 const thumbOf = slug => fs.existsSync(path.join(ROOT, 'assets/img/insights', slug + '.jpg')) ? `insights/${slug}.jpg` : null;
-const POSTS = loadPosts(path.join(ROOT, 'content/blog'), { R: '../../', today }).map(p => ({ ...p, coverKey: catIndex(p.category), coverText: p.cover || p.title, thumb: thumbOf(p.slug) }));
+const POSTS = loadPosts(path.join(ROOT, 'content/blog'), { R: '../../', now: { date: today, time: nowTime } }).map(p => ({ ...p, coverKey: catIndex(p.category), coverText: p.cover || p.title, thumb: thumbOf(p.slug) }));
 const noThumb = POSTS.filter(p => !p.thumb).map(p => p.slug);
 if (noThumb.length) console.warn(`경고: 썸네일 없음 ${noThumb.length}편 (python tools/thumbs/build_thumbs.py 먼저 실행): ${noThumb.join(', ')}`);
 for (const p of POSTS) {

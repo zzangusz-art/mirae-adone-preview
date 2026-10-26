@@ -30,7 +30,7 @@ export function home(posts) {
   const body = `
 <section class="hfilm" data-hfilm aria-label="미래애드원 소개 영상">
   <div class="hfilm__stage">
-    <video class="hfilm__v" muted playsinline preload="none" poster="assets/video/hero-poster.webp" data-src="assets/video/hero-1080.mp4" data-src4k="assets/video/hero-2160.mp4" data-src-m="assets/video/hero-m.mp4" data-poster-m="assets/video/hero-poster-m.webp" aria-label="미래애드원 10초 소개 영상: 검색창, 키워드, 직접 만든 작업물, 실제 ChatGPT 답변 화면, 운영 수치, 18개 서비스, 로고"></video>
+    <video class="hfilm__v" muted playsinline loop preload="none" poster="assets/video/hero-poster.webp" data-src="assets/video/hero-1080.mp4" data-src4k="assets/video/hero-2160.mp4" data-src-m="assets/video/hero-m.mp4" data-poster-m="assets/video/hero-poster-m.webp" aria-label="미래애드원 소개 영상(반복 재생): 검색창, 키워드, 직접 만든 작업물, 실제 ChatGPT 답변 화면, 운영 수치, 18개 서비스, 로고"></video>
     <div class="hfilm__bar" aria-hidden="true"></div>
     <div class="hfilm__ctl">
       <button class="hfilm__btn" type="button" data-hfilm-sound aria-pressed="false">${icon('mute')}<span>소리 켜기</span></button>
@@ -56,18 +56,12 @@ export function home(posts) {
     </div>
   </div>
   <div class="wrap hero__foot">${statsRow('stats--glass glass')}</div>
-  <a class="hero__scroll" href="#manifesto" aria-label="아래로 스크롤"><span></span></a>
+  <a class="hero__scroll" href="#ai-proof" aria-label="아래로 스크롤"><span></span></a>
 </section>
 
 ${logosMarquee(R)}
 
-<section class="manifesto" id="manifesto">
-  <div class="wrap">
-    <p class="eyebrow">WHY MIRAE ADONE</p>
-    <p class="manifesto__t" data-words><span class="ln">광고 영업 전화, 불분명한 계약 조건,</span> <span class="ln">연락이 닿지 않는 담당자 때문에 불안하셨나요?</span> <span class="ln">미래애드원은 직접 기획하고 제작·관리하는 실행형 파트너입니다.</span> <span class="ln">상주 작가와 디자이너, 발행 전 확인,</span> <span class="ln">전용 소통 채널과 정기 보고로 무엇을 어떻게 진행하는지 보여 드립니다.</span></p>
-    <ul class="pillars">${[['chat', '담당자 소통', '1:1 전담 담당자와 전용 단톡방'], ['shield', '발행 전 확인', '원고·디자인을 먼저 보고 승인'], ['pen', '직접 제작', '상주 작가·디자이너가 직접 작업'], ['chart', '정기 보고', '회차별 URL, 1~2주·월간 보고']].map(([ic, k, d], i) => `<li data-reveal style="--d:${i * 70}ms">${icon(ic)}<b>${k}</b><span>${d}</span></li>`).join('')}</ul>
-  </div>
-</section>
+
 
 ${aiRecording(R)}
 
@@ -254,7 +248,7 @@ ${s.slug === 'seo-aeo-geo' ? `<section class="sec sec--gray" id="flow"><div clas
 <section class="sec sec--gray" id="fit"><div class="wrap">${sectionHead({ eyebrow: 'INDUSTRY', title: '이런 업종에 먼저 권합니다', lead: '네이버 검색 경쟁이 심하거나, 검색광고 비용이 부담되는 업종입니다.' })}${geoIndustries(R)}</div></section>` : ''}`;
   if (s.slug === 'website') return `
 ${webCases(R)}
-<section class="sec sec--gray" id="works"><div class="wrap">${sectionHead({ eyebrow: 'PORTFOLIO', title: '업종별 제작 사례', lead: '업종별 홈페이지 제작 사례입니다. 이미지를 누르면 크게 볼 수 있습니다.' })}${portfolioGrid(R, PORTFOLIO.filter(x => x.cat === 'web' || x.cat === 'web-set'), { group: 'svc-pf', limit: 9 })}</div></section>`;
+<section class="sec sec--gray" id="works"><div class="wrap">${sectionHead({ eyebrow: 'PORTFOLIO', title: '업종별 제작 사례', lead: '업종별 홈페이지 제작 사례입니다. 이미지를 누르면 크게 볼 수 있습니다.' })}${portfolioGrid(R, [...PORTFOLIO.filter(x => x.cat === 'web-set'), ...PORTFOLIO.filter(x => x.cat === 'web')], { group: 'svc-pf', limit: 9 })}</div></section>`;
   return '';
 }
 
@@ -355,7 +349,7 @@ ${webCases(R, { title: '홈페이지 제작·운영<br>레퍼런스' })}
 <section class="sec"><div class="wrap">${sectionHead({ eyebrow: 'MEDIA', title: '협력 언론사', center: true })}${pressWall(R)}</div></section>
 ${logosMarquee(R)}
 ${ctaBand(R)}`;
-  return { path: p, html: page({ R, current: 'portfolio/', title: T('포트폴리오'), desc: '홈페이지 제작 35건, 블로그 스킨 14건, 블로그 운영 통계, 바이럴·검색광고·SNS 운영 사례를 업종별로 확인하세요.', canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['포트폴리오', url(p)]])] }], body }) };
+  return { path: p, html: page({ R, current: 'portfolio/', title: T('포트폴리오'), desc: '홈페이지(PC·모바일) 16건, 홈페이지형 블로그 19건, 블로그 스킨 14건, 블로그 운영 통계, 바이럴·검색광고·SNS 운영 사례를 업종별로 확인하세요.', canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['포트폴리오', url(p)]])] }], body }) };
 }
 
 // ═════════ 고객 후기

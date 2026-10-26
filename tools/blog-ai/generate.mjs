@@ -5,6 +5,9 @@
 //   node tools/blog-ai/generate.mjs --topic id   특정 주제
 //   node tools/blog-ai/generate.mjs --check      API 호출 없이 기존 글 전체를 같은 검증기로 검사
 //   node tools/blog-ai/generate.mjs --plan       다음에 쓸 주제 10개 미리보기(API 호출 없음)
+//   node tools/blog-ai/generate.mjs --cap 3      오늘(KST) 날짜 글이 예약 글 포함 3편 이상이면 쓰지 않음(예약 큐와 자동 작성이 겹치지 않게)
+//   node tools/blog-ai/generate.mjs --sheet      사실 목록·허용 수치 출력(사람이 미리 쓸 때 기준)
+//   node tools/blog-ai/generate.mjs --check-file <파일>  글 한 편만 같은 검증기로 검사
 // 주제: content/blog/_topics.json 의 status:"todo" 를 먼저 쓰고, 다 쓰면 서비스×업종×관점 조합으로 자동 생성한다.
 // 검증에 실패한 글은 발행하지 않고 content/drafts/ 에 남긴다(사람이 고쳐서 content/blog/ 로 옮기면 발행).
 import fs from 'node:fs';
@@ -275,6 +278,14 @@ async function main() {
   const sheet = factSheet();
   const allowed = allowedNumbers(sheet);
 
+  if (flag('--sheet')) { console.log(sheet); console.log('\n[허용 수치] ' + [...allowed].sort((a, b) => a - b).join(', ')); return; }
+  if (opt('--check-file')) {
+    const f = path.resolve(opt('--check-file')), md = fs.readFileSync(f, 'utf8'), me = parseFrontmatter(md).meta.slug;
+    const posts = loadPosts(BLOG), slugs = new Set(posts.map(p => p.slug).filter(s => s !== me));
+    const v = validate(md, { allowed, slugs, titles: posts.filter(p => p.slug !== me).map(p => p.title) });
+    console.log(`${v.ok ? 'OK' : 'NG'} ${path.basename(f)} (${v.len ?? '?'}자)${v.ok ? '' : '\n  - ' + v.errs.join('\n  - ')}`);
+    process.exit(v.ok ? 0 : 1);
+  }
   if (flag('--check')) {
     const posts = loadPosts(BLOG);
     let bad = 0;
@@ -295,6 +306,12 @@ async function main() {
     return;
   }
 
+  const cap = +(opt('--cap') || 0);
+  if (cap) {
+    const { date } = nowKST();
+    const n = loadPosts(BLOG).filter(p => p.date === date).length; // loadPosts 기본값은 예약 글도 포함
+    if (n >= cap) { console.log(`오늘(${date}) 글 ${n}편(예약 포함) — 상한 ${cap}편이라 새로 쓰지 않습니다.`); return; }
+  }
   let client;
   if (opt('--dry')) client = { dry: path.resolve(opt('--dry')) };
   else { const { default: Anthropic } = await import('@anthropic-ai/sdk'); client = new Anthropic(); } // ANTHROPIC_API_KEY 등 환경 자격 증명 사용

@@ -1,4 +1,6 @@
-# 미래애드원 홈페이지: 빌드 → GitHub Pages 배포 + 인사이트 글 하루 3편 AI 자동 발행(09:00 · 13:00 · 18:00 KST)
+# 미래애드원 홈페이지: 빌드 → GitHub Pages 배포 + 인사이트 글 하루 3편(09:00 · 13:00 · 18:00 KST)
+# - 미리 써 둔 예약 글(content/blog, date·time 이 미래)은 그 시각 이후 첫 실행에서 공개된다
+# - 예약 글이 그날 3편을 채우지 못하면 AI가 실행마다 1편씩 써서 채운다(--cap 3)
 # 필요한 설정: 저장소 Settings → Secrets and variables → Actions → ANTHROPIC_API_KEY
 # (키가 없으면 글 작성 단계만 건너뛰고 사이트 배포는 그대로 진행)
 # 선택 설정: Variables → PRODUCTION=true (실제 도메인 운영 시, 그 전에는 전 페이지 noindex 미리보기), PREVIEW_URL, BLOG_MODEL (기본 claude-opus-5-5)
@@ -50,7 +52,8 @@ jobs:
           if [ -z "$ANTHROPIC_API_KEY" ]; then echo "::warning::ANTHROPIC_API_KEY 미설정 — 글 작성을 건너뜁니다"; exit 0; fi
           [ -z "$BLOG_MODEL" ] && unset BLOG_MODEL
           npm ci --no-audit --no-fund
-          node tools/blog-ai/generate.mjs --count "$COUNT" || echo "::warning::글 작성 실패 — 사이트 배포는 계속합니다"
+          CAP=""; [ "${{ github.event_name }}" = "schedule" ] && CAP="--cap 3"
+          node tools/blog-ai/generate.mjs --count "$COUNT" $CAP || echo "::warning::글 작성 실패 — 사이트 배포는 계속합니다"
           python tools/thumbs/build_thumbs.py
           git config user.name "mirae-adone-blog-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

@@ -45,7 +45,7 @@ export const SERVICES = [
     model: '초기 제작 + 지속 운영 계약', priceRef: 'web-ai',
     process: ['사업·경쟁 진단, 목표 질문 정리', '정보구조(IA)·와이어프레임 확정', '디자인 시안·수정', '퍼블리싱·모바일 점검·검색 도구 연결', '오픈 후 월간 관리·보고'],
     report: ['페이지별 작업 내역과 URL', '색인·검색 노출 점검 결과', '상담폼·전화 클릭 등 전환 지표'],
-    portfolio: ['web', 'web-set'],
+    portfolio: ['web-set'],
     faq: [
       ['제작 기간은 얼마나 걸리나요?', '페이지 수와 기능에 따라 다르며, 견적 단계에서 주차별 일정을 함께 드립니다. 기획서 기준 제작 기간은 보통 3~6주로 잡습니다.'],
       ['도메인·호스팅 비용도 포함되나요?', '견적서에 포함 여부를 따로 적어 드립니다. 이미 쓰는 도메인이 있으면 그대로 연결하고, 옛 주소는 301 리디렉션으로 옮깁니다.'],
@@ -61,7 +61,7 @@ export const SERVICES = [
     model: '초기 세팅 + 월간 육성/보고', priceRef: 'web-ai',
     process: ['사업 진단·목표 질문 정의·측정 기준선', '주요 페이지 제작·기술 SEO', 'FAQ·구조화 데이터·색인 점검', 'AI 질문 테스트·비교 보고서', '2개월 차부터 월간 육성·보고'],
     report: ['질문 원문·플랫폼·측정 조건', '발견/언급/출처 인용/링크/미확인 구분', '캡처·출처 URL·수정한 페이지 기록'],
-    portfolio: ['web-set', 'web'],
+    portfolio: ['web-set'],
     faq: [
       ['ChatGPT·Gemini·Grok에 무조건 노출되나요?', '아닙니다. 발견 가능성을 높이는 기술·콘텐츠 작업과 테스트·보고를 제공하지만, AI 답변 노출은 보장하지 않습니다.'],
       ['네이버 통합검색 1위를 보장하나요?', '검색 결과는 플랫폼과 질의 조건에 따라 달라지므로 특정 순위를 보장하지 않습니다. 대신 무엇을 했고 어떻게 바뀌었는지를 기록으로 보여 드립니다.'],
@@ -158,7 +158,7 @@ export const SERVICES = [
     model: '건별·패키지', priceRef: 'quote',
     process: ['상품·경쟁 분석', '구성안·카피', '촬영·디자인', '등록·광고 연계'],
     report: ['납품 파일 목록', '광고 연계 시 클릭·전환'],
-    portfolio: ['web'],
+    portfolio: ['web-set'],
     faq: [['원본 디자인 파일도 받을 수 있나요?', '계약 범위에 따라 원본(PSD 등) 제공 여부를 미리 정해 견적서에 적습니다.']],
   },
   {
@@ -262,7 +262,7 @@ export const SERVICES = [
     model: '진단 + 개선 + 월 추적', priceRef: 'quote',
     process: ['퍼널 진단', '개선안', '적용', '월 추적'],
     report: ['단계별 이탈', '개선 전후 비교'],
-    portfolio: ['web'],
+    portfolio: ['web-set'],
     faq: [['홈페이지를 새로 만들어야 하나요?', '대부분은 기존 사이트의 버튼·폼·문구만 고쳐도 됩니다. 구조 문제가 크면 그때 리뉴얼을 제안합니다.']],
   },
   {
@@ -585,8 +585,8 @@ const P = (cat, prefix, caps) => caps.map((cap, i) => ({ cat, src: `portfolio/${
 export const PORTFOLIO_CATS = [
   { id: 'blog-stats', name: '블로그 운영 성과', desc: '실제 관리 블로그의 네이버 블로그 통계 화면' },
   { id: 'blog-skin', name: '블로그 스킨', desc: '홈페이지형 블로그 스킨 디자인' },
-  { id: 'web', name: '홈페이지', desc: '업종별 홈페이지 메인 화면' },
   { id: 'web-set', name: '홈페이지(PC·모바일)', desc: 'PC·모바일 반응형 제작 사례' },
+  { id: 'web', name: '홈페이지형 블로그', desc: '업종별 홈페이지형 블로그 메인 화면' },
   { id: 'viral', name: '블로그 바이럴', desc: '키워드 검색 결과 노출 화면' },
   { id: 'ads', name: '검색광고', desc: '네이버 검색광고 운영 화면' },
   { id: 'sns', name: 'SNS', desc: '인스타그램 계정 운영' },
@@ -595,8 +595,8 @@ export const PORTFOLIO_CATS = [
 export const PORTFOLIO = [
   ...P('blog-stats', 'blog-stats', ['의류 매입 업체 · 월 조회수 1,595', '부동산 세무 정보 · 월 조회수 2,667', '욕실·인테리어 · 월 조회수 2,746', '반려견 정보 · 월 조회수 2,795', '제약 영업(CSO) · 월 조회수 11,087', '세무 기장 · 월 조회수 15,867', '지역 교육 기관 · 월 조회수 3,481', '입시 학원 · 월 조회수 3,149']),
   ...P('blog-skin', 'blog-skin', ['음식점', '골프 아카데미', '노무 상담', '동물병원', '의료기기 공공기관', '태양광 기업', '세무 회계', '정부 지원사업 안내', '물류 기업', '재활·통증 클리닉', 'FTA 컨설팅', '입시 학원', '피부·미용 의원', '기업 교육']),
-  ...P('web', 'web', ['한의원', '주식 교육', '한의원', '장외주식 투자', '영어 학원', '피부과', '인테리어', '치과', '초등 학습', '인테리어 리모델링', '영어 유치원', '기술 학원', '성형외과', '정형외과', '법무법인', '미술 입시 학원', '산후·육아 서비스', '투자 교육', '휴대폰 수리']),
   ...P('web-set', 'web-set', ['수입차 딜러', '슬라이딩 도어 제조', '건설·철거', '숯불구이 전문점', '반려동물 장례', '한옥 스테이', '종합 건설', '공간 디자인', '정보보안 기업', '컨설팅 기업', '부동산 개발', '기업 서비스', '한식 갈비', '수입차 렌트', '자동차 관리 서비스', '섬 여행·관광']),
+  ...P('web', 'web', ['한의원', '주식 교육', '한의원', '장외주식 투자', '영어 학원', '피부과', '인테리어', '치과', '초등 학습', '인테리어 리모델링', '영어 유치원', '기술 학원', '성형외과', '정형외과', '법무법인', '미술 입시 학원', '산후·육아 서비스', '투자 교육', '휴대폰 수리']),
   ...P('viral', 'viral', ['「강남역 맛집」 모바일 검색', '「대학로 공연」 모바일 검색', '「용평 렌탈샵」 모바일 검색', '「대전 가족사진」 모바일 검색', '「법률사무원」 검색', '「얼음축제」 검색', '「건축물대장」 검색', '「공인노무사」 검색']),
   ...P('ads', 'ads', ['파워링크 PC·모바일', '쇼핑검색 광고', '네이버 통합검색 광고', '파워링크·쇼핑 연계', '플레이스 지도 노출', '플레이스 목록 노출', '플레이스 지역 검색', '플레이스 메뉴 이미지']),
   ...P('sns', 'sns', ['자동차 계정', '공공 홍보 계정', '외식 브랜드 계정', '교육 브랜드 계정', '학습 서비스 계정', '문화 행사 계정', '여행 계정', '인테리어 계정', '반려동물 계정', '음식점 계정', '카페·공간 계정', '주얼리 계정', '학습 서비스 피드']),
@@ -688,11 +688,10 @@ export const svc = slug => SERVICES.find(s => s.slug === slug);
 
 // ───────── 홈페이지 제작 레퍼런스(직접 만들고 운영하는 사이트, 화면은 2026-10-23 캡처 · src/webcases.json)
 export const WEBCASE_META = {
-  mirae: { kind: '온라인광고대행사', host: 'mirae-adone.com', live: '', status: '리뉴얼 오픈 준비', facts: ['45페이지 · 서비스 18종 상세', '블로그 하루 3편 자동 발행', '페이지별 구조화 데이터 · llms.txt'] },
-  saenru: { kind: 'AI 빌더 플랫폼 · AEO·GEO 컨설팅', host: 'saenru.com', live: 'https://saenru.com/', status: '운영 중', facts: ['국문·영문 2개 언어', '블로그 국·영 동시 발행', 'AI 노출 자가 진단 화면'] },
-  starterz: { kind: '프랜차이즈 창업·구축 플랫폼', host: 'starterz.kr', live: 'https://starterz.kr/', status: '운영 중', facts: ['플랫폼 · 자가 진단 · 블로그', '가격 공개형 상품 구성', 'AI 검색 답변 인용 확인'] },
-  quick: { kind: '퀵서비스 · 화물 운송', host: '퀵서비스다.kr', live: '', status: '오픈 준비', facts: ['19페이지 · 차종별 요금 안내', '차량 제원 비교 · 빠른 접수', '블로그 하루 3편 자동 발행'] },
-  paroot: { kind: '대학로 공연 제작사', host: 'paroot.kr', live: '', status: '오픈 준비', facts: ['공연 상세 6편 · 예매 연결', '4K 히어로 필름', '블로그 하루 3편 자동 발행'] },
+  ex1: { abc: 'B', kind: '온라인광고대행사', live: false, status: '리뉴얼 오픈 준비', facts: ['45페이지 · 서비스 18종 상세', '블로그 하루 3편 자동 발행', '페이지별 구조화 데이터 · llms.txt'] },
+  ex2: { abc: 'A', kind: '프랜차이즈 창업·구축 플랫폼', live: true, status: '운영 중', facts: ['플랫폼 · 자가 진단 · 블로그', '가격 공개형 상품 구성', 'AI 검색 답변 인용 확인'] },
+  ex3: { abc: 'C', kind: '퀵서비스 · 화물 운송', live: false, status: '오픈 준비', facts: ['19페이지 · 차종별 요금 안내', '차량 제원 비교 · 빠른 접수', '블로그 하루 3편 자동 발행'] },
+  ex4: { abc: 'D', kind: '대학로 공연 제작사', live: false, status: '오픈 준비', facts: ['공연 상세 6편 · 예매 연결', '4K 히어로 필름', '블로그 하루 3편 자동 발행'] },
 };
 
 // ───────── AI 검색 실제 녹화(로그인하지 않은 ChatGPT, PC 2026-10-23·모바일 2026-10-25 · record_chatgpt.mjs → encode_rec2.py: 답변 영역만, 대기 구간 줄임, 1.5배속)
@@ -703,8 +702,8 @@ export const AI_RECORDINGS = [
 // ───────── 작업 전후 변화(측정: tools/measure/compare.mjs, 2026-10-23 · 원시 HTML 기준)
 export const CASE_CHANGES = [
   {
-    key: 'starterz', name: '스타터즈', kind: '프랜차이즈 창업·구축 플랫폼', status: '운영 중',
-    before: 'cases/starterz-before.webp', after: 'cases/starterz-after.webp',
+    key: 'c1', abc: 'A', name: 'A업체', kind: '프랜차이즈 창업·구축 플랫폼', status: '운영 중',
+    before: 'cases/c1-before.webp', after: 'cases/c1-after.webp',
     timeline: [
       ['2026.07.28', 'ChatGPT·Perplexity에 업체 추천 질문 3개를 물었을 때 한 번도 나오지 않음'],
       ['2026.08.10', '검색·AI 구조 점검 80점(SEO 85 · AEO 80 · GEO 75)'],
@@ -714,18 +713,18 @@ export const CASE_CHANGES = [
     foot: 'AI 답변은 물을 때마다 달라집니다. 날짜별로 직접 물어 본 결과를 적었습니다.',
   },
   {
-    key: 'mirae', name: '미래애드원', kind: '온라인광고대행사', status: '리뉴얼 오픈 준비',
-    before: 'cases/mirae-before.webp', after: 'webcases/mirae/home-d.webp',
+    key: 'c2', abc: 'B', name: 'B업체', kind: '온라인광고대행사', status: '리뉴얼 오픈 준비',
+    before: 'cases/c2-before.webp', after: 'webcases/ex1/home-d.webp',
     rows: [['제목 태그(H1)', '0개', '1개'], ['구조화 데이터 유형', '0종', '8종'], ['AI 검색 봇 규칙', '명시 없음', '허용 명시'], ['llms.txt(AI용 사이트 요약)', '없음', '있음'], ['사이트맵 등록 페이지', '1개', '44개'], ['AI가 바로 읽는 본문', '6,808자', '13,066자']],
   },
   {
-    key: 'quick', name: '퀵서비스다', kind: '퀵서비스 · 화물 운송', status: '오픈 준비',
-    before: 'cases/quick-before.webp', after: 'webcases/quick/home-d.webp',
+    key: 'c3', abc: 'C', name: 'C업체', kind: '퀵서비스 · 화물 운송', status: '오픈 준비',
+    before: 'cases/c3-before.webp', after: 'webcases/ex3/home-d.webp',
     rows: [['제목 태그(H1)', '0개', '1개'], ['구조화 데이터 유형', '0종', '17종'], ['FAQ 구조화 데이터', '없음', '있음'], ['AI 검색 봇 규칙', '명시 없음', '허용 명시'], ['llms.txt(AI용 사이트 요약)', '없음', '있음'], ['AI가 바로 읽는 본문', '1,078자', '10,911자']],
   },
   {
-    key: 'paroot', name: '파릇', kind: '대학로 공연 제작사', status: '오픈 준비',
-    before: 'cases/paroot-before.webp', after: 'webcases/paroot/home-d.webp',
+    key: 'c4', abc: 'D', name: 'D업체', kind: '대학로 공연 제작사', status: '오픈 준비',
+    before: 'cases/c4-before.webp', after: 'webcases/ex4/home-d.webp',
     rows: [['제목 태그(H1)', '0개', '1개'], ['구조화 데이터 유형', '3종', '15종'], ['FAQ 구조화 데이터', '없음', '있음'], ['AI 검색 봇 규칙', '명시 없음', '허용 명시'], ['사이트맵 등록 페이지', '15개', '18개'], ['AI가 바로 읽는 본문', '3,634자', '16,891자']],
   },
 ];

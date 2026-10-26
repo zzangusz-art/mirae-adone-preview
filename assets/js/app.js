@@ -238,8 +238,9 @@
     const start = () => { if (!v.getAttribute('src')) v.src = src; v.play().catch(() => { rep.hidden = false; }); };
     if (!reduce && !saveData) { v.preload = 'auto'; start(); } else rep.hidden = false;
     v.addEventListener('timeupdate', () => sec.style.setProperty('--fp', (v.currentTime / (v.duration || 10)).toFixed(4)));
-    v.addEventListener('ended', () => { rep.hidden = false; sec.classList.add('is-ended'); });
-    rep.addEventListener('click', () => { if (!v.getAttribute('src')) v.src = src; v.currentTime = 0; v.play(); rep.hidden = true; sec.classList.remove('is-ended'); });
+    v.loop = true; // 스크롤하기 전까지(화면에 보이는 동안) 계속 반복
+    v.addEventListener('timeupdate', () => { if (v.currentTime > (v.duration || 12.5) - 1.5) sec.classList.add('is-ended'); }); // 한 바퀴 본 뒤 SCROLL 안내 강조
+    rep.addEventListener('click', () => { if (!v.getAttribute('src')) v.src = src; v.currentTime = 0; v.play(); rep.hidden = true; });
     snd.addEventListener('click', () => {
       const on = v.muted; v.muted = !on;
       snd.setAttribute('aria-pressed', String(on));
@@ -249,7 +250,7 @@
       toast(on ? '소리를 켰습니다' : '소리를 껐습니다', 'ok', 1600);
     });
     // 화면 밖이면 멈추고, 돌아오면 이어서(끝난 뒤에는 그대로)
-    new IntersectionObserver(([e]) => { if (!e.isIntersecting) v.pause(); else if (!v.ended && v.getAttribute('src') && !reduce) v.play().catch(() => {}); }, { threshold: 0 }).observe(sec);
+    new IntersectionObserver(([e]) => { if (!e.isIntersecting) v.pause(); else if (v.getAttribute('src') && !reduce) v.play().catch(() => {}); }, { threshold: 0 }).observe(sec);
     // 스크롤 진행도(--p): 필름이 머무는 구간에서만 계산
     let near = true, ticking = false;
     const dockEl = $('.dock');
@@ -629,10 +630,13 @@
     const qEl = $('[data-aichat-q]', a), text = qEl.textContent;
     if (reduce) { a.classList.add('is-typed'); return; }
     qEl.textContent = '';
-    new IntersectionObserver(([e], o) => {
-      if (!e.isIntersecting) return; o.disconnect();
-      let i = 0; const t = setInterval(() => { qEl.textContent = text.slice(0, ++i); if (i >= text.length) { clearInterval(t); setTimeout(() => a.classList.add('is-typed'), 450); } }, 45);
-    }, { threshold: .5 }).observe(a);
+    let vis = false, busy = false;
+    const cycle = () => {
+      if (!vis || busy) return; busy = true;
+      a.classList.remove('is-typed'); qEl.textContent = '';
+      let i = 0; const t = setInterval(() => { qEl.textContent = text.slice(0, ++i); if (i >= text.length) { clearInterval(t); setTimeout(() => a.classList.add('is-typed'), 450); setTimeout(() => { busy = false; cycle(); }, 6500); } }, 45);
+    };
+    new IntersectionObserver(([e]) => { vis = e.isIntersecting; cycle(); }, { threshold: .5 }).observe(a);
   });
 
   /* ───────── 서브 내비 · 글 목차 현재 위치 */

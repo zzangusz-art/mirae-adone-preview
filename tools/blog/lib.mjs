@@ -88,7 +88,8 @@ export function splitFaq(body) {
 }
 
 // R: 글 페이지(insights/<slug>/)에서 사이트 루트까지의 상대 접두사
-export function loadPosts(dir, { R = '../../', today = null } = {}) {
+// today: 'YYYY-MM-DD'(그날 글 전부) / now: { date, time }(그 시각까지 글만 — 하루 3편 09·13·18시 예약용)
+export function loadPosts(dir, { R = '../../', today = null, now = null } = {}) {
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir).filter(f => f.endsWith('.md') && !f.startsWith('_')).map(f => {
     const { meta, body } = parseFrontmatter(fs.readFileSync(path.join(dir, f), 'utf8'));
@@ -97,6 +98,6 @@ export function loadPosts(dir, { R = '../../', today = null } = {}) {
     const { html, toc } = renderMarkdown(main, R);
     const chars = body.replace(/\s+/g, '').length;
     return { ...meta, file: f, html, toc, faq: faq.map(x => ({ q: x.q.replace(/\*\*/g, ''), a: x.a.replace(/\*\*/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') })), minutes: Math.max(2, Math.ceil(chars / 500)), chars, text: main };
-  }).filter(p => !today || p.date <= today) // 예약 발행: 날짜가 오늘 이후인 글은 빌드에서 뺀다
+  }).filter(p => now ? (p.date < now.date || (p.date === now.date && (p.time || '00:00') <= now.time)) : (!today || p.date <= today)) // 예약 발행: 아직 시각이 안 된 글은 빌드에서 뺀다
     .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : (b.time || '').localeCompare(a.time || '') || a.slug.localeCompare(b.slug)));
 }

@@ -25,10 +25,14 @@
 - **AI 주제 미리보기**: `node tools/blog-ai/generate.mjs --plan` (API 호출 없음). 대기열이 끝나면 서비스×업종×관점 조합(756개)으로 자동 생성.
 - **전체 점검**: `npm run check`
 
-## AI 자동 발행 켜기 (하루 3편)
+## 하루 3편 발행 — 예약 글 + AI 자동 작성
+- **예약 글**: `content/blog/*.md` 의 `date`·`time` 이 미래면 그 시각이 지난 뒤 첫 빌드에서 공개됩니다(09:00·13:00·18:00 KST 예약 실행이 빌드). 2026-10-26 ~ 11-02 분량 24편을 미리 써 두었습니다. 새로 미리 써 둔 글은 `node tools/blog/mark_topics.mjs` 로 주제 대기열에 반영.
+- **AI 자동 작성**: 예약 실행마다 그날(KST) 글이 예약 글 포함 3편 미만이면 1편을 써서 채웁니다(`--cap 3`). 예약 글이 있는 날은 쓰지 않습니다.
+
+### AI 자동 작성 켜기
 1. 저장소 **Settings → Secrets and variables → Actions → New repository secret** → `ANTHROPIC_API_KEY` (대표님 계정 키를 직접 입력).
-2. **Actions → site → Run workflow** 로 1편 시험 생성 → `content/blog/` 에 글이 생기고 사이트에 반영되는지 확인.
-3. 이후 09:00·13:00·18:00(KST) 자동 실행(GitHub 예약 실행은 몇 분~수십 분 늦을 수 있음).
+2. **Actions → site → Run workflow** 로 1편 시험 생성 → `content/blog/` 에 글이 생기고 사이트에 반영되는지 확인(수동 실행은 상한 없이 지정한 편수만큼 씀).
+3. 이후 09:00·13:00·18:00(KST) 자동 실행(GitHub 예약 실행은 몇 분~2시간 가까이 늦을 수 있음).
 - 모델: 기본 `claude-opus-5-5`(effort high, 거절 시 서버 측 대체 모델). 비용을 줄이려면 Variables 에 `BLOG_MODEL=claude-sonnet-5-5`.
 - 검증 실패(금지 표현·사실 목록에 없는 수치·외부 링크 등) 글은 발행하지 않고 `content/drafts/` 에 남습니다.
 

@@ -23,8 +23,6 @@ export const aiRecording = R => {
         <video muted playsinline loop preload="none" poster="${v}-d-poster.webp" data-d="${v}-d.mp4" data-m="${v}-m.mp4" data-poster-m="${v}-m-poster.webp" data-airec-video aria-label="ChatGPT에 「${esc(r.q)}」를 묻는 실제 화면 녹화"></video>
       </div>
     </div>
-    <p class="airec__cap"><b>「${esc(r.q)}」</b><span>${esc(r.note)}</span></p>
-    <p class="airec__foot">*실제 ChatGPT 검색 녹화 영상 · 로그인하지 않은 상태 · 1.5배속, 답변을 기다리는 구간은 줄였습니다(PC 2026.10.23, 모바일 2026.10.25). AI 답변은 묻는 시점과 환경에 따라 달라질 수 있습니다.</p>
   </div>
 </div>
 </section>`;
@@ -79,22 +77,22 @@ export const aiSlides = () => {
 };
 
 // ───────── 작업 전후 변화
-const compare = (R, c) => `<div class="cmp" data-cmp style="--pos:50%">
-  ${pic(R, c.before, `${c.name} 작업 전 홈페이지 첫 화면`, { cls: 'cmp__b' })}
-  <div class="cmp__a">${pic(R, c.after, `${c.name} 작업 후 홈페이지 첫 화면`)}</div>
-  <span class="cmp__tag cmp__tag--b">BEFORE</span><span class="cmp__tag cmp__tag--a">AFTER</span>
-  <span class="cmp__line" aria-hidden="true"><i>${icon('left')}${icon('right')}</i></span>
+const compare = (R, c) => `<div class="bax" data-cmp style="--pos:50%">
+  ${pic(R, c.before, `${c.name} 작업 전 홈페이지 첫 화면`, { cls: 'bax__b' })}
+  <div class="bax__a">${pic(R, c.after, `${c.name} 작업 후 홈페이지 첫 화면`)}</div>
+  <span class="bax__tag bax__tag--b">BEFORE</span><span class="bax__tag bax__tag--a">AFTER</span>
+  <span class="bax__line" aria-hidden="true"><i>${icon('left')}${icon('right')}</i></span>
   <input type="range" min="0" max="100" value="50" step="1" aria-label="${esc(c.name)} 작업 전후 화면 비교" data-cmp-range>
 </div>`;
 export const beforeAfter = R => `<section class="sec sec--gray" id="changes">
 <div class="wrap">
   ${sectionHead({ eyebrow: 'BEFORE / AFTER', title: '홈페이지·AEO·GEO 작업 후,<br>이렇게 달라졌습니다', lead: '홈페이지 제작과 AEO·GEO 작업 전후를 같은 기준으로 비교했습니다. 화면 가운데 손잡이를 좌우로 움직여 보세요.' })}
   <div class="chg" data-tabs>
-    <div class="chg__tabs" role="tablist" aria-label="전후 비교 사례">${CASE_CHANGES.map((c, i) => `<button role="tab" type="button" id="chg-t-${c.key}" aria-controls="chg-p-${c.key}" aria-selected="${i === 0}"${i ? ' tabindex="-1"' : ''}><b>예시 ${i + 1}</b><small>${esc(c.kind)}</small></button>`).join('')}</div>
+    <div class="chg__tabs" role="tablist" aria-label="전후 비교 사례">${CASE_CHANGES.map((c, i) => `<button role="tab" type="button" id="chg-t-${c.key}" aria-controls="chg-p-${c.key}" aria-selected="${i === 0}"${i ? ' tabindex="-1"' : ''}><b>${c.abc}업체</b><small>${esc(c.kind)}</small></button>`).join('')}</div>
     ${CASE_CHANGES.map((c, i) => `<div class="chg__panel" role="tabpanel" id="chg-p-${c.key}" aria-labelledby="chg-t-${c.key}"${i ? ' hidden' : ''}>
-      ${compare(R, { ...c, name: `예시 ${i + 1}` })}
+      ${compare(R, { ...c, name: `${c.abc}업체` })}
       <div class="chg__side">
-        <p class="chg__kind">예시 ${i + 1} · ${esc(c.status)}</p>
+        <p class="chg__kind">${c.abc}업체 · ${esc(c.status)}</p>
         <h3>${esc(c.kind)}</h3>
         ${c.timeline ? `<ol class="chg__tl">${c.timeline.map(([d, t], j) => `<li${j === c.timeline.length - 1 ? ' class="is-now"' : ''}><time>${d}</time><p>${esc(t)}</p></li>`).join('')}</ol>`
         : `<table class="chg__tbl"><thead><tr><th scope="col">항목</th><th scope="col">작업 전</th><th scope="col">작업 후</th></tr></thead><tbody>${c.rows.map(([k, b, a]) => `<tr><th scope="row">${esc(k)}</th><td>${esc(b)}</td><td><b>${esc(a)}</b></td></tr>`).join('')}</tbody></table>`}
@@ -109,29 +107,28 @@ export const beforeAfter = R => `<section class="sec sec--gray" id="changes">
 export const webCases = (R, { id = 'web-refs', gray = false, title = '직접 만들고 운영하는<br>홈페이지 레퍼런스' } = {}) => {
   const sites = WEBCASES.sites, total = sites.reduce((n, s) => n + s.pages.length, 0);
   const pagesOf = s => [...(s.long ? [{ slug: 'long', label: '메인 전체 스크롤', desktop: s.long, thumb: s.pages[0].thumb, mobile: s.pages[0].mobile, url: s.pages[0].url, long: true }] : []), ...s.pages];
-  const path = u => { try { const x = new URL(u); return decodeURIComponent(x.pathname.replace(/^\/(mirae-adone|quickservice|paroot)-preview/, '')); } catch { return '/'; } };
+  const path = u => decodeURIComponent(u || '/');
   return `<section class="sec${gray ? ' sec--gray' : ''}" id="${id}">
 <div class="wrap">
   ${sectionHead({ eyebrow: 'WEB REFERENCES', title, lead: `메인부터 서브 페이지까지 실제 화면을 그대로 담았습니다. ${sites.length}개 사이트, ${total}개 화면을 눌러서 넘겨 보세요.` })}
   <div class="wc" data-tabs>
-    <div class="wc__tabs" role="tablist" aria-label="홈페이지 레퍼런스">${sites.map((s, i) => `<button role="tab" type="button" id="${id}-t-${s.key}" aria-controls="${id}-p-${s.key}" aria-selected="${i === 0}"${i ? ' tabindex="-1"' : ''}><b>${esc(s.name)}</b><small>${esc(WEBCASE_META[s.key].kind)}</small></button>`).join('')}</div>
+    <div class="wc__tabs" role="tablist" aria-label="홈페이지 레퍼런스">${sites.map((s, i) => `<button role="tab" type="button" id="${id}-t-${s.key}" aria-controls="${id}-p-${s.key}" aria-selected="${i === 0}"${i ? ' tabindex="-1"' : ''}><b>${WEBCASE_META[s.key].abc}업체</b><small>${esc(WEBCASE_META[s.key].kind)}</small></button>`).join('')}</div>
     ${sites.map((s, i) => {
-      const m = WEBCASE_META[s.key], P = pagesOf(s), first = s.pages[0];
+      const m = WEBCASE_META[s.key], P = pagesOf(s), first = s.pages[0], nm = `${m.abc}업체`;
       return `<div class="wc__panel" role="tabpanel" id="${id}-p-${s.key}" aria-labelledby="${id}-t-${s.key}"${i ? ' hidden' : ''} data-wc>
       <div class="wc__stage">
         <div class="wc__browser">
-          <div class="wc__bar"><span></span><span></span><span></span><p data-wc-url>${esc(m.host)}${esc(path(first.url))}</p></div>
-          <button class="wc__view" type="button" data-wc-open aria-label="${esc(s.name)} 화면 크게 보기">${pic(R, first.desktop, `${s.name} ${first.label} 화면`, { eager: false })}<span class="wc__zoom">${icon('search')} 크게 보기</span></button>
+          <div class="wc__bar"><span></span><span></span><span></span><p data-wc-url>${esc(path(first.url))}</p></div>
+          <button class="wc__view" type="button" data-wc-open aria-label="${nm} 화면 크게 보기">${pic(R, first.desktop, `${nm}(${m.kind}) ${first.label} 화면`, { eager: false })}<span class="wc__zoom">${icon('search')} 크게 보기</span></button>
         </div>
         ${first.mobile ? `<div class="wc__phone" aria-hidden="true"><span class="wc__notch"></span><div class="wc__screen">${pic(R, first.mobile, '')}</div></div>` : ''}
       </div>
       <div class="wc__side">
-        <p class="wc__kind">${esc(m.kind)} <span class="wc__st${m.live ? ' is-live' : ''}">${esc(m.status)}</span></p>
-        <h3>${esc(s.name)}</h3>
+        <p class="wc__kind">${nm} <span class="wc__st${m.live ? ' is-live' : ''}">${esc(m.status)}</span></p>
+        <h3>${esc(m.kind)}</h3>
         <ul class="wc__facts">${m.facts.map(f => `<li>${icon('check')}${esc(f)}</li>`).join('')}</ul>
-        ${m.live ? `<a class="link" href="${m.live}" target="_blank" rel="noopener">${esc(m.host)} 방문하기 ${icon('ext')}</a>` : ''}
       </div>
-      <ol class="wc__pages" aria-label="${esc(s.name)} 페이지">${P.map((p, j) => `<li><button type="button" data-wc-page aria-pressed="${p.slug === first.slug && !p.long}" data-desk="${R}assets/img/${p.desktop}" data-mob="${p.mobile ? `${R}assets/img/${p.mobile}` : ''}" data-url="${esc(m.host)}${esc(path(p.url))}" data-label="${esc(p.label)}"${p.long ? ' data-long="1"' : ''} data-w="${imgSize(p.desktop).w}" data-h="${imgSize(p.desktop).h}">${pic(R, p.thumb, '')}<span>${p.long ? `${icon('play')} ` : ''}${esc(p.label)}</span></button></li>`).join('')}</ol>
+      <ol class="wc__pages" aria-label="${nm} 페이지">${P.map((p, j) => `<li><button type="button" data-wc-page aria-pressed="${p.slug === first.slug && !p.long}" data-desk="${R}assets/img/${p.desktop}" data-mob="${p.mobile ? `${R}assets/img/${p.mobile}` : ''}" data-url="${esc(path(p.url))}" data-label="${esc(p.label)}"${p.long ? ' data-long="1"' : ''} data-w="${imgSize(p.desktop).w}" data-h="${imgSize(p.desktop).h}">${pic(R, p.thumb, '')}<span>${p.long ? `${icon('play')} ` : ''}${esc(p.label)}</span></button></li>`).join('')}</ol>
     </div>`;
     }).join('')}
   </div>
