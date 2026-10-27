@@ -46,5 +46,13 @@ git add -A && git commit -m "미래애드원 사이트"
 gh repo create <계정>/mirae-adone-preview --public --source . --push
 gh api -X POST repos/<계정>/mirae-adone-preview/pages -f build_type=workflow
 ```
-이후 갱신은 상위 폴더의 `deploy-preview.bat` 더블클릭. 미리보기는 전 페이지 `noindex`.
+이후 갱신은 상위 폴더의 `deploy.bat` 더블클릭(빌드·점검 → 커밋 → AI 글 받아오기 → 푸시 → GitHub Pages·Railway 배포 결과까지 확인). 미리보기는 전 페이지 `noindex`.
 실제 도메인(www.mirae-adone.com)으로 옮길 때: Variables 에 `PRODUCTION=true`, Pages 설정에 사용자 도메인 입력, DNS(CNAME) 변경.
+
+## Railway 배포
+저장소를 Railway 에 연결하면 푸시마다 자동 배포됩니다. 설정은 `railway.json`(코드로 관리) — 화면에서 따로 고칠 것은 없습니다.
+- 빌드: `npm run railway:build` = `build.mjs` + 내보내기(`_site`, 소스·도구·글 원고 제외). 깨진 상태면 여기서 멈춰 이전 배포가 그대로 유지됩니다.
+- 실행: `npm start` = `tools/serve.mjs`(의존성 없는 정적 서버, `PORT`). 동영상 Range·gzip·404 페이지 처리.
+- 예약 글: 서버가 09:00·13:00·18:00(KST)마다 다시 빌드해 그 시각 글을 공개합니다(푸시가 없어도).
+- 색인: 기본은 미리보기(noindex, `RAILWAY_PUBLIC_DOMAIN` 기준). 실제 운영 도메인으로 쓸 때 Railway Variables 에 `PRODUCTION=true`.
+- 로컬에서 똑같이 띄워 보기: `npm start` → http://localhost:8080

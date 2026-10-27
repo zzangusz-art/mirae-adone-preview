@@ -20,3 +20,5 @@ content/drafts/
 /robots.txt
 /llms.txt
 /assets/js/data.js
+_site.next/
+_site.old/

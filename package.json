@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
+    "start": "node tools/serve.mjs --build",
+    "railway:build": "node tools/serve.mjs --build-only",
     "check": "node build.mjs && node tools/check-site.mjs && node tools/blog-ai/generate.mjs --check",
     "blog:generate": "node tools/blog-ai/generate.mjs",
     "blog:check": "node tools/blog-ai/generate.mjs --check",
@@ -12,5 +14,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.135.0"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
