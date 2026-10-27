@@ -11,7 +11,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.resolve(process.argv[2] || '_site');
 const i = process.argv.indexOf('--preview');
 const PREVIEW = i > -1 ? (process.argv[i + 1] || '').replace(/\/?$/, '/') : null;
-const SKIP = [/^src[\\/]/, /^tools[\\/]/, /^content[\\/]/, /^node_modules[\\/]/, /^\.github[\\/]/, /^\.git([\\/]|$)/, /^_site(\.[a-z]+)?[\\/]/, /^apps-script[\\/]/,
+const SKIP = [/^src[\\/]/, /^tools[\\/]/, /^content[\\/]/, /^node_modules[\\/]/, /^\.github[\\/]/, /^\.git([\\/]|$)/, /^_site(\.\w+)?[\\/]/, /^apps-script[\\/]/,
   /^railway\.json$/, /^package(-lock)?\.json$/, /^build\.(mjs|bat)$/, /^README\.md$/, /^\.gitignore$/, /\.log$/];
 
 fs.rmSync(OUT, { recursive: true, force: true });

@@ -13,7 +13,9 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const OUT = path.join(ROOT, '_site');
+const BASE = path.join(ROOT, '_site'); // 빌드 단계(--build-only) 결과 — 이미지에 들어 있어 실행 중 빌드가 실패해도 이걸로 서빙
+let OUT = BASE; // 지금 서빙 중인 폴더
+let seq = 0;
 const PORT = +(process.env.PORT || 8080);
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8',
@@ -24,19 +26,19 @@ const MIME = {
 const TEXT = new Set(['.html', '.css', '.js', '.mjs', '.json', '.xml', '.txt', '.svg']);
 
 // ── 빌드: build.mjs → export-site.mjs(운영이면 그대로, 아니면 noindex 미리보기)
-export function buildSite() {
+// 실행 중 다시 빌드할 때는 새 폴더(_site.r1, r2 …)로 내보낸 뒤 서빙 폴더만 바꾼다.
+// 폴더 이름 바꾸기(rename)는 쓰지 않는다 — 컨테이너(overlayfs)에서는 이미지에 들어 있던 폴더의 이름을 바꾸면 EXDEV 로 실패한다.
+export function buildSite(dest = `${BASE}.r${++seq}`) {
   const run = args => { const r = spawnSync(process.execPath, args, { cwd: ROOT, stdio: 'inherit' }); if (r.status) throw new Error('실패: node ' + args.join(' ')); };
   run(['build.mjs']);
   const prod = process.env.PRODUCTION === 'true';
   const host = process.env.RAILWAY_PUBLIC_DOMAIN || process.env.PUBLIC_HOST || 'localhost';
-  const tmp = OUT + '.next';
-  run(['tools/export-site.mjs', tmp, ...(prod ? [] : ['--preview', `https://${host}/`])]);
-  fs.rmSync(OUT + '.old', { recursive: true, force: true });
-  if (fs.existsSync(OUT)) fs.renameSync(OUT, OUT + '.old');
-  fs.renameSync(tmp, OUT);
-  fs.rmSync(OUT + '.old', { recursive: true, force: true });
+  run(['tools/export-site.mjs', dest, ...(prod ? [] : ['--preview', `https://${host}/`])]);
+  const prev = OUT;
+  OUT = dest;
   cache.clear();
-  console.log(`[build] ${new Date().toISOString()} ${prod ? '운영(색인 허용)' : '미리보기(noindex)'}`);
+  if (prev !== BASE && prev !== dest) fs.rmSync(prev, { recursive: true, force: true });
+  console.log(`[build] ${new Date().toISOString()} ${prod ? '운영(색인 허용)' : '미리보기(noindex)'} → ${path.basename(dest)}`);
 }
 
 // 예약 공개 시각(KST)이 바뀌면 다시 빌드
@@ -75,7 +77,7 @@ function handler(req, res) {
   let rel;
   try { rel = decodeURIComponent(new URL(req.url, 'http://x').pathname); } catch { res.writeHead(400); return res.end(); }
   const abs = path.normalize(path.join(OUT, rel));
-  if (!abs.startsWith(OUT)) { res.writeHead(403); return res.end(); }
+  if (abs !== OUT && !abs.startsWith(OUT + path.sep)) { res.writeHead(403); return res.end(); }
   let file = abs;
   try {
     if (fs.statSync(file).isDirectory()) {
@@ -90,9 +92,13 @@ function handler(req, res) {
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  if (process.argv.includes('--build-only')) { buildSite(); process.exit(0); }
-  // 시작할 때마다 다시 빌드: 이미지가 만들어진 뒤 지난 예약 시각의 글까지 바로 공개
-  if (process.argv.includes('--build') || !fs.existsSync(path.join(OUT, 'index.html'))) buildSite();
+  for (const e of fs.readdirSync(ROOT)) if (/^_site\.\w+$/.test(e)) fs.rmSync(path.join(ROOT, e), { recursive: true, force: true }); // 지난 실행의 빌드 폴더
+  if (process.argv.includes('--build-only')) { buildSite(BASE); process.exit(0); }
+  // 시작할 때마다 다시 빌드: 이미지가 만들어진 뒤 지난 예약 시각의 글까지 바로 공개. 실패하면 빌드 단계 결과로 서빙(서버는 죽지 않게)
+  const hasBase = fs.existsSync(path.join(BASE, 'index.html'));
+  if (process.argv.includes('--build') || !hasBase) {
+    try { buildSite(); } catch (e) { if (!hasBase) throw e; console.error('[build] 시작 빌드 실패 — 빌드 단계 결과(_site)로 서빙:', e.message); }
+  }
   let slot = slotKST();
   setInterval(() => { const s = slotKST(); if (s !== slot) { slot = s; try { buildSite(); } catch (e) { console.error('[build] 실패 — 이전 화면 유지:', e.message); } } }, 60 * 1000);
   http.createServer(handler).listen(PORT, '0.0.0.0', () => console.log(`[serve] ${OUT} → :${PORT}`));
