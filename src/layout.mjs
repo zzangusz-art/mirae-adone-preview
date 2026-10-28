@@ -49,7 +49,7 @@ export const MEGA_FEATURE = () => {
 
 // 검색엔진 소유 확인 태그(값이 있는 것만)
 const VERIFY_META = [['naver-site-verification', SITE_VERIFICATION.naver], ['google-site-verification', SITE_VERIFICATION.google], ['msvalidate.01', SITE_VERIFICATION.bing]]
-  .filter(([, v]) => v).map(([n, v]) => `<meta name="${n}" content="${esc(v)}">`).join('\n');
+  .flatMap(([n, v]) => [v].flat().filter(Boolean).map(x => `<meta name="${n}" content="${esc(x)}">`)).join('\n');
 
 export function head({ R, title, desc, canonical, og = 'og.jpg', jsonld = [], extraHead = '', kw = [] }) {
   return `<!doctype html>

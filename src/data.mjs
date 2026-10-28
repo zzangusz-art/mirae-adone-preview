@@ -478,7 +478,10 @@ export const KEYWORDS = ['AEO GEO 마케팅', '홈페이지 제작', '블로그�
 export const LEGACY_KEYWORDS = ['블로그관리대행', '브랜드블로그', '브랜딩블로그', '네이버블로그', '블로그마케팅', '블로그광고', '브랜드마케팅', '인스타그램광고', '온라인광고', '검색광고', '블로그바이럴', 'sns광고', '언론보도', '홈페이지제작'];
 // 검색엔진 소유 확인 — 각 도구가 주는 「HTML 태그」의 content 값만 넣는다(비우면 태그를 넣지 않음). 바꾼 뒤 deploy.bat
 export const SITE_VERIFICATION = {
-  naver: 'd26bd825c654b153335b59d39decdf35e45ec19a', // 네이버 서치어드바이저 — 기존 mirae-adone.com 값 유지(도메인 이전 후에도 소유 확인 연속)
+  naver: [ // 네이버 서치어드바이저 — 계정마다 값이 달라 여러 개를 함께 넣는다
+    '40af78b9d2663bcb7d3b47ec958ccb461c917e58', // 2026-10-28 사용자 계정으로 새로 등록
+    'd26bd825c654b153335b59d39decdf35e45ec19a', // 기존 mirae-adone.com 등록 계정(옛 사이트 값 유지 — 지우면 그 계정의 확인이 풀림)
+  ],
   google: 't87otxYdRUqV0CxXEK8X2L2rjUYIbnWQbFSgeVNYVkU', // Google Search Console(URL 접두어 https://www.mirae-adone.com/) — 지우면 소유 확인이 풀림
   bing: '',    // Bing 웹마스터 도구 — msvalidate.01. Search Console 에서 가져오기로 등록하면 필요 없음
   daum: '',    // 다음 웹마스터도구 — robots.txt 에 넣으라는 「#DaumWebMasterTool:…」 한 줄 전체
