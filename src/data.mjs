@@ -479,7 +479,7 @@ export const LEGACY_KEYWORDS = ['블로그관리대행', '브랜드블로그', '
 // 검색엔진 소유 확인 — 각 도구가 주는 「HTML 태그」의 content 값만 넣는다(비우면 태그를 넣지 않음). 바꾼 뒤 deploy.bat
 export const SITE_VERIFICATION = {
   naver: 'd26bd825c654b153335b59d39decdf35e45ec19a', // 네이버 서치어드바이저 — 기존 mirae-adone.com 값 유지(도메인 이전 후에도 소유 확인 연속)
-  google: '',  // Google Search Console(URL 접두어 속성) — google-site-verification. 도메인 속성을 Cloudflare DNS 로 확인했다면 비워 둬도 됨
+  google: 't87otxYdRUqV0CxXEK8X2L2rjUYIbnWQbFSgeVNYVkU', // Google Search Console(URL 접두어 https://www.mirae-adone.com/) — 지우면 소유 확인이 풀림
   bing: '',    // Bing 웹마스터 도구 — msvalidate.01. Search Console 에서 가져오기로 등록하면 필요 없음
   daum: '',    // 다음 웹마스터도구 — robots.txt 에 넣으라는 「#DaumWebMasterTool:…」 한 줄 전체
 };

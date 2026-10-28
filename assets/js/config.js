@@ -14,8 +14,8 @@ window.MA_CONFIG = {
   /* 3) 방문·전환 추적 — 있는 것만 입력. 비워 두면 그 스크립트는 불러오지 않습니다(assets/js/track.js).
         아래 TRACK_HOSTS 주소에서만 켜집니다. 미리보기 주소에서 시험하려면 주소 끝에 ?track=on (끄기 ?track=off)
         보내는 이벤트와 각 도구 설정 방법: README.md 「방문·전환 추적」 */
-  GTM_ID: '',                  // Google 태그 관리자 (예: GTM-XXXXXXX). GA4_ID 를 아래에 넣었다면 GTM 안에 GA4 구성 태그를 또 만들지 마세요(중복 집계)
-  GA4_ID: '',                  // Google 애널리틱스 4 측정 ID (예: G-XXXXXXXXXX)
+  GTM_ID: 'GTM-M8LBJ85R',      // Google 태그 관리자 (미래애드원 계정 · www.mirae-adone.com 컨테이너). GA4 는 아래 GA4_ID 로 직접 보내므로 GTM 안에 GA4 구성 태그를 또 만들지 마세요(중복 집계)
+  GA4_ID: 'G-Q9407C4DEY',      // Google 애널리틱스 4 (미래애드원 계정 · 미래애드원 홈페이지 속성)
   GOOGLE_ADS_ID: '',           // Google Ads 전환 추적 ID (예: AW-123456789)
   GOOGLE_ADS_LEAD_LABEL: '',   // Google Ads 「상담 신청」 전환 라벨
   NAVER_ANALYTICS_ID: '',      // 네이버 애널리틱스(analytics.naver.com) 사이트 키
