@@ -5,7 +5,7 @@ window.MA_CONFIG = {
   /* 1) 상담 신청 수신 주소 (Google Apps Script 웹앱 URL, .../exec)
         apps-script/설정가이드.md 순서대로 배포한 뒤 붙여넣으세요.
         비어 있으면 신청 내용을 정리해 보여 주고 전화·카카오톡으로 연결합니다(저장되지 않음). */
-  LEAD_ENDPOINT: '',
+  LEAD_ENDPOINT: 'https://script.google.com/macros/s/AKfycbzJJAK-jo4Arg_5IBVC8IKdJbKirsR4Xysu-lFwdaCl3pzhAG2SR_RAzXEwqrSqla-pBw/exec', // zzangusz@gmail.com 「미래애드원 상담신청」 시트 · 알림 메일 같은 주소
 
   /* 2) 연락처 */
   PHONE: '02-6481-6603',
