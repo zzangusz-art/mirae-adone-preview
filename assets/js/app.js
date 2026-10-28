@@ -547,6 +547,7 @@
   /* ───────── 비용 계산기 */
   $$('[data-calc]').forEach(c => {
     const ind = $('[data-calc-ind]', c), rng = $('[data-calc-clicks]', c), out = $('[data-calc-clicks-out]', c), ad = $('[data-calc-ad]', c), q = $('[data-calc-q]', c);
+    c.addEventListener('change', () => track('calc_use', { industry: ind?.value || '' }), { once: true });
     const upd = () => {
       const r = (DATA.cpc || []).find(x => x.id === ind.value) || (DATA.cpc || [])[0]; if (!r) return;
       const n = +rng.value; out.textContent = n;
@@ -663,14 +664,8 @@
   } catch { /* 저장소 차단 환경 */ }
   const attr = () => { try { return JSON.parse(sessionStorage.getItem(ATTR_KEY) || '{}'); } catch { return {}; } };
 
-  /* ───────── 전환 이벤트 */
-  function track(name, params = {}) {
-    try { window.gtag?.('event', name, params); } catch { }
-    try { if (window.wcs && name === 'generate_lead') { window._nasa = window._nasa || {}; window._nasa.cnv = window.wcs.cnv('4', '1'); window.wcs_do?.(window._nasa); } } catch { }
-  }
-  document.addEventListener('click', e => { const t = e.target.closest('[data-track]'); if (t) track(t.dataset.track === 'tel' ? 'click_tel' : 'click_kakao', { page: location.pathname }); });
-  if (CFG.GA4_ID) { const s = document.createElement('script'); s.async = true; s.src = `https://www.googletagmanager.com/gtag/js?id=${CFG.GA4_ID}`; document.head.appendChild(s); window.dataLayer = window.dataLayer || []; window.gtag = function () { dataLayer.push(arguments); }; gtag('js', new Date()); gtag('config', CFG.GA4_ID); }
-  if (CFG.NAVER_WCS_ID) { const s = document.createElement('script'); s.src = 'https://wcs.naver.net/wcslog.js'; s.onload = () => { window.wcs_add = { wa: CFG.NAVER_WCS_ID }; window.wcs?.inflow?.(); window.wcs_do?.(); }; document.head.appendChild(s); }
+  /* ───────── 전환 이벤트 — 도구 불러오기·전화/카카오 클릭·스크롤은 assets/js/track.js */
+  const track = (name, params) => { try { window.maTrack?.(name, params); } catch { } };
 
   /* ───────── 상담 폼(3단계) */
   function prefillForm(form, { service, plan } = {}) {
@@ -686,7 +681,10 @@
       bar.style.width = `${(k + 1) / steps.length * 100}%`; prev.hidden = k === 0; next.hidden = k === steps.length - 1; submit.hidden = k !== steps.length - 1;
       const f = $('input:not([type=checkbox]):not(.hp),select,textarea', steps[k]); if (f && form.closest('.drawer.is-open, .contact')) setTimeout(() => f.focus({ preventScroll: true }), 80);
     };
-    next.addEventListener('click', () => show(Math.min(steps.length - 1, i + 1)));
+    next.addEventListener('click', () => { show(Math.min(steps.length - 1, i + 1)); track('form_step', { form: form.id, step: i + 1 }); });
+    let started = false; // 첫 입력(포커스 또는 체크 — 서비스 칩은 클릭해도 포커스가 안 감)
+    const start = () => { if (!started) { started = true; track('form_start', { form: form.id }); } };
+    form.addEventListener('focusin', start); form.addEventListener('change', start);
     prev.addEventListener('click', () => show(Math.max(0, i - 1)));
     form.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.tagName === 'INPUT' && i < steps.length - 1) { e.preventDefault(); next.click(); } });
     // ?service= 로 들어온 경우(상담 페이지)
@@ -716,7 +714,8 @@
         } catch (err) { form.classList.remove('is-busy'); toast('전송에 실패했습니다. 전화나 카카오톡으로 연락 주세요.', 'err', 4200); return; }
       }
       form.classList.remove('is-busy');
-      track('generate_lead', { services: data.services.join(','), industry: data.industry });
+      // 실제 접수(저장 성공)만 generate_lead(광고 전환). 접수 주소가 없어 내용만 정리한 경우는 lead_draft
+      track(ok ? 'generate_lead' : 'lead_draft', { form: form.id, services: data.services.join(','), industry: data.industry, budget: data.budget });
       const summary = `[미래애드원 상담 신청]\n이름/업체: ${name}\n연락처: ${phone}\n관심 서비스: ${data.services.join(', ') || '미정'}\n업종/지역: ${[data.industry, data.region].filter(Boolean).join(' / ') || '-'}\n예산: ${data.budget || '-'}\n주소: ${data.url || '-'}\n내용: ${data.message || '-'}`;
       const done = ok
         ? `<div class="qf-done">${icon('check')}<h3>상담 신청이 접수되었습니다</h3><p>${id ? `접수번호 ${esc(id)} · ` : ''}담당자가 확인 후 연락드립니다.</p><div class="btns"><a class="btn btn--line" href="${ROOT}portfolio/">기다리는 동안 포트폴리오 보기</a></div></div>`

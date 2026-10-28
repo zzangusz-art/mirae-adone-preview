@@ -11,7 +11,17 @@ window.MA_CONFIG = {
   PHONE: '02-6481-6603',
   KAKAO: 'https://open.kakao.com/o/glzPMi4f',
 
-  /* 3) 전환 추적 (있는 것만 입력. 비워 두면 스크립트를 불러오지 않음) */
-  GA4_ID: '',          // 예: G-XXXXXXXXXX
-  NAVER_WCS_ID: ''     // 네이버 프리미엄 로그분석 / 검색광고 공통 인증키 (예: s_xxxxxxxx)
+  /* 3) 방문·전환 추적 — 있는 것만 입력. 비워 두면 그 스크립트는 불러오지 않습니다(assets/js/track.js).
+        아래 TRACK_HOSTS 주소에서만 켜집니다. 미리보기 주소에서 시험하려면 주소 끝에 ?track=on (끄기 ?track=off)
+        보내는 이벤트와 각 도구 설정 방법: README.md 「방문·전환 추적」 */
+  GTM_ID: '',                  // Google 태그 관리자 (예: GTM-XXXXXXX). GA4_ID 를 아래에 넣었다면 GTM 안에 GA4 구성 태그를 또 만들지 마세요(중복 집계)
+  GA4_ID: '',                  // Google 애널리틱스 4 측정 ID (예: G-XXXXXXXXXX)
+  GOOGLE_ADS_ID: '',           // Google Ads 전환 추적 ID (예: AW-123456789)
+  GOOGLE_ADS_LEAD_LABEL: '',   // Google Ads 「상담 신청」 전환 라벨
+  NAVER_ANALYTICS_ID: '',      // 네이버 애널리틱스(analytics.naver.com) 사이트 키
+  NAVER_WCS_ID: '',            // 네이버 검색광고 전환추적·프리미엄 로그분석 AccountId (예: s_xxxxxxxxxxxx) — 상담 신청 lead, 전화 custom001, 카카오 custom002
+  CLARITY_ID: '',              // Microsoft Clarity 프로젝트 ID (히트맵·세션 녹화, 입력값은 자동 가림)
+  META_PIXEL_ID: '',           // 메타(페이스북·인스타그램) 픽셀 ID
+  KAKAO_PIXEL_ID: '',          // 카카오 픽셀(카카오모먼트) 트랙 ID
+  TRACK_HOSTS: ['www.mirae-adone.com', 'mirae-adone.com']
 };

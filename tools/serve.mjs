@@ -5,18 +5,26 @@
 // - 서빙 폴더는 tools/export-site.mjs 가 만든 _site(소스·도구·글 원고는 들어가지 않음)
 // - 예약 글: 09:00·13:00·18:00(KST)이 지날 때마다 다시 빌드해 그 시각의 글을 공개한다(푸시가 없어도)
 // - 동영상은 Range(206) 응답, 글자 파일은 gzip, 주소/폴더 → index.html, 없으면 404.html
+// - 운영/미리보기는 접속 주소로 나눈다: SITE 도메인(www.mirae-adone.com)은 운영(색인 허용), 그 밖(*.up.railway.app 등)은 미리보기(noindex — 중복 색인 방지)
+//   mirae-adone.com(www 없음) → https://www.mirae-adone.com 으로 301. 환경 변수 PRODUCTION=true/false 로 모든 주소를 한쪽으로 고정할 수 있다
+// - IndexNow: Railway 에서 실행 중이면 오늘 공개된 인사이트 글 주소를 네이버·Bing 에 알린다(tools/indexnow.mjs)
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { SITE } from '../src/data.mjs';
+import { submitIndexNow } from './indexnow.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = path.join(ROOT, '_site'); // 빌드 단계(--build-only) 결과 — 이미지에 들어 있어 실행 중 빌드가 실패해도 이걸로 서빙
-let OUT = BASE; // 지금 서빙 중인 폴더
+let OUT = BASE; // 지금 서빙 중인 폴더(안에 prod/ · preview/)
 let seq = 0;
 const PORT = +(process.env.PORT || 8080);
+const SITE_HOST = new URL(SITE).hostname, APEX = SITE_HOST.replace(/^www\./, '');
+const MODE = process.env.PRODUCTION || '';
+const isProdHost = host => MODE === 'true' || (MODE !== 'false' && host === SITE_HOST);
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8',
   '.json': 'application/json; charset=utf-8', '.xml': 'application/xml; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.svg': 'image/svg+xml',
@@ -25,20 +33,34 @@ const MIME = {
 };
 const TEXT = new Set(['.html', '.css', '.js', '.mjs', '.json', '.xml', '.txt', '.svg']);
 
-// ── 빌드: build.mjs → export-site.mjs(운영이면 그대로, 아니면 noindex 미리보기)
+// ── 빌드: build.mjs → export-site.mjs 두 벌(prod = 운영, preview = noindex 미리보기)
 // 실행 중 다시 빌드할 때는 새 폴더(_site.r1, r2 …)로 내보낸 뒤 서빙 폴더만 바꾼다.
 // 폴더 이름 바꾸기(rename)는 쓰지 않는다 — 컨테이너(overlayfs)에서는 이미지에 들어 있던 폴더의 이름을 바꾸면 EXDEV 로 실패한다.
-export function buildSite(dest = `${BASE}.r${++seq}`) {
+export function buildSite(dest = `${BASE}.r${++seq}`, { ping = true } = {}) {
   const run = args => { const r = spawnSync(process.execPath, args, { cwd: ROOT, stdio: 'inherit' }); if (r.status) throw new Error('실패: node ' + args.join(' ')); };
   run(['build.mjs']);
-  const prod = process.env.PRODUCTION === 'true';
   const host = process.env.RAILWAY_PUBLIC_DOMAIN || process.env.PUBLIC_HOST || 'localhost';
-  run(['tools/export-site.mjs', dest, ...(prod ? [] : ['--preview', `https://${host}/`])]);
+  run(['tools/export-site.mjs', path.join(dest, 'prod')]);
+  run(['tools/export-site.mjs', path.join(dest, 'preview'), '--preview', `https://${host}/`]);
   const prev = OUT;
   OUT = dest;
   cache.clear();
   if (prev !== BASE && prev !== dest) fs.rmSync(prev, { recursive: true, force: true });
-  console.log(`[build] ${new Date().toISOString()} ${prod ? '운영(색인 허용)' : '미리보기(noindex)'} → ${path.basename(dest)}`);
+  console.log(`[build] ${new Date().toISOString()} → ${path.basename(dest)} (운영: ${MODE === 'false' ? '끔' : MODE === 'true' ? '모든 주소' : SITE_HOST})`);
+  if (ping) pingNewPosts(dest);
+}
+
+// 오늘(KST) 공개된 인사이트 글을 IndexNow 로 알림 — 실행 중 한 주소는 한 번만. 로컬 실행에서는 보내지 않음(INDEXNOW=on 이면 보냄)
+const pinged = new Set();
+function pingNewPosts(dir) {
+  if (MODE === 'false' || (!process.env.RAILWAY_PROJECT_ID && process.env.INDEXNOW !== 'on')) return;
+  const today = slotKST().slice(0, 10);
+  let xml = '';
+  try { xml = fs.readFileSync(path.join(dir, 'prod', 'sitemap.xml'), 'utf8'); } catch { return; }
+  const urls = [...xml.matchAll(/<loc>([^<]+\/insights\/[^<\/]+\/)<\/loc><lastmod>([^<]+)<\/lastmod>/g)].filter(m => m[2] === today && !pinged.has(m[1])).map(m => m[1]);
+  if (!urls.length) return;
+  urls.forEach(u => pinged.add(u));
+  submitIndexNow(urls).then(r => console.log(`[indexnow] ${urls.length}개 → ${r.join(' · ')}`));
 }
 
 // 예약 공개 시각(KST)이 바뀌면 다시 빌드
@@ -74,10 +96,13 @@ function send(req, res, file, status = 200) {
 
 function handler(req, res) {
   if (req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405, { Allow: 'GET, HEAD' }); return res.end(); }
+  const host = String(req.headers.host || '').split(':')[0].toLowerCase();
+  if (APEX !== SITE_HOST && host === APEX) { res.writeHead(301, { Location: `https://${SITE_HOST}${req.url}` }); return res.end(); }
+  const DIR = path.join(OUT, isProdHost(host) ? 'prod' : 'preview');
   let rel;
   try { rel = decodeURIComponent(new URL(req.url, 'http://x').pathname); } catch { res.writeHead(400); return res.end(); }
-  const abs = path.normalize(path.join(OUT, rel));
-  if (abs !== OUT && !abs.startsWith(OUT + path.sep)) { res.writeHead(403); return res.end(); }
+  const abs = path.normalize(path.join(DIR, rel));
+  if (abs !== DIR && !abs.startsWith(DIR + path.sep)) { res.writeHead(403); return res.end(); }
   let file = abs;
   try {
     if (fs.statSync(file).isDirectory()) {
@@ -86,16 +111,16 @@ function handler(req, res) {
     }
     if (fs.existsSync(file)) return send(req, res, file);
   } catch { /* 아래 404 */ }
-  const nf = path.join(OUT, '404.html');
+  const nf = path.join(DIR, '404.html');
   if (fs.existsSync(nf)) return send(req, res, nf, 404);
   res.writeHead(404); res.end('Not found');
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   for (const e of fs.readdirSync(ROOT)) if (/^_site\.\w+$/.test(e)) fs.rmSync(path.join(ROOT, e), { recursive: true, force: true }); // 지난 실행의 빌드 폴더
-  if (process.argv.includes('--build-only')) { buildSite(BASE); process.exit(0); }
+  if (process.argv.includes('--build-only')) { buildSite(BASE, { ping: false }); process.exit(0); }
   // 시작할 때마다 다시 빌드: 이미지가 만들어진 뒤 지난 예약 시각의 글까지 바로 공개. 실패하면 빌드 단계 결과로 서빙(서버는 죽지 않게)
-  const hasBase = fs.existsSync(path.join(BASE, 'index.html'));
+  const hasBase = fs.existsSync(path.join(BASE, 'prod', 'index.html'));
   if (process.argv.includes('--build') || !hasBase) {
     try { buildSite(); } catch (e) { if (!hasBase) throw e; console.error('[build] 시작 빌드 실패 — 빌드 단계 결과(_site)로 서빙:', e.message); }
   }

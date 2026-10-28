@@ -9,14 +9,14 @@ import * as PG from './src/pages.mjs';
 import { ROOT } from './src/lib.mjs';
 import { loadPosts } from './tools/blog/lib.mjs';
 
-const { SITE, COMPANY, SERVICES, INDUSTRIES, BLOG_CATEGORIES, BLOG_PLANS, WEB_AI_PLAN, PRICE_SHOW_WEB_AI, CPC, FAQ, SEO, KEYWORD_LINKS } = D;
+const { SITE, COMPANY, SERVICES, INDUSTRIES, BLOG_CATEGORIES, BLOG_PLANS, WEB_AI_PLAN, PRICE_SHOW_WEB_AI, CPC, FAQ, SEO, KEYWORD_LINKS, SITE_VERIFICATION, INDEXNOW_KEY } = D;
 const wr = (rel, s) => { const f = path.join(ROOT, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s); };
 const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' }).format(new Date());
 const nowTime = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date()).replace(/^24/, '00');
 
 // 1) 이전 빌드 결과 지우기 (소스·에셋은 건드리지 않음)
 const GENERATED_DIRS = ['about', 'services', 'industries', 'pricing', 'portfolio', 'reviews', 'faq', 'contact', 'privacy', 'insights'];
-const GENERATED_FILES = ['index.html', '404.html', 'sitemap.xml', 'robots.txt', 'llms.txt', 'assets/js/data.js'];
+const GENERATED_FILES = ['index.html', '404.html', 'sitemap.xml', 'robots.txt', 'llms.txt', 'assets/js/data.js', `${INDEXNOW_KEY}.txt`];
 for (const d of GENERATED_DIRS) fs.rmSync(path.join(ROOT, d), { recursive: true, force: true });
 for (const f of GENERATED_FILES) fs.rmSync(path.join(ROOT, f), { force: true });
 
@@ -38,7 +38,7 @@ const pages = [
   PG.industriesIndex(), ...INDUSTRIES.map(PG.industryDetail), PG.pricing(), PG.portfolio(), PG.reviews(), PG.faqPage(), PG.contact(), PG.privacy(),
   PG.insightsIndex(POSTS), ...POSTS.map(p => PG.insightPost(p, POSTS)), PG.notFound(),
 ];
-const V = crypto.createHash('md5').update(['assets/css/style.css', 'assets/js/app.js', 'assets/js/config.js'].map(f => fs.readFileSync(path.join(ROOT, f), 'utf8')).join('') + today).digest('hex').slice(0, 8);
+const V = crypto.createHash('md5').update(['assets/css/style.css', 'assets/js/app.js', 'assets/js/config.js', 'assets/js/track.js'].map(f => fs.readFileSync(path.join(ROOT, f), 'utf8')).join('') + today).digest('hex').slice(0, 8);
 for (const pg of pages) {
   const html = pg.html.replaceAll('{V}', V).replaceAll('{BASE}', process.env.BASE || '/');
   wr(pg.file ? pg.path : `${pg.path}index.html`, html);
@@ -64,7 +64,8 @@ ${POSTS.slice(0, 50).map(p => `<item><title>${x(p.title)}</title><link>${SITE}in
 // 6) sitemap / robots / llms.txt
 const urls = pages.filter(p => !p.file).map(p => ({ loc: SITE + p.path, lastmod: p.path.startsWith('insights/') && p.path !== 'insights/' ? (POSTS.find(q => p.path === `insights/${q.slug}/`)?.updated || POSTS.find(q => p.path === `insights/${q.slug}/`)?.date || today) : today }));
 wr('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u => `<url><loc>${u.loc}</loc><lastmod>${u.lastmod}</lastmod></url>`).join('\n')}\n</urlset>\n`);
-wr('robots.txt', `User-agent: *\nAllow: /\n\n# AI 검색·답변 서비스 크롤러도 공개 페이지 접근 허용\nUser-agent: OAI-SearchBot\nAllow: /\nUser-agent: ChatGPT-User\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: Google-Extended\nAllow: /\nUser-agent: ClaudeBot\nAllow: /\nUser-agent: Yeti\nAllow: /\n\nSitemap: ${SITE}sitemap.xml\n`);
+wr('robots.txt', `User-agent: *\nAllow: /\n\n# AI 검색·답변 서비스 크롤러도 공개 페이지 접근 허용\nUser-agent: OAI-SearchBot\nAllow: /\nUser-agent: ChatGPT-User\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: Google-Extended\nAllow: /\nUser-agent: ClaudeBot\nAllow: /\nUser-agent: Yeti\nAllow: /\n\nSitemap: ${SITE}sitemap.xml\n${SITE_VERIFICATION.daum ? `\n${SITE_VERIFICATION.daum}\n` : ''}`);
+wr(`${INDEXNOW_KEY}.txt`, INDEXNOW_KEY); // IndexNow 키 확인 파일(https://www.mirae-adone.com/<키>.txt)
 const won = n => n.toLocaleString('ko-KR') + '원';
 wr('llms.txt', `# ${COMPANY.name} (${COMPANY.nameEn})
 

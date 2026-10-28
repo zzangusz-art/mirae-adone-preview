@@ -476,7 +476,15 @@ export const INDUSTRIES = [
 // 설명은 「미래애드원」으로 시작해 브랜드와 키워드를 한 문장에 묶는다(AI 답변이 문장을 가져갈 때 브랜드가 따라가게).
 export const KEYWORDS = ['AEO GEO 마케팅', '홈페이지 제작', '블로그관리대행', '브랜드 블로그', '블로그 마케팅', '블로그광고대행', '블로그운영대행', '블로그 홍보', '네이버 블로그 광고', '인테리어 블로그 마케팅', '병원 마케팅', '병원 홈페이지', '학원 블로그 마케팅', '부동산 블로그 마케팅', '바이럴 마케팅', '온라인광고대행사'];
 export const LEGACY_KEYWORDS = ['블로그관리대행', '브랜드블로그', '브랜딩블로그', '네이버블로그', '블로그마케팅', '블로그광고', '브랜드마케팅', '인스타그램광고', '온라인광고', '검색광고', '블로그바이럴', 'sns광고', '언론보도', '홈페이지제작'];
-export const NAVER_SITE_VERIFICATION = 'd26bd825c654b153335b59d39decdf35e45ec19a'; // 기존 mirae-adone.com 의 네이버 서치어드바이저 소유 확인 값(도메인 이전 시 유지)
+// 검색엔진 소유 확인 — 각 도구가 주는 「HTML 태그」의 content 값만 넣는다(비우면 태그를 넣지 않음). 바꾼 뒤 deploy.bat
+export const SITE_VERIFICATION = {
+  naver: 'd26bd825c654b153335b59d39decdf35e45ec19a', // 네이버 서치어드바이저 — 기존 mirae-adone.com 값 유지(도메인 이전 후에도 소유 확인 연속)
+  google: '',  // Google Search Console(URL 접두어 속성) — google-site-verification. 도메인 속성을 Cloudflare DNS 로 확인했다면 비워 둬도 됨
+  bing: '',    // Bing 웹마스터 도구 — msvalidate.01. Search Console 에서 가져오기로 등록하면 필요 없음
+  daum: '',    // 다음 웹마스터도구 — robots.txt 에 넣으라는 「#DaumWebMasterTool:…」 한 줄 전체
+};
+// IndexNow(네이버·Bing 등에 새 글 즉시 알림) 키 — 사이트 루트의 <키>.txt 로 공개되는 값이라 비밀이 아님. 바꾸지 않는다
+export const INDEXNOW_KEY = '9cc53e216a44c982421836bb285290a9';
 // 키워드 허브(푸터·업종 섹션의 내부 링크) — [앵커 문구, 경로]
 export const KEYWORD_LINKS = [
   ['블로그관리대행', 'services/brand-blog/'], ['브랜드 블로그 운영대행', 'services/brand-blog/'], ['홈페이지 제작', 'services/website/'],

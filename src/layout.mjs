@@ -1,5 +1,5 @@
 // 공통 레이아웃: <head>, 헤더(메가 메뉴), 푸터, 레이어(드로어·모달·토스트·상담폼), 아이콘 스프라이트
-import { SITE, COMPANY, NAV, AXES, SERVICES, BLOG_PLANS, INDUSTRIES, KEYWORDS, KEYWORD_LINKS, NAVER_SITE_VERIFICATION } from './data.mjs';
+import { SITE, COMPANY, NAV, AXES, SERVICES, BLOG_PLANS, INDUSTRIES, KEYWORDS, KEYWORD_LINKS, SITE_VERIFICATION } from './data.mjs';
 import { esc, icon, ld, man } from './lib.mjs';
 
 const SPRITE = `<svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -47,6 +47,10 @@ export const MEGA_FEATURE = () => {
   return `<a class="mega__feature" href="{R}services/brand-blog/"><span class="mega__tag">공개 가격</span><strong>브랜드 블로그 월 ${p.count}회 ${man(p.price)}부터</strong><span>상주 작가·디자이너 직접 제작 · VAT 별도</span><span class="mega__go">가격 보기 ${icon('arrow')}</span></a>`;
 };
 
+// 검색엔진 소유 확인 태그(값이 있는 것만)
+const VERIFY_META = [['naver-site-verification', SITE_VERIFICATION.naver], ['google-site-verification', SITE_VERIFICATION.google], ['msvalidate.01', SITE_VERIFICATION.bing]]
+  .filter(([, v]) => v).map(([n, v]) => `<meta name="${n}" content="${esc(v)}">`).join('\n');
+
 export function head({ R, title, desc, canonical, og = 'og.jpg', jsonld = [], extraHead = '', kw = [] }) {
   return `<!doctype html>
 <html lang="ko">
@@ -55,7 +59,7 @@ export function head({ R, title, desc, canonical, og = 'og.jpg', jsonld = [], ex
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
-${kw.length ? `<meta name="keywords" content="${esc(kw.join(', '))}">\n` : ''}<meta name="naver-site-verification" content="${NAVER_SITE_VERIFICATION}">
+${kw.length ? `<meta name="keywords" content="${esc(kw.join(', '))}">\n` : ''}${VERIFY_META}
 <link rel="canonical" href="${canonical}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="${COMPANY.name}">
@@ -207,6 +211,7 @@ ${footer(R)}
 ${layers(R)}
 <script>window.MA_ROOT=${JSON.stringify(R)};</script>
 <script src="${R}assets/js/config.js?v={V}"></script>
+<script src="${R}assets/js/track.js?v={V}" defer></script>
 <script src="${R}assets/js/data.js?v={V}"></script>
 <script src="${R}assets/js/app.js?v={V}" defer></script>
 </body>
