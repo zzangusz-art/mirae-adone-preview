@@ -94,7 +94,7 @@ ${KEYWORD_LINKS.map(([t, h]) => `- ${t}: ${SITE}${h}`).join('\n')}
 ${SERVICES.map(s => `- [${s.name}](${SITE}services/${s.slug}/): ${s.copy}`).join('\n')}
 - [가격 안내](${SITE}pricing/)
 - [업종별 솔루션](${SITE}industries/)
-${INDUSTRIES.map(x => `- [${(SEO[x.slug] && SEO[x.slug].h1) || x.name + ' 마케팅'}](${SITE}industries/${x.slug}/)`).join('\n')}
+${INDUSTRIES.map(x => `- [${SEO['ind:' + x.slug]?.h1 || x.name + ' 마케팅'}](${SITE}industries/${x.slug}/)`).join('\n')}
 - [포트폴리오](${SITE}portfolio/)
 - [고객 후기·운영 기록](${SITE}reviews/)
 - [회사소개](${SITE}about/)

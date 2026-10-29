@@ -1,6 +1,6 @@
 ---
 title: GEO란 무엇인가요? SEO와 같은 점, 다른 점
-description: GEO는 ChatGPT·Gemini 같은 AI가 답을 만들 때 우리 사이트 정보를 정확히 읽고 인용하도록 돕는 작업입니다. SEO와의 차이와 시작 순서를 정리했습니다.
+description: GEO는 ChatGPT 같은 AI가 우리 사이트 정보를 정확히 읽고 인용하게 돕는 작업입니다. SEO와 같은 점·다른 점을 정리했습니다.
 slug: what-is-geo-vs-seo
 date: 2026-10-18
 time: 13:00

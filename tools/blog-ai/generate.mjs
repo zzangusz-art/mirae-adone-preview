@@ -110,10 +110,10 @@ function validate(md, { allowed, slugs, titles = [], keywords = new Map(), when 
   if (meta.slug && slugs.has(meta.slug)) errs.push(`이미 있는 slug: ${meta.slug}`);
   if (meta.category && !D.BLOG_CATEGORIES.includes(meta.category)) errs.push(`category는 ${D.BLOG_CATEGORIES.join('/')} 중 하나`);
   if (meta.service && !D.SERVICES.some(s => s.slug === meta.service)) errs.push(`service 값이 서비스 목록에 없음: ${meta.service}`);
-  if (meta.title && (meta.title.length < 12 || meta.title.length > 60)) errs.push('제목은 12~60자');
+  if (meta.title && ([...meta.title].length < 12 || [...meta.title].length > 40)) errs.push('제목은 12~40자(네이버 권장 — <title> 에 그대로 쓰임)');
   if (meta.cover && meta.cover.length > 32) errs.push('cover는 32자 이내');
   if (meta.cover && !/^[가-힣A-Za-z0-9\s.,·?!%~\-—–()'"“”‘’「」『』:/&+]+$/.test(meta.cover)) errs.push('cover에 썸네일 폰트에 없는 문자(한글·영문·숫자·기본 문장부호만)');
-  if (meta.description && (meta.description.length < 40 || meta.description.length > 140)) errs.push('설명은 40~140자');
+  if (meta.description && ([...meta.description].length < 40 || [...meta.description].length > 80)) errs.push('설명은 40~80자(네이버 권장 — meta description·카카오톡 미리보기에 그대로 쓰임)');
   for (const t of titles) if (meta.title && sim(meta.title, t) > .72) { errs.push(`기존 글과 제목이 비슷함: ${t}`); break; }
   const len = (body || '').replace(/\s+/g, '').length;
   if (len < 1200 || len > 4800) errs.push(`본문 길이 ${len}자(공백 제외) — 1,200~4,800자`);
@@ -164,8 +164,8 @@ const SYSTEM = sheet => `당신은 통합 마케팅 회사 미래애드원의 �
 
 # 출력 형식 (이 형식 외의 말은 출력하지 않습니다)
 ---
-title: (12~60자, 검색 질문이 드러나게)
-description: (40~140자, 글의 답을 한 문장으로)
+title: (12~40자 — 공백 포함. 1순위 검색어로 시작하고 검색 질문이 드러나게)
+description: (40~80자 — 공백 포함. 1순위 검색어로 시작해 글의 답을 한 문장으로)
 slug: (영문 소문자-하이픈, 주제 뜻이 드러나게)
 category: (${D.BLOG_CATEGORIES.join(' | ')} 중 하나)
 tags: (쉼표로 구분 3~5개)

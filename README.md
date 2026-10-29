@@ -24,6 +24,8 @@
 - **글 직접 쓰기**: `content/blog/새-글.md` (머리말 형식은 기존 글 참고) → `node tools/blog-ai/generate.mjs --check` 로 검증.
 - **AI 주제 미리보기**: `node tools/blog-ai/generate.mjs --plan` (API 호출 없음). 대기열이 끝나면 서비스×업종×관점 조합(756개)으로 자동 생성.
 - **전체 점검**: `npm run check`
+- **페이지 제목·설명 바꾸기**: `src/data.mjs` 의 `SEO`(키: `home`·`pricing`… / 서비스 `svc:<slug>` / 업종 `ind:<slug>`). 제목 40자·설명 80자 이내(네이버 서치어드바이저 권장, 공백 포함), 핵심 검색어를 앞에. 같은 값이 og:title·og:description(카카오톡 미리보기)에도 들어갑니다. 넘으면 `npm run check` 가 경고합니다. 글은 머리말 `title` 40자·`description` 80자(검증기가 거부).
+- **카카오톡 공유 썸네일**: 페이지별 `assets/img/og/<키>.jpg`(1200x630)는 `SEO[키].card` 문구로 `python tools/thumbs/build_og.py` 가 만듭니다(문구 바꾼 뒤 다시 실행). 글은 `build_thumbs.py` 의 글 썸네일을 씁니다. 카카오톡은 미리보기를 한동안 저장해 두므로, 바뀐 썸네일을 바로 보려면 카카오 개발자 사이트의 「공유 디버거」에서 주소의 캐시를 지웁니다.
 
 ## 하루 3편 발행 — 예약 글 + AI 자동 작성
 - **예약 글**: `content/blog/*.md` 의 `date`·`time` 이 미래면 그 시각이 지난 뒤 첫 빌드에서 공개됩니다(09:00·13:00·18:00 KST 예약 실행이 빌드). 2026-10-26 ~ 11-02 분량 24편을 미리 써 두었습니다. 새로 미리 써 둔 글은 `node tools/blog/mark_topics.mjs` 로 주제 대기열에 반영.

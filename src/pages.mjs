@@ -1,4 +1,6 @@
 // 페이지 렌더러. 각 함수는 { path, html } 을 돌려준다. path 는 사이트 루트 기준 디렉터리('' = 홈)
+import fs from 'node:fs';
+import path from 'node:path';
 import {
   SITE, COMPANY, SERVICES, AXES, INDUSTRIES, PORTFOLIO, PORTFOLIO_CATS, REVIEWS, FAQ, BLOG_FAQ, BLOG_PLANS, WEB_AI_PLAN, PRICE_SHOW_WEB_AI,
   CPC, BLOG_CATEGORIES, BLOG_AUTHOR, SEQUENCE, SEO, KEYWORD_LINKS, svc,
@@ -10,12 +12,17 @@ import {
   industryTabs, faqBlock, faqList, faqLD, postCard, ctaBand, processSteps, portfolioGrid, chatDemo, costStructure, keywordCards, geoTimeline,
   reportChart, reportFieldsTable, monthFlows, geoIndustries, statusBoard,
 } from './blocks.mjs';
-import { esc, won, man, icon, img } from './lib.mjs';
+import { esc, won, man, icon, img, ROOT } from './lib.mjs';
 import { aiRecording, aiSlides, beforeAfter, webCases, pressWall, WEBCASES } from './showcase.mjs';
 
 const depthR = p => (p ? '../'.repeat(p.split('/').filter(Boolean).length) : '');
 const url = p => SITE + p;
 const T = t => `${t} | ${COMPANY.name}`;
+// SEO 키(data.mjs SEO) → 제목·설명·키워드·공유 썸네일(assets/img/og/<키>.jpg 가 있으면 그것, 없으면 og.jpg)
+const ogOf = k => { const f = `og/${k.replace(':', '-')}.jpg`; return fs.existsSync(path.join(ROOT, 'assets/img', f)) ? f : 'og.jpg'; };
+const meta = k => { const m = SEO[k]; if (!m) throw new Error(`SEO['${k}'] 없음 — src/data.mjs`); return { title: m.title, desc: m.desc, kw: m.kw || [], og: ogOf(k) }; };
+// 글 <title>: 「제목 | 미래애드원」이 40자를 넘으면 제목만(네이버 권장 길이 — 상호는 og:site_name 으로 남는다)
+const postTitle = t => ([...T(t)].length <= 40 ? T(t) : t);
 
 // ═════════ 홈
 export function home(posts) {
@@ -139,7 +146,7 @@ ${ctaBand(R)}`;
   return {
     path: '',
     html: page({
-      R, current: '', title: SEO.home.title, desc: SEO.home.desc, kw: SEO.home.kw,
+      R, current: '', ...meta('home'),
       canonical: SITE, bodyClass: 'is-home', jsonld: [{ '@context': 'https://schema.org', '@graph': [ORG, WEBSITE] }], body,
     }),
   };
@@ -194,7 +201,7 @@ ${logosMarquee(R)}
   </div>
 </section>
 ${ctaBand(R)}`;
-  return { path: p, html: page({ R, current: 'about/', title: SEO.about.title, kw: SEO.about.kw, desc: SEO.about.desc, canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [ORG, crumbs([['홈', SITE], ['회사소개', url(p)]])] }], body }) };
+  return { path: p, html: page({ R, current: 'about/', ...meta('about'), canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [ORG, crumbs([['홈', SITE], ['회사소개', url(p)]])] }], body }) };
 }
 
 // ═════════ 서비스 전체
@@ -213,7 +220,7 @@ ${ctaBand(R)}
 <script type="application/json" id="svc-quick">${JSON.stringify(Object.fromEntries(SERVICES.map(s => [s.slug, { name: s.name, copy: s.copy, lead: s.lead, scope: s.scope, model: s.model }]))).replace(/</g, '\\u003c')}</script>`;
   return {
     path: p, html: page({
-      R, current: 'services/', title: T('서비스 전체'), desc: '홈페이지·SEO·AEO·GEO·브랜드 블로그·검색광고·플레이스·SNS·바이럴·촬영·PR까지 미래애드원의 18개 마케팅 서비스를 한눈에 확인하세요.', canonical: url(p),
+      R, current: 'services/', ...meta('services'), canonical: url(p),
       jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['서비스', url(p)]]), { '@type': 'ItemList', itemListElement: SERVICES.map((s, i) => ({ '@type': 'ListItem', position: i + 1, url: url(`services/${s.slug}/`), name: s.name })) }] }], body,
     }),
   };
@@ -261,7 +268,7 @@ export function serviceDetail(s, posts) {
   const faqs = [...s.faq.map(([q, a]) => ({ q, a })), ...(s.slug === 'brand-blog' ? BLOG_FAQ.map(([q, a]) => ({ q, a })) : FAQ.filter(f => f.c === '계약').slice(0, 2))];
   const relPosts = posts.filter(x => x.service === s.slug).slice(0, 3);
   const body = `
-${pageHero({ R, eyebrow: `${axis.en} · ${String(s.no).padStart(2, '0')}`, title: esc(SEO[s.slug]?.h1 || s.name), lead: `<strong>${esc(s.copy)}</strong><br>${esc(s.lead)}`, crumbs: crumbNav(R, [['홈', ''], ['서비스', 'services/'], [s.name, p]]), ctas: `${quoteBtn('이 상품으로 상담하기', s.slug)}<a class="btn btn--glass" href="#price">가격·판매 구조</a>`, cls: `phero--svc phero--${s.slug}` })}
+${pageHero({ R, eyebrow: `${axis.en} · ${String(s.no).padStart(2, '0')}`, title: esc(SEO['svc:' + s.slug]?.h1 || s.name), lead: `<strong>${esc(s.copy)}</strong><br>${esc(s.lead)}`, crumbs: crumbNav(R, [['홈', ''], ['서비스', 'services/'], [s.name, p]]), ctas: `${quoteBtn('이 상품으로 상담하기', s.slug)}<a class="btn btn--glass" href="#price">가격·판매 구조</a>`, cls: `phero--svc phero--${s.slug}` })}
 <nav class="subnav glass glass--light" aria-label="이 페이지 목차" data-subnav>${toc.map(([id, t]) => `<a href="#${id}">${t}</a>`).join('')}</nav>
 <section class="sec" id="problem"><div class="wrap">${sectionHead({ eyebrow: 'PROBLEM', title: '이런 상황이라면' })}<div class="pains">${s.pains.map((t, i) => `<article data-reveal style="--d:${i * 70}ms"><span>${String(i + 1).padStart(2, '0')}</span><p>${esc(t)}</p></article>`).join('')}</div>
 <div class="fit" data-reveal><p>추천 대상</p><ul>${s.targets.map(t => `<li>${icon('check')}${esc(t)}</li>`).join('')}</ul></div></div></section>
@@ -281,10 +288,9 @@ ${ctaBand(R, { title: `${esc(s.name)}, 어디서부터 시작할지 같이 정�
     : s.priceRef === 'web-ai' && PRICE_SHOW_WEB_AI ? { offers: [WEB_AI_PLAN.build, WEB_AI_PLAN.operate].map(b => ({ '@type': 'Offer', name: b.name, price: b.price, priceCurrency: 'KRW', priceSpecification: { '@type': 'PriceSpecification', price: b.price, priceCurrency: 'KRW', valueAddedTaxIncluded: false } })) } : {};
   return {
     path: p, html: page({
-      R, current: 'services/', title: SEO[s.slug]?.title || T(s.name), kw: SEO[s.slug]?.kw || [s.name, s.short],
-      desc: SEO[s.slug]?.desc || `미래애드원 ${s.name}: ${s.copy} ${s.scope.slice(0, 3).join(', ')}. 판매 구조: ${s.model}.`,
+      R, current: 'services/', ...meta('svc:' + s.slug),
       canonical: url(p), bodyClass: `is-svc svc-${s.slug}`,
-      jsonld: [{ '@context': 'https://schema.org', '@graph': [{ '@type': 'Service', '@id': url(p) + '#service', name: s.name, serviceType: s.name, ...(SEO[s.slug] ? { alternateName: SEO[s.slug].kw.slice(0, 4), keywords: SEO[s.slug].kw.join(', ') } : {}), description: s.lead, provider: { '@id': SITE + '#org' }, areaServed: 'KR', url: url(p), ...offers }, crumbs([['홈', SITE], ['서비스', url('services/')], [s.name, url(p)]]), faqLD(faqs)] }, { '@context': 'https://schema.org', ...ORG }], body,
+      jsonld: [{ '@context': 'https://schema.org', '@graph': [{ '@type': 'Service', '@id': url(p) + '#service', name: s.name, serviceType: s.name, ...(SEO['svc:' + s.slug] ? { alternateName: SEO['svc:' + s.slug].kw.slice(0, 4), keywords: SEO['svc:' + s.slug].kw.join(', ') } : {}), description: s.lead, provider: { '@id': SITE + '#org' }, areaServed: 'KR', url: url(p), ...offers }, crumbs([['홈', SITE], ['서비스', url('services/')], [s.name, url(p)]]), faqLD(faqs)] }, { '@context': 'https://schema.org', ...ORG }], body,
     }),
   };
 }
@@ -297,7 +303,7 @@ ${pageHero({ R, eyebrow: 'INDUSTRIES', title: '사업에 따라<br>정답이 달
 <section class="sec"><div class="wrap"><div class="icards">${INDUSTRIES.map((x, i) => `<a class="icard" href="${R}industries/${x.slug}/" data-reveal style="--d:${(i % 4) * 60}ms">${icon(x.icon)}<h2>${x.name}</h2><p>${esc(x.behavior)}</p><ul>${x.mix.slice(0, 3).map(sl => `<li>${esc(svc(sl).short)}</li>`).join('')}</ul><span>${icon('arrow')}</span></a>`).join('')}</div></div></section>
 <section class="sec sec--gray"><div class="wrap">${sectionHead({ eyebrow: 'COMPARE', title: '업종별 채널 조합 한눈에' })}${industryTabs(R)}</div></section>
 ${ctaBand(R)}`;
-  return { path: p, html: page({ R, current: 'industries/', title: T('업종별 솔루션 — 병원 마케팅·학원·인테리어·부동산 블로그 마케팅'), kw: ['병원 마케팅', '학원 블로그 마케팅', '인테리어 블로그 마케팅', '부동산 블로그 마케팅', '업종별 마케팅'], desc: '미래애드원 업종별 솔루션: 병원 마케팅·병원 홈페이지, 학원·인테리어·부동산 블로그 마케팅, 음식점·숙박·법률·프랜차이즈·쇼핑몰까지 고객 행동에 맞춘 채널 조합과 광고 규정을 정리했습니다.', canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['업종별 솔루션', url(p)]])] }], body }) };
+  return { path: p, html: page({ R, current: 'industries/', ...meta('industries'), canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['업종별 솔루션', url(p)]])] }], body }) };
 }
 
 export function industryDetail(x) {
@@ -307,7 +313,7 @@ export function industryDetail(x) {
   const catMap = { restaurant: ['viral', 'blog-skin'], hospitality: ['web-set'], medical: ['web', 'blog-skin'], legal: ['web', 'blog-skin'], franchise: ['blog-skin', 'web-set'], ecommerce: ['ads', 'sns'], education: ['web', 'blog-stats'], interior: ['web', 'web-set'], 'real-estate': ['blog-stats', 'web-set'] };
   const byCap = PORTFOLIO.filter(i => capRe[x.slug]?.test(i.cap));
   const pf = [...byCap, ...PORTFOLIO.filter(i => catMap[x.slug].includes(i.cat) && !byCap.includes(i))].slice(0, 6);
-  const sx = SEO[x.slug] || {};
+  const sx = SEO['ind:' + x.slug] || {};
   const body = `
 ${pageHero({ R, eyebrow: 'INDUSTRY SOLUTION', title: esc(sx.h1 || `${x.name} 마케팅`), lead: esc(x.behavior), crumbs: crumbNav(R, [['홈', ''], ['업종별 솔루션', 'industries/'], [x.name, p]]), ctas: quoteBtn(`${x.name} 상담`) })}
 <section class="sec"><div class="wrap two two--top"><div>${sectionHead({ eyebrow: 'DELIVERABLES', title: '이렇게 준비합니다' })}<ul class="scope" data-reveal>${x.deliver.map(t => `<li>${icon('check')}<span>${esc(t)}</span></li>`).join('')}</ul><p class="warnbox" data-reveal>${icon('shield')} ${esc(x.caution)}</p></div>
@@ -315,7 +321,7 @@ ${pageHero({ R, eyebrow: 'INDUSTRY SOLUTION', title: esc(sx.h1 || `${x.name} 마
 <section class="sec sec--gray"><div class="wrap">${sectionHead({ eyebrow: 'CASES', title: '참고할 만한 제작 사례' })}${portfolioGrid(R, pf, { filters: false, group: 'ind-pf' })}</div></section>
 <section class="sec"><div class="wrap">${sectionHead({ eyebrow: 'OTHER', title: '다른 업종 보기' })}<div class="ilinks">${INDUSTRIES.filter(i => i.slug !== x.slug).map(i => `<a href="${R}industries/${i.slug}/">${icon(i.icon)}${i.name}</a>`).join('')}</div></div></section>
 ${ctaBand(R, { title: `${x.name}, 어떤 채널부터 시작할지 정해 드립니다` })}`;
-  return { path: p, html: page({ R, current: 'industries/', title: sx.title || T(`${x.name} 마케팅 솔루션`), kw: sx.kw || [], desc: sx.desc || `미래애드원 ${x.name} 마케팅: ${x.mix.map(sl => svc(sl).short).join('·')}. ${x.caution}`, canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['업종별 솔루션', url('industries/')], [x.name, url(p)]])] }], body }) };
+  return { path: p, html: page({ R, current: 'industries/', ...meta('ind:' + x.slug), canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['업종별 솔루션', url('industries/')], [x.name, url(p)]])] }], body }) };
 }
 
 // ═════════ 가격
@@ -333,7 +339,7 @@ ${pageHero({ R, eyebrow: 'PRICING', title: '가격과 범위를<br>먼저 보여
 ${ctaBand(R)}`;
   return {
     path: p, html: page({
-      R, current: 'pricing/', title: SEO.pricing.title, kw: SEO.pricing.kw, desc: SEO.pricing.desc, canonical: url(p),
+      R, current: 'pricing/', ...meta('pricing'), canonical: url(p),
       jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['가격', url(p)]]), faqLD(faqs)] }], body,
     }),
   };
@@ -349,7 +355,7 @@ ${webCases(R, { title: '홈페이지 제작·운영<br>레퍼런스' })}
 <section class="sec"><div class="wrap">${sectionHead({ eyebrow: 'MEDIA', title: '협력 언론사', center: true })}${pressWall(R)}</div></section>
 ${logosMarquee(R)}
 ${ctaBand(R)}`;
-  return { path: p, html: page({ R, current: 'portfolio/', title: T('포트폴리오'), desc: '홈페이지(PC·모바일) 16건, 홈페이지형 블로그 19건, 블로그 스킨 14건, 블로그 운영 통계, 바이럴·검색광고·SNS 운영 사례를 업종별로 확인하세요.', canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['포트폴리오', url(p)]])] }], body }) };
+  return { path: p, html: page({ R, current: 'portfolio/', ...meta('portfolio'), canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['포트폴리오', url(p)]])] }], body }) };
 }
 
 // ═════════ 고객 후기
@@ -362,7 +368,7 @@ ${pageHero({ R, eyebrow: 'CLIENT RECORDS', title: '직접 경험한 분들의<br
 ${logosMarquee(R)}
 <section class="sec"><div class="wrap wrap--narrow"><div class="notice" data-reveal><h2>후기 게시 원칙</h2><ul><li>고객의 상호·로고·후기는 공개 동의를 받은 것만 게시합니다.</li><li>대가를 주고 쓴 후기나 꾸민 후기를 싣지 않습니다.</li><li>성과 수치는 보고 당시 화면 그대로 보여 드리며, 같은 결과를 약속하지 않습니다.</li></ul></div></div></section>
 ${ctaBand(R)}`;
-  return { path: p, html: page({ R, current: 'reviews/', title: T('고객 후기·운영 기록'), desc: '미래애드원이 블로그 관리 고객과 주고받은 실제 카카오톡 운영 기록과 관리 블로그 통계 화면, 협력 기업·기관을 확인하세요.', canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['고객 후기', url(p)]])] }], body }) };
+  return { path: p, html: page({ R, current: 'reviews/', ...meta('reviews'), canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['고객 후기', url(p)]])] }], body }) };
 }
 
 // ═════════ FAQ
@@ -373,7 +379,7 @@ export function faqPage() {
 ${pageHero({ R, eyebrow: 'FAQ', title: '질문이 있으세요?<br>바로 답합니다', lead: '운영·가격·AI 검색·계약에 관한 질문을 모았습니다. 검색창에 단어를 넣으면 바로 찾을 수 있습니다.', crumbs: crumbNav(R, [['홈', ''], ['자주 묻는 질문', p]]) })}
 <section class="sec"><div class="wrap wrap--narrow">${faqBlock(all, { idp: 'fq', search: true })}</div></section>
 ${ctaBand(R, { title: '찾는 답이 없다면 직접 물어보세요' })}`;
-  return { path: p, html: page({ R, current: '', title: T('자주 묻는 질문'), desc: '블로그 관리대행 가격·VAT, 발행 전 확인, AI 검색 노출 보장 여부, 계약·보고 방식 등 미래애드원에 자주 묻는 질문을 정리했습니다.', canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['자주 묻는 질문', url(p)]]), faqLD(all)] }], body }) };
+  return { path: p, html: page({ R, current: '', ...meta('faq'), canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['자주 묻는 질문', url(p)]]), faqLD(all)] }], body }) };
 }
 
 // ═════════ 상담 신청
@@ -392,7 +398,7 @@ ${pageHero({ R, eyebrow: 'CONTACT', title: '대표님의 사업,<br>먼저 듣�
   </aside>
 </div></section>
 <section class="sec sec--gray"><div class="wrap">${sectionHead({ eyebrow: 'AFTER', title: '신청 후에는 이렇게 진행됩니다' })}${processSteps()}</div></section>`;
-  return { path: p, html: page({ R, current: '', title: T('상담 신청'), desc: '업종·지역·관심 서비스를 남기시면 미래애드원 담당자가 연락드립니다. 전화 02-6481-6603, 카카오톡 상담도 가능합니다.', canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['상담 신청', url(p)]]), { '@type': 'ContactPage', url: url(p), about: { '@id': SITE + '#org' } }] }], body }) };
+  return { path: p, html: page({ R, current: '', ...meta('contact'), canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['상담 신청', url(p)]]), { '@type': 'ContactPage', url: url(p), about: { '@id': SITE + '#org' } }] }], body }) };
 }
 
 // ═════════ 개인정보처리방침
@@ -412,7 +418,7 @@ export function privacy() {
   const body = `
 ${pageHero({ R, eyebrow: 'PRIVACY', title: '개인정보처리방침', lead: `${COMPANY.name}는 상담 신청에 필요한 최소한의 정보만 수집합니다.`, crumbs: crumbNav(R, [['홈', ''], ['개인정보처리방침', p]]) })}
 <section class="sec"><div class="wrap wrap--narrow"><table class="tbl tbl--info"><tbody>${rows.map(([k, v]) => `<tr><th>${k}</th><td>${esc(v)}</td></tr>`).join('')}</tbody></table><p class="small">시행일: 2026년 10월 19일</p></div></section>`;
-  return { path: p, html: page({ R, title: T('개인정보처리방침'), desc: '미래애드원 홈페이지 상담 신청 시 수집하는 개인정보 항목, 이용 목적, 보유 기간을 안내합니다.', canonical: url(p), body }) };
+  return { path: p, html: page({ R, ...meta('privacy'), canonical: url(p), body }) };
 }
 
 export function notFound() {
@@ -441,7 +447,7 @@ ${pageHero({ R, eyebrow: 'INSIGHTS', title: '광고주가 알아야 할<br>마�
 ${ctaBand(R, { title: '글로 다 못 한 이야기는 상담에서 드립니다' })}`;
   return {
     path: p, html: page({
-      R, current: 'insights/', title: T('인사이트 — 마케팅 실무 노트'), desc: '브랜드 블로그, AI 검색 최적화(GEO), 네이버 검색광고·플레이스, 홈페이지 운영에 관한 미래애드원 마케팅팀의 실무 글.', canonical: url(p),
+      R, current: 'insights/', ...meta('insights'), canonical: url(p),
       jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['인사이트', url(p)]]), { '@type': 'Blog', '@id': url(p) + '#blog', name: '미래애드원 인사이트', url: url(p), inLanguage: 'ko-KR', publisher: { '@id': SITE + '#org' }, blogPost: posts.slice(0, 30).map(x => ({ '@type': 'BlogPosting', headline: x.title, url: url(`insights/${x.slug}/`), datePublished: x.date, ...(x.thumb ? { image: SITE + 'assets/img/' + x.thumb } : {}) })) }] }], body,
     }),
   };
@@ -468,5 +474,5 @@ export function insightPost(x, posts) {
 ${related.length ? `<section class="sec sec--gray"><div class="wrap">${sectionHead({ eyebrow: 'MORE', title: '함께 읽으면 좋은 글' })}<div class="pgrid">${related.map(y => postCard(R, y)).join('')}</div></div></section>` : ''}
 ${ctaBand(R, { svc: x.service || '' })}`;
   const ldPost = { '@type': 'BlogPosting', headline: x.title, description: x.description, datePublished: x.date, dateModified: x.updated || x.date, author: { '@type': 'Organization', name: x.author || BLOG_AUTHOR, url: SITE }, publisher: { '@id': SITE + '#org' }, mainEntityOfPage: url(p), inLanguage: 'ko-KR', keywords: x.tags.join(', '), articleSection: x.category, image: SITE + 'assets/img/' + (x.thumb || 'og.jpg') };
-  return { path: p, html: page({ R, current: 'insights/', title: T(x.title), desc: x.description, canonical: url(p), bodyClass: 'is-post', og: x.thumb || 'og.jpg', jsonld: [{ '@context': 'https://schema.org', '@graph': [ldPost, crumbs([['홈', SITE], ['인사이트', url('insights/')], [x.title, url(p)]]), ...(x.faq.length ? [faqLD(x.faq.map(f => ({ q: f.q, a: f.a })))] : []), ORG] }], body }) };
+  return { path: p, html: page({ R, current: 'insights/', title: postTitle(x.title), desc: x.description, canonical: url(p), bodyClass: 'is-post', og: x.thumb || 'og.jpg', ogType: 'article', jsonld: [{ '@context': 'https://schema.org', '@graph': [ldPost, crumbs([['홈', SITE], ['인사이트', url('insights/')], [x.title, url(p)]]), ...(x.faq.length ? [faqLD(x.faq.map(f => ({ q: f.q, a: f.a })))] : []), ORG] }], body }) };
 }

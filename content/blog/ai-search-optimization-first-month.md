@@ -1,6 +1,6 @@
 ---
 title: AI 검색 최적화 첫 달, 주차별로 무엇을 하나요
-description: AI 검색 최적화 첫 달은 질문셋 측정으로 출발점을 잡고, 사이트 구조와 콘텐츠를 손본 뒤 같은 조건으로 다시 측정해 비교하는 순서로 진행합니다.
+description: AI 검색 최적화 첫 달은 질문셋 측정으로 출발점을 잡고, 사이트 구조와 콘텐츠를 손본 뒤 같은 조건으로 다시 측정해 비교합니다.
 slug: ai-search-optimization-first-month
 date: 2026-11-02
 time: 13:00

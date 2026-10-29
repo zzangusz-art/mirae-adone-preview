@@ -1,6 +1,6 @@
 ---
 title: AEO·GEO 마케팅, 우리 회사도 지금 시작해야 할까
-description: AEO·GEO 마케팅은 고객이 AI에게 비교·추천을 묻는 업종이면서 홈페이지와 기본 정보가 갖춰진 회사부터 시작할 만합니다. 필요한 경우와 이른 경우, 점검표를 정리했습니다.
+description: AEO·GEO 마케팅은 고객이 AI에게 비교·추천을 묻는 업종이면서 홈페이지와 기본 정보가 갖춰진 회사부터 시작할 만합니다.
 slug: aeo-geo-marketing-when-to-start
 date: 2026-10-26
 time: 18:00

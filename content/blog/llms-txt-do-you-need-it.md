@@ -1,6 +1,6 @@
 ---
-title: llms.txt는 꼭 만들어야 하나요? robots.txt·사이트맵과 차이
-description: llms.txt는 AI에게 사이트 요약과 주요 링크를 알려 주자는 제안 단계의 파일로, 필수는 아닙니다. robots.txt·사이트맵과 무엇이 다르고 언제 만들면 되는지 정리했습니다.
+title: llms.txt 꼭 만들어야 하나요? robots.txt·사이트맵과 차이
+description: llms.txt는 AI에게 사이트 요약과 주요 링크를 알려 주자는 제안 단계 파일로 필수는 아닙니다. robots.txt와 차이를 정리했습니다.
 slug: llms-txt-do-you-need-it
 date: 2026-11-02
 time: 18:00

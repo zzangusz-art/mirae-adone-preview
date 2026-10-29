@@ -51,7 +51,10 @@ export const MEGA_FEATURE = () => {
 const VERIFY_META = [['naver-site-verification', SITE_VERIFICATION.naver], ['google-site-verification', SITE_VERIFICATION.google], ['msvalidate.01', SITE_VERIFICATION.bing]]
   .flatMap(([n, v]) => [v].flat().filter(Boolean).map(x => `<meta name="${n}" content="${esc(x)}">`)).join('\n');
 
-export function head({ R, title, desc, canonical, og = 'og.jpg', jsonld = [], extraHead = '', kw = [] }) {
+// 공유 썸네일 크기: 글 썸네일(insights/)은 1200x675, 나머지(og.jpg·og/*.jpg)는 1200x630
+const ogSize = og => (og.startsWith('insights/') ? [1200, 675] : [1200, 630]);
+
+export function head({ R, title, desc, canonical, og = 'og.jpg', ogType = 'website', jsonld = [], extraHead = '', kw = [] }) {
   return `<!doctype html>
 <html lang="ko">
 <head>
@@ -61,12 +64,15 @@ export function head({ R, title, desc, canonical, og = 'og.jpg', jsonld = [], ex
 <meta name="description" content="${esc(desc)}">
 ${kw.length ? `<meta name="keywords" content="${esc(kw.join(', '))}">\n` : ''}${VERIFY_META}
 <link rel="canonical" href="${canonical}">
-<meta property="og:type" content="website">
+<meta property="og:type" content="${ogType}">
 <meta property="og:site_name" content="${COMPANY.name}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${canonical}">
 <meta property="og:image" content="${SITE}assets/img/${og}">
+<meta property="og:image:width" content="${ogSize(og)[0]}">
+<meta property="og:image:height" content="${ogSize(og)[1]}">
+<meta property="og:image:alt" content="${esc(title)}">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#111D30">
@@ -200,8 +206,8 @@ export function layers(R) {
 <button class="totop glass" type="button" aria-label="맨 위로" data-totop>${icon('chev')}</button>`;
 }
 
-export function page({ R, current = '', title, desc, canonical, jsonld = [], body, bodyClass = '', og, extraHead = '', kw = [] }) {
-  return `${head({ R, title, desc, canonical, og, jsonld, extraHead, kw })}
+export function page({ R, current = '', title, desc, canonical, jsonld = [], body, bodyClass = '', og, ogType, extraHead = '', kw = [] }) {
+  return `${head({ R, title, desc, canonical, og, ogType, jsonld, extraHead, kw })}
 <body class="${bodyClass}">
 ${header(R, current)}
 <main id="main">

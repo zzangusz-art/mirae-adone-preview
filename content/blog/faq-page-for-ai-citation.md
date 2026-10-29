@@ -1,6 +1,6 @@
 ---
 title: AI가 인용하기 좋은 FAQ 페이지 쓰는 법과 FAQPage 넣는 순서
-description: AI가 인용하기 좋은 FAQ는 고객이 실제로 묻는 문장을 질문으로 쓰고, 답의 첫 문장에서 결론을 말하는 페이지입니다. 질문 고르기부터 FAQPage 구조화 데이터까지 순서대로 정리했습니다.
+description: AI가 인용하기 좋은 FAQ 페이지는 고객이 실제로 묻는 문장을 질문으로 쓰고 답의 첫 문장에서 결론을 말합니다. FAQPage 넣는 순서까지.
 slug: faq-page-for-ai-citation
 date: 2026-11-01
 time: 09:00
