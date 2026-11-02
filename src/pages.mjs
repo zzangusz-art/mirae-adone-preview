@@ -306,7 +306,20 @@ ${ctaBand(R)}`;
   return { path: p, html: page({ R, current: 'industries/', ...meta('industries'), canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['업종별 솔루션', url(p)]])] }], body }) };
 }
 
-export function industryDetail(x) {
+// 업종 가격 질문 — 추천 채널 조합 중 공개 가격이 있는 상품만 숫자로, 나머지는 견적 안내(숫자는 data.mjs 값에서 만든다)
+const josaUn = w => { const c = w.charCodeAt(w.length - 1) - 0xAC00; return c >= 0 && c <= 11171 && c % 28 ? '은' : '는'; };
+const industryPriceFaq = (x, kw) => {
+  const mix = x.mix.map(svc), out = [];
+  if (mix.some(s => s.priceRef === 'blog')) out.push(`브랜드 블로그 관리대행은 ${BLOG_PLANS.map(b => `월 ${b.count}회 ${man(b.price)}`).join('·')}입니다.`);
+  const web = mix.filter(s => s.priceRef === 'web-ai');
+  if (web.length && PRICE_SHOW_WEB_AI) { const n = web.map(s => s.short).join('·'); out.push(`${n}${josaUn(n)} ${WEB_AI_PLAN.build.name} ${man(WEB_AI_PLAN.build.price)}(${WEB_AI_PLAN.build.period})과 ${WEB_AI_PLAN.operate.name} 월 ${man(WEB_AI_PLAN.operate.price)}입니다.`); }
+  if (mix.some(s => s.priceRef === 'ads')) out.push('검색광고는 광고주 계정에서 네이버에 직접 충전하는 매체비와 운영 수수료를 나눠 안내합니다.');
+  const rest = mix.filter(s => !['blog', 'ads'].includes(s.priceRef) && !(s.priceRef === 'web-ai' && PRICE_SHOW_WEB_AI));
+  if (rest.length) { const n = rest.map(s => s.short).join('·'); out.push(`${n}${josaUn(n)} 업종·물량을 확인한 뒤 견적서로 안내합니다.`); }
+  return { q: `${kw} 비용은 얼마인가요?`, a: `${out.join(' ')} 모든 가격은 부가세 별도이고, 견적서에 제공 범위·횟수·보고 주기를 적습니다.` };
+};
+
+export function industryDetail(x, posts = []) {
   const p = `industries/${x.slug}/`, R = depthR(p);
   // 업종과 맞는 실제 사례를 캡션으로 먼저 고르고, 모자라면 분류로 채운다
   const capRe = { restaurant: /음식|숯불|갈비|맛집|외식|카페/, hospitality: /스테이|여행|관광|숙박/, medical: /의원|한의원|피부과|치과|성형|정형|병원|클리닉/, legal: /법무|노무|세무|법률/, franchise: /물류|기업|본사|프랜차이즈|건설/, ecommerce: /쇼핑|광고|외식 브랜드|주얼리/, education: /학원|유치원|학습|교육/, interior: /인테리어|공간|욕실|도어/, 'real-estate': /부동산/ };
@@ -314,14 +327,22 @@ export function industryDetail(x) {
   const byCap = PORTFOLIO.filter(i => capRe[x.slug]?.test(i.cap));
   const pf = [...byCap, ...PORTFOLIO.filter(i => catMap[x.slug].includes(i.cat) && !byCap.includes(i))].slice(0, 6);
   const sx = SEO['ind:' + x.slug] || {};
+  const kw = (sx.kw || [])[0] || `${x.name} 마케팅`;
+  // AEO: 첫 화면 바로 아래 한 문단 답(검색·AI 답변이 그대로 가져갈 수 있게) + 업종 질문 + 가격 질문(공개 가격에서 생성)
+  const faqs = [...(x.faq || []).map(([q, a]) => ({ q, a })), industryPriceFaq(x, kw)];
+  // 관련 글: 본문에서 이 업종 페이지로 링크한 공개 글(글 → 업종 링크만 있던 것을 양방향으로)
+  const rel = posts.filter(q => (q.text || '').includes(`/${p}`)).slice(0, 3);
   const body = `
 ${pageHero({ R, eyebrow: 'INDUSTRY SOLUTION', title: esc(sx.h1 || `${x.name} 마케팅`), lead: esc(x.behavior), crumbs: crumbNav(R, [['홈', ''], ['업종별 솔루션', 'industries/'], [x.name, p]]), ctas: quoteBtn(`${x.name} 상담`) })}
-<section class="sec"><div class="wrap two two--top"><div>${sectionHead({ eyebrow: 'DELIVERABLES', title: '이렇게 준비합니다' })}<ul class="scope" data-reveal>${x.deliver.map(t => `<li>${icon('check')}<span>${esc(t)}</span></li>`).join('')}</ul><p class="warnbox" data-reveal>${icon('shield')} ${esc(x.caution)}</p></div>
+<section class="sec">${x.answer ? `<div class="wrap"><div class="ansbox" data-reveal><p class="eyebrow">SUMMARY</p><h2>${esc(kw)}, 무엇부터 하나요?</h2><p>${esc(x.answer)}</p></div></div>` : ''}<div class="wrap two two--top"><div>${sectionHead({ eyebrow: 'DELIVERABLES', title: '이렇게 준비합니다' })}<ul class="scope" data-reveal>${x.deliver.map(t => `<li>${icon('check')}<span>${esc(t)}</span></li>`).join('')}</ul><p class="warnbox" data-reveal>${icon('shield')} ${esc(x.caution)}</p></div>
 <div><p class="eyebrow">CHANNEL MIX</p><h2 class="h2s">추천 채널 조합</h2><div class="mixlist">${x.mix.map((sl, i) => { const s = svc(sl); return `<a href="${R}services/${sl}/" data-reveal style="--d:${i * 60}ms"><span>${i + 1}</span><div><b>${esc(s.name)}</b><small>${esc(s.copy)}</small></div>${icon('arrow')}</a>`; }).join('')}</div></div></div></section>
 <section class="sec sec--gray"><div class="wrap">${sectionHead({ eyebrow: 'CASES', title: '참고할 만한 제작 사례' })}${portfolioGrid(R, pf, { filters: false, group: 'ind-pf' })}</div></section>
-<section class="sec"><div class="wrap">${sectionHead({ eyebrow: 'OTHER', title: '다른 업종 보기' })}<div class="ilinks">${INDUSTRIES.filter(i => i.slug !== x.slug).map(i => `<a href="${R}industries/${i.slug}/">${icon(i.icon)}${i.name}</a>`).join('')}</div></div></section>
+<section class="sec" id="ind-faq"><div class="wrap wrap--narrow">${sectionHead({ eyebrow: 'FAQ', title: `${esc(kw)} 자주 묻는 질문`, center: true })}${faqBlock(faqs, { chips: false, idp: 'if' })}</div></section>
+${rel.length ? `<section class="sec sec--gray"><div class="wrap">${sectionHead({ eyebrow: 'INSIGHTS', title: `${esc(x.name)} 관련 글` })}<div class="pgrid">${rel.map(q => postCard(R, q)).join('')}</div></div></section>` : ''}
+<section class="sec ${rel.length ? '' : 'sec--gray'}"><div class="wrap">${sectionHead({ eyebrow: 'OTHER', title: '다른 업종 보기' })}<div class="ilinks">${INDUSTRIES.filter(i => i.slug !== x.slug).map(i => `<a href="${R}industries/${i.slug}/">${icon(i.icon)}${i.name}</a>`).join('')}</div></div></section>
 ${ctaBand(R, { title: `${x.name}, 어떤 채널부터 시작할지 정해 드립니다` })}`;
-  return { path: p, html: page({ R, current: 'industries/', ...meta('ind:' + x.slug), canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['업종별 솔루션', url('industries/')], [x.name, url(p)]])] }], body }) };
+  const service = { '@type': 'Service', '@id': url(p) + '#service', name: sx.h1 || `${x.name} 마케팅`, serviceType: kw, ...(sx.kw ? { alternateName: sx.kw.slice(1, 4), keywords: sx.kw.join(', ') } : {}), description: x.answer || x.behavior, provider: { '@id': SITE + '#org' }, areaServed: 'KR', url: url(p) };
+  return { path: p, html: page({ R, current: 'industries/', ...meta('ind:' + x.slug), canonical: url(p), jsonld: [{ '@context': 'https://schema.org', '@graph': [service, crumbs([['홈', SITE], ['업종별 솔루션', url('industries/')], [x.name, url(p)]]), faqLD(faqs)] }, { '@context': 'https://schema.org', ...ORG }], body }) };
 }
 
 // ═════════ 가격

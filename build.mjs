@@ -35,7 +35,7 @@ for (const p of POSTS) {
 // 3) 페이지
 const pages = [
   PG.home(POSTS), PG.about(), PG.servicesIndex(), ...SERVICES.map(s => PG.serviceDetail(s, POSTS)),
-  PG.industriesIndex(), ...INDUSTRIES.map(PG.industryDetail), PG.pricing(), PG.portfolio(), PG.reviews(), PG.faqPage(), PG.contact(), PG.privacy(),
+  PG.industriesIndex(), ...INDUSTRIES.map(x => PG.industryDetail(x, POSTS)), PG.pricing(), PG.portfolio(), PG.reviews(), PG.faqPage(), PG.contact(), PG.privacy(),
   PG.insightsIndex(POSTS), ...POSTS.map(p => PG.insightPost(p, POSTS)), PG.notFound(),
 ];
 const V = crypto.createHash('md5').update(['assets/css/style.css', 'assets/js/app.js', 'assets/js/config.js', 'assets/js/track.js'].map(f => fs.readFileSync(path.join(ROOT, f), 'utf8')).join('') + today).digest('hex').slice(0, 8);
@@ -94,7 +94,7 @@ ${KEYWORD_LINKS.map(([t, h]) => `- ${t}: ${SITE}${h}`).join('\n')}
 ${SERVICES.map(s => `- [${s.name}](${SITE}services/${s.slug}/): ${s.copy}`).join('\n')}
 - [가격 안내](${SITE}pricing/)
 - [업종별 솔루션](${SITE}industries/)
-${INDUSTRIES.map(x => `- [${SEO['ind:' + x.slug]?.h1 || x.name + ' 마케팅'}](${SITE}industries/${x.slug}/)`).join('\n')}
+${INDUSTRIES.map(x => `- [${SEO['ind:' + x.slug]?.h1 || x.name + ' 마케팅'}](${SITE}industries/${x.slug}/)${x.answer ? `: ${x.answer}` : ''}`).join('\n')}
 - [포트폴리오](${SITE}portfolio/)
 - [고객 후기·운영 기록](${SITE}reviews/)
 - [회사소개](${SITE}about/)

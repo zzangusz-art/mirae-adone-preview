@@ -819,6 +819,12 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 .qprice span{color:var(--ink-3);margin-bottom:14px}
 .warnbox{margin-top:16px;padding:16px 18px;border-radius:14px;background:#FFF5EE;color:#8A3B12;font-size:14.5px;display:flex;gap:8px}
 .warnbox .i{margin-top:3px}
+/* 업종 페이지 첫 문단 답(AEO) */
+.ansbox{max-width:880px;margin:0 auto 64px;padding:28px 32px;border-radius:20px;background:#F3F7FF;border:1px solid #D9E5FF}
+.ansbox .eyebrow{margin-bottom:10px}
+.ansbox h2{font-size:clamp(20px,2.2vw,26px);font-weight:800;letter-spacing:-.025em;margin-bottom:12px}
+.ansbox p:last-child{font-size:16.5px;line-height:1.8;color:var(--ink-2)}
+@media (max-width:640px){.ansbox{padding:22px 20px;margin-bottom:44px}.ansbox p:last-child{font-size:15.5px}}
 .mixlist{display:grid;gap:10px}
 .mixlist a{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:16px 18px;border-radius:14px;border:1px solid var(--line);background:#fff;transition:border-color .2s,transform .3s var(--ease-o)}
 .mixlist a:hover{border-color:var(--blue);transform:translateX(3px)}
