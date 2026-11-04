@@ -235,7 +235,7 @@
     const big = !portrait && screen.width * (devicePixelRatio || 1) >= 2400 && !saveData && conn.effectiveType !== '3g';
     const src = ROOT + (portrait ? v.dataset.srcM : big ? v.dataset.src4k : v.dataset.src);
     if (portrait) v.poster = ROOT + v.dataset.posterM;
-    v.defaultPlaybackRate = v.playbackRate = .85; // 원본(12.5초)보다 조금 느리게 — src 를 넣어도 유지되도록 기본 속도까지 지정
+    v.defaultPlaybackRate = v.playbackRate = .7; // 원본(12.5초)보다 느리게(한 바퀴 약 17.9초) — src 를 넣어도 유지되도록 기본 속도까지 지정
     const start =() => { if (!v.getAttribute('src')) v.src = src; v.play().catch(() => { rep.hidden = false; }); };
     if (!reduce && !saveData) { v.preload = 'auto'; start(); } else rep.hidden = false;
     v.addEventListener('timeupdate', () => sec.style.setProperty('--fp', (v.currentTime / (v.duration || 10)).toFixed(4)));
