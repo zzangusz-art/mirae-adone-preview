@@ -12,7 +12,7 @@ import {
   industryTabs, faqBlock, faqList, faqLD, postCard, ctaBand, processSteps, portfolioGrid, chatDemo, costStructure, keywordCards, geoTimeline,
   reportChart, reportFieldsTable, monthFlows, geoIndustries, statusBoard,
 } from './blocks.mjs';
-import { esc, won, man, icon, img, ROOT } from './lib.mjs';
+import { esc, won, man, icon, img, imgUrl, ROOT } from './lib.mjs';
 import { aiRecording, aiSlides, beforeAfter, webCases, pressWall, WEBCASES } from './showcase.mjs';
 
 const depthR = p => (p ? '../'.repeat(p.split('/').filter(Boolean).length) : '');
@@ -469,7 +469,7 @@ ${ctaBand(R, { title: '글로 다 못 한 이야기는 상담에서 드립니다
   return {
     path: p, html: page({
       R, current: 'insights/', ...meta('insights'), canonical: url(p),
-      jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['인사이트', url(p)]]), { '@type': 'Blog', '@id': url(p) + '#blog', name: '미래애드원 인사이트', url: url(p), inLanguage: 'ko-KR', publisher: { '@id': SITE + '#org' }, blogPost: posts.slice(0, 30).map(x => ({ '@type': 'BlogPosting', headline: x.title, url: url(`insights/${x.slug}/`), datePublished: x.date, ...(x.thumb ? { image: SITE + 'assets/img/' + x.thumb } : {}) })) }] }], body,
+      jsonld: [{ '@context': 'https://schema.org', '@graph': [crumbs([['홈', SITE], ['인사이트', url(p)]]), { '@type': 'Blog', '@id': url(p) + '#blog', name: '미래애드원 인사이트', url: url(p), inLanguage: 'ko-KR', publisher: { '@id': SITE + '#org' }, blogPost: posts.slice(0, 30).map(x => ({ '@type': 'BlogPosting', headline: x.title, url: url(`insights/${x.slug}/`), datePublished: x.date, ...(x.thumb ? { image: SITE + 'assets/img/' + imgUrl(x.thumb) } : {}) })) }] }], body,
     }),
   };
 }
@@ -494,6 +494,6 @@ export function insightPost(x, posts) {
 </article>
 ${related.length ? `<section class="sec sec--gray"><div class="wrap">${sectionHead({ eyebrow: 'MORE', title: '함께 읽으면 좋은 글' })}<div class="pgrid">${related.map(y => postCard(R, y)).join('')}</div></div></section>` : ''}
 ${ctaBand(R, { svc: x.service || '' })}`;
-  const ldPost = { '@type': 'BlogPosting', headline: x.title, description: x.description, datePublished: x.date, dateModified: x.updated || x.date, author: { '@type': 'Organization', name: x.author || BLOG_AUTHOR, url: SITE }, publisher: { '@id': SITE + '#org' }, mainEntityOfPage: url(p), inLanguage: 'ko-KR', keywords: x.tags.join(', '), articleSection: x.category, image: SITE + 'assets/img/' + (x.thumb || 'og.jpg') };
+  const ldPost = { '@type': 'BlogPosting', headline: x.title, description: x.description, datePublished: x.date, dateModified: x.updated || x.date, author: { '@type': 'Organization', name: x.author || BLOG_AUTHOR, url: SITE }, publisher: { '@id': SITE + '#org' }, mainEntityOfPage: url(p), inLanguage: 'ko-KR', keywords: x.tags.join(', '), articleSection: x.category, image: SITE + 'assets/img/' + imgUrl(x.thumb || 'og.jpg') };
   return { path: p, html: page({ R, current: 'insights/', title: postTitle(x.title), desc: x.description, canonical: url(p), bodyClass: 'is-post', og: x.thumb || 'og.jpg', ogType: 'article', jsonld: [{ '@context': 'https://schema.org', '@graph': [ldPost, crumbs([['홈', SITE], ['인사이트', url('insights/')], [x.title, url(p)]]), ...(x.faq.length ? [faqLD(x.faq.map(f => ({ q: f.q, a: f.a })))] : []), ORG] }], body }) };
 }

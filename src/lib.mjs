@@ -1,4 +1,5 @@
 // 빌드 공용 도우미: 이스케이프, 금액, 이미지 크기(WebP/PNG 헤더), 아이콘
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -8,6 +9,9 @@ export const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;'
 export const won = n => Number(n).toLocaleString('ko-KR') + '원';
 export const man = n => (n % 10000 === 0 ? (n / 10000).toLocaleString('ko-KR') + '만원' : won(n));
 export const ld = obj => `<script type="application/ld+json">${JSON.stringify(obj).replace(/</g, '\\u003c')}</script>`;
+
+// 글 썸네일 주소에 내용 해시를 붙인다 — CDN이 이미지를 7일 캐시하므로 같은 파일명으로 교체해도 바로 반영되도록
+export const imgUrl = rel => (rel.startsWith('insights/') ? `${rel}?v=${crypto.createHash('md5').update(fs.readFileSync(path.join(ROOT, 'assets/img', rel))).digest('hex').slice(0, 8)}` : rel);
 
 const sizeCache = new Map();
 export function imgSize(rel) {
@@ -32,7 +36,7 @@ export function imgSize(rel) {
 // 스켈레톤 래퍼가 있는 지연 로딩 이미지. R = 상대 경로 접두사
 export function img(R, rel, alt, { cls = '', eager = false, sizes = '', frame = true } = {}) {
   const { w, h } = imgSize(rel);
-  const tag = `<img src="${R}assets/img/${rel}" width="${w}" height="${h}" alt="${esc(alt)}"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} decoding="async"${sizes ? ` sizes="${sizes}"` : ''}>`;
+  const tag = `<img src="${R}assets/img/${imgUrl(rel)}" width="${w}" height="${h}" alt="${esc(alt)}"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} decoding="async"${sizes ? ` sizes="${sizes}"` : ''}>`;
   return frame ? `<span class="sk ${cls}" style="aspect-ratio:${w}/${h}">${tag}</span>` : tag;
 }
 

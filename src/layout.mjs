@@ -1,6 +1,6 @@
 // 공통 레이아웃: <head>, 헤더(메가 메뉴), 푸터, 레이어(드로어·모달·토스트·상담폼), 아이콘 스프라이트
 import { SITE, COMPANY, NAV, AXES, SERVICES, BLOG_PLANS, INDUSTRIES, KEYWORDS, KEYWORD_LINKS, SITE_VERIFICATION } from './data.mjs';
-import { esc, icon, ld, man } from './lib.mjs';
+import { esc, icon, ld, man, imgUrl } from './lib.mjs';
 
 const SPRITE = `<svg width="0" height="0" style="position:absolute" aria-hidden="true">
 <defs>
@@ -69,7 +69,7 @@ ${kw.length ? `<meta name="keywords" content="${esc(kw.join(', '))}">\n` : ''}${
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${canonical}">
-<meta property="og:image" content="${SITE}assets/img/${og}">
+<meta property="og:image" content="${SITE}assets/img/${imgUrl(og)}">
 <meta property="og:image:width" content="${ogSize(og)[0]}">
 <meta property="og:image:height" content="${ogSize(og)[1]}">
 <meta property="og:image:alt" content="${esc(title)}">

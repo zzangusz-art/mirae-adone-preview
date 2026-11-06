@@ -6,7 +6,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import * as D from './src/data.mjs';
 import * as PG from './src/pages.mjs';
-import { ROOT } from './src/lib.mjs';
+import { ROOT, imgUrl } from './src/lib.mjs';
 import { loadPosts } from './tools/blog/lib.mjs';
 
 const { SITE, COMPANY, SERVICES, INDUSTRIES, BLOG_CATEGORIES, BLOG_PLANS, WEB_AI_PLAN, PRICE_SHOW_WEB_AI, CPC, FAQ, SEO, KEYWORD_LINKS, SITE_VERIFICATION, INDEXNOW_KEY } = D;
@@ -48,7 +48,7 @@ for (const pg of pages) {
 const client = {
   services: SERVICES.map(s => ({ slug: s.slug, name: s.name, short: s.short })),
   cpc: CPC.rows, operate: PRICE_SHOW_WEB_AI ? WEB_AI_PLAN.operate.price : null,
-  posts: POSTS.map(p => ({ slug: p.slug, title: p.title, date: p.date, category: p.category, minutes: p.minutes, coverKey: p.coverKey, coverText: p.coverText, d: p.description, thumb: p.thumb })),
+  posts: POSTS.map(p => ({ slug: p.slug, title: p.title, date: p.date, category: p.category, minutes: p.minutes, coverKey: p.coverKey, coverText: p.coverText, d: p.description, thumb: p.thumb && imgUrl(p.thumb) })),
 };
 wr('assets/js/data.js', `/* 빌드 생성 파일 — 수정은 src/data.mjs */\nwindow.MA=${JSON.stringify(client)};\n`);
 
