@@ -1,6 +1,6 @@
 ---
 title: ChatGPT에 우리 회사가 나오는지 확인하는 방법
-description: ChatGPT 노출 확인은 질문 목록을 정하고 측정 조건과 결과를 같은 형식으로 기록해야 비교할 수 있습니다. 직접 해 보는 순서를 담았습니다.
+description: 챗GPT·제미나이·그록에 우리 회사가 나오는지 확인하려면 질문 목록을 정하고 측정 조건과 결과를 같은 형식으로 기록해 비교해야 합니다.
 slug: check-brand-in-ai-answers
 date: 2026-10-19
 time: 13:00
