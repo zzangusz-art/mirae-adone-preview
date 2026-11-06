@@ -9,6 +9,7 @@ tags: 바이럴 마케팅, 블로그 바이럴, 카페 바이럴, 체험단, 기
 keyword: 바이럴 마케팅
 service: blog-viral
 cover: 바이럴, 쌓이는 방식과 위험한 방식
+thumb_bg: search
 author: 미래애드원 마케팅팀
 generated: claude-opus-5-5 2026-10-26 예약 작성
 topic: kw-viral-marketing

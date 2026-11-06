@@ -9,6 +9,7 @@ tags: 학원 맘카페 홍보, 지역 맘카페, 학원 광고, 카페 바이럴
 keyword: 학원 맘카페 홍보
 service: cafe-viral
 cover: 학원 맘카페 홍보, 올리기 전 지킬 것
+thumb_bg: search
 author: 미래애드원 마케팅팀
 generated: claude-opus-5-5 2026-10-26 예약 작성
 topic: academy-mom-cafe

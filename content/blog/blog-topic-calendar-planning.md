@@ -8,7 +8,7 @@ category: 블로그 마케팅
 tags: 블로그 주제 기획, 블로그 글감, 콘텐츠 캘린더, 브랜드 블로그
 keyword: 블로그 주제 기획
 service: brand-blog
-cover: 글감이 떨어질 때 주제 캘린더 짜는 법
+cover: 글감이 떨어질 때, 주제 캘린더 짜는 법
 author: 미래애드원 마케팅팀
 generated: claude-opus-5-5 2026-10-26 예약 작성
 topic: blog-topic-planning

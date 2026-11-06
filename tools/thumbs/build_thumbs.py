@@ -97,6 +97,15 @@ def balance(d, lines, f, max_w):
     return [a, b]
 
 
+def comma_lines(d, s, f, max_w):
+    """쉼표가 있으면 쉼표 뒤에서 나눈다(양쪽 다 한 줄에 들어갈 때만) — 「첫 / 달」처럼 말이 끊기는 것을 막는다."""
+    if ', ' not in s:
+        return None
+    a, b = s.split(', ', 1)
+    a += ','
+    return [a, b] if d.textlength(a, font=f) <= max_w and d.textlength(b, font=f) <= max_w else None
+
+
 # ── 표지 문구 ────────────────────────────────────────
 def display_title(m):
     """머리말 cover(32자 이내 표지 문구)를 우선 쓰고, 없으면 제목의 앞 절만 쓴다."""
@@ -114,9 +123,9 @@ def display_title(m):
 # ── 배경 테마 ────────────────────────────────────────
 # 제목의 강한 신호만 본다. 흔한 단어는 넣지 않는다(배경이 한쪽으로 쏠리는 것을 막기 위해).
 THEME_RULES = [
-    ('cafe',       r'카페|커피|디저트|베이커리'),
+    ('cafe',       r'(?<!맘)카페(?! 바이럴)|커피|디저트|베이커리'),  # 맘카페·카페 바이럴은 온라인 커뮤니티라 제외
     ('food',       r'음식점|식당|외식|메뉴|맛집|요리'),
-    ('kitchen',    r'촬영|사진|영상|숏폼|릴스'),
+    ('kitchen',    r'촬영|영상|숏폼|릴스'),
     ('legal',      r'법률|변호사|법무|세무|노무|의료광고|심의|규정|표시|협찬|공정위|추천·보증|개인정보'),
     ('contract',   r'계약|해지|환불|인계|권한|저작권|약관'),
     ('blog',       r'블로그|원고|포스팅|스킨|글감|주제'),
@@ -124,8 +133,9 @@ THEME_RULES = [
     ('cost',       r'비용|가격|단가|수수료|예산|견적|매체비|1회당|광고비'),
     ('data',       r'AI|GEO|AEO|SEO|ChatGPT|Gemini|구조화|색인|서치어드바이저|llms|GA4|분석|추적|데이터'),
     ('marketing',  r'광고|바이럴|체험단|기자단|카페 바이럴|맘카페|SNS|인스타그램|보도자료|언론'),
-    ('storefront', r'플레이스|매장|오픈|가맹점|프랜차이즈|펜션|숙박'),
-    ('meeting',    r'상담|보고서|보고|대행사|업체 선택|고르는'),
+    ('search',     r'펜션|숙박'),  # 숙박 전용 사진이 없어 예약 채널이 보이는 검색 화면으로
+    ('storefront', r'플레이스|매장|오픈|가맹점|프랜차이즈'),
+    ('meeting',    r'병원|의원|치과|개원|상담|보고서|보고|대행사|업체 선택|고르는'),
     ('city',       r'지역|상권|동네'),
 ]
 CAT_THEME = {
@@ -169,7 +179,7 @@ def make_background(theme, seed):
     left = int((im.width - W) * rnd0.choice((0.15, 0.5, 0.85)))
     top = int((im.height - H) * rnd0.choice((0.3, 0.4, 0.55)))
     im = im.crop((left, top, left + W, top + H))
-    if theme not in ('web', 'blog') and seed % 2:
+    if theme not in ('web', 'blog', 'search', 'storefront', 'contract', 'marketing') and seed % 2:  # 글자가 보이는 사진은 뒤집지 않는다
         im = im.transpose(Image.FLIP_LEFT_RIGHT)
 
     # 톤 통일: 채도·밝기를 낮추고 네이비를 살짝 덮어 브랜드 색으로 맞춘다
@@ -216,7 +226,9 @@ def render(m):
     title = display_title(m)
     for size in (74, 70, 66, 62, 58, 54, 50, 46, 42):
         f_title = ImageFont.truetype(FONT_BOLD, size)
-        lines = balance(d, wrap_measured(d, title, f_title, MAX_W), f_title, MAX_W)
+        lines = wrap_measured(d, title, f_title, MAX_W)
+        if len(lines) > 1:
+            lines = comma_lines(d, title, f_title, MAX_W) or balance(d, lines, f_title, MAX_W)
         if len(lines) <= 2:
             break
     else:

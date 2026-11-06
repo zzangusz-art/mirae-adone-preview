@@ -8,7 +8,7 @@ category: AI 검색·SEO
 tags: AI 잘못된 정보 수정, AI 답변 오류, 브랜드 정보 관리, AI 검색 가시성
 keyword: AI 잘못된 정보 수정
 service: ai-visibility
-cover: AI가 틀리게 말할 때 바로잡는 순서
+cover: AI가 틀리게 말할 때, 바로잡는 순서
 author: 미래애드원 마케팅팀
 generated: claude-opus-5-5 2026-10-26 예약 작성
 topic: ai-wrong-company-info
