@@ -470,7 +470,10 @@
     ],
     "category": "검색광고·플레이스",
     "service": "naver-search-ads",
-    "status": "todo"
+    "status": "done",
+    "slug": "powerlink-negative-keywords",
+    "date": "2026-11-12",
+    "time": "18:00"
   },
   {
     "id": "place-photo-guide",
@@ -482,7 +485,10 @@
     ],
     "category": "검색광고·플레이스",
     "service": "naver-place",
-    "status": "todo"
+    "status": "done",
+    "slug": "place-photo-guide",
+    "date": "2026-11-17",
+    "time": "18:00"
   },
   {
     "id": "place-review-reply",
@@ -494,7 +500,10 @@
     ],
     "category": "검색광고·플레이스",
     "service": "naver-place",
-    "status": "todo"
+    "status": "done",
+    "slug": "place-review-reply",
+    "date": "2026-11-23",
+    "time": "18:00"
   },
   {
     "id": "ads-call-tracking",
@@ -506,7 +515,10 @@
     ],
     "category": "검색광고·플레이스",
     "service": "analytics",
-    "status": "todo"
+    "status": "done",
+    "slug": "ads-call-tracking",
+    "date": "2026-11-29",
+    "time": "18:00"
   },
   {
     "id": "ga4-basic-for-owners",
@@ -518,7 +530,10 @@
     ],
     "category": "검색광고·플레이스",
     "service": "analytics",
-    "status": "todo"
+    "status": "done",
+    "slug": "ga4-basic-for-owners",
+    "date": "2026-11-20",
+    "time": "18:00"
   },
   {
     "id": "landing-page-vs-homepage",
@@ -546,7 +561,10 @@
     ],
     "category": "홈페이지",
     "service": "conversion",
-    "status": "todo"
+    "status": "done",
+    "slug": "contact-form-fields",
+    "date": "2026-11-19",
+    "time": "18:00"
   },
   {
     "id": "mobile-first-check",
@@ -558,7 +576,10 @@
     ],
     "category": "홈페이지",
     "service": "website",
-    "status": "todo"
+    "status": "done",
+    "slug": "mobile-first-check",
+    "date": "2026-11-14",
+    "time": "18:00"
   },
   {
     "id": "website-maintenance-contract",
@@ -586,7 +607,10 @@
     ],
     "category": "홈페이지",
     "service": "website",
-    "status": "todo"
+    "status": "done",
+    "slug": "301-redirect-renewal",
+    "date": "2026-11-26",
+    "time": "18:00"
   },
   {
     "id": "instagram-monthly-plan",
@@ -598,7 +622,10 @@
     ],
     "category": "SNS·콘텐츠",
     "service": "sns",
-    "status": "todo"
+    "status": "done",
+    "slug": "instagram-monthly-plan",
+    "date": "2026-11-28",
+    "time": "18:00"
   },
   {
     "id": "shortform-for-small-business",
@@ -610,7 +637,10 @@
     ],
     "category": "SNS·콘텐츠",
     "service": "shortform",
-    "status": "todo"
+    "status": "done",
+    "slug": "shortform-for-small-business",
+    "date": "2026-12-05",
+    "time": "18:00"
   },
   {
     "id": "food-photo-shoot-prep",
@@ -622,7 +652,10 @@
     ],
     "category": "SNS·콘텐츠",
     "service": "photo-video",
-    "status": "todo"
+    "status": "done",
+    "slug": "food-photo-shoot-prep",
+    "date": "2026-12-01",
+    "time": "18:00"
   },
   {
     "id": "detail-page-structure",
@@ -634,7 +667,10 @@
     ],
     "category": "SNS·콘텐츠",
     "service": "smartstore-detail",
-    "status": "todo"
+    "status": "done",
+    "slug": "detail-page-structure",
+    "date": "2026-12-03",
+    "time": "18:00"
   },
   {
     "id": "press-release-basics",
@@ -646,7 +682,10 @@
     ],
     "category": "SNS·콘텐츠",
     "service": "press-pr",
-    "status": "todo"
+    "status": "done",
+    "slug": "press-release-basics",
+    "date": "2026-12-07",
+    "time": "18:00"
   },
   {
     "id": "clinic-marketing-rules",
@@ -751,7 +790,10 @@
     ],
     "category": "업종별 가이드",
     "service": "smartstore-detail",
-    "status": "todo"
+    "status": "done",
+    "slug": "ecommerce-ad-to-detail",
+    "date": "2026-12-08",
+    "time": "18:00"
   },
   {
     "id": "tax-office-blog",
@@ -763,7 +805,10 @@
     ],
     "category": "업종별 가이드",
     "service": "brand-blog",
-    "status": "todo"
+    "status": "done",
+    "slug": "tax-office-blog",
+    "date": "2026-11-22",
+    "time": "18:00"
   },
   {
     "id": "marketing-budget-small",
@@ -775,7 +820,10 @@
     ],
     "category": "업종별 가이드",
     "service": "industry-consulting",
-    "status": "todo"
+    "status": "done",
+    "slug": "marketing-budget-small",
+    "date": "2026-12-02",
+    "time": "18:00"
   },
   {
     "id": "agency-contract-checklist",
@@ -800,7 +848,10 @@
     ],
     "category": "업종별 가이드",
     "service": "industry-consulting",
-    "status": "todo"
+    "status": "done",
+    "slug": "agency-change-handover",
+    "date": "2026-12-04",
+    "time": "18:00"
   },
   {
     "id": "cafe-viral-what-is",
@@ -812,7 +863,10 @@
     ],
     "category": "블로그 마케팅",
     "service": "cafe-viral",
-    "status": "todo"
+    "status": "done",
+    "slug": "cafe-viral-what-is",
+    "date": "2026-11-10",
+    "time": "18:00"
   },
   {
     "id": "experience-group-guide",
@@ -824,7 +878,10 @@
     ],
     "category": "블로그 마케팅",
     "service": "blog-viral",
-    "status": "todo"
+    "status": "done",
+    "slug": "experience-group-guide",
+    "date": "2026-11-15",
+    "time": "18:00"
   },
   {
     "id": "ai-search-vs-ads-budget",
@@ -836,7 +893,10 @@
     ],
     "category": "AI 검색·SEO",
     "service": "seo-aeo-geo",
-    "status": "todo"
+    "status": "done",
+    "slug": "ai-search-vs-ads-budget",
+    "date": "2026-11-25",
+    "time": "18:00"
   },
   {
     "id": "weekly-report-template",
@@ -848,7 +908,10 @@
     ],
     "category": "검색광고·플레이스",
     "service": "analytics",
-    "status": "todo"
+    "status": "done",
+    "slug": "weekly-report-template",
+    "date": "2026-12-06",
+    "time": "18:00"
   },
   {
     "id": "service-page-template",
@@ -860,7 +923,10 @@
     ],
     "category": "홈페이지",
     "service": "website",
-    "status": "todo"
+    "status": "done",
+    "slug": "service-page-template",
+    "date": "2026-11-09",
+    "time": "18:00"
   },
   {
     "id": "blog-vs-homepage",
@@ -922,5 +988,575 @@
     "slug": "blog-marketing-fit-check",
     "date": "2026-11-04",
     "time": "09:00"
+  },
+  {
+    "id": "naver-ads-types",
+    "title": "네이버 광고 종류, 우리 업종은 무엇부터 시작할까",
+    "angle": "검색광고(파워링크·쇼핑검색·브랜드검색·플레이스·파워컨텐츠)와 디스플레이(성과형 디스플레이), AI 자동화(ADVoost)의 차이를 표로 비교하고 업종·목적별 시작 순서를 제시",
+    "keywords": [
+      "네이버 광고"
+    ],
+    "category": "검색광고·플레이스",
+    "service": "naver-search-ads",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "naver-ads-types",
+    "date": "2026-11-09",
+    "time": "09:00"
+  },
+  {
+    "id": "aeo-geo-seo-website-build",
+    "title": "AEO GEO SEO 홈페이지 제작, 설계 단계에서 넣을 것",
+    "angle": "만든 뒤 고치는 것보다 설계 때 넣는 편이 싼 항목: 서비스별 페이지·첫 문단 답·FAQ·회사 정보 일관성·구조화 데이터·사이트맵·robots(AI 검색 크롤러 허용)·제목/설명 길이. 체크리스트 표",
+    "keywords": [
+      "AEO GEO SEO 홈페이지 제작"
+    ],
+    "category": "홈페이지",
+    "service": "website",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "aeo-geo-seo-website-build",
+    "date": "2026-11-10",
+    "time": "09:00"
+  },
+  {
+    "id": "chatgpt-gemini-grok-differences",
+    "title": "챗GPT·제미나이·그록, 우리 회사가 다르게 나오는 이유",
+    "angle": "세 AI가 정보를 찾는 길이 다르다(챗GPT 검색·제미나이의 구글 검색 근거·그록의 웹+X 게시물)는 점을 표로, 같은 질문에도 답과 출처가 달라지는 이유와 공통으로 할 일",
+    "keywords": [
+      "챗GPT 제미나이 그록"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "ai-visibility",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "chatgpt-gemini-grok-differences",
+    "date": "2026-11-11",
+    "time": "09:00"
+  },
+  {
+    "id": "brand-blog-start",
+    "title": "브랜드 블로그 만들기, 개설부터 첫 열 편까지",
+    "angle": "계정 명의·블로그 이름·소개글·카테고리·프로필, 첫 열 편의 주제 배치 순서, 첫 달 발행 간격",
+    "keywords": [
+      "브랜드 블로그 만들기"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "brand-blog-start",
+    "date": "2026-11-12",
+    "time": "09:00"
+  },
+  {
+    "id": "blog-marketing-effect-timeline",
+    "title": "블로그 마케팅 효과, 몇 달 차에 무엇을 볼 수 있나",
+    "angle": "첫 달·셋째 달·여섯째 달에 확인할 지표(발행 URL·검색 반영·키워드 노출·문의 경로), 효과를 단정하지 않고 확인 순서로",
+    "keywords": [
+      "블로그 마케팅 효과"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "blog-marketing-effect-timeline",
+    "date": "2026-11-13",
+    "time": "09:00"
+  },
+  {
+    "id": "blog-agency-first-month",
+    "title": "블로그관리대행 진행 과정, 계약 후 첫 달 흐름",
+    "angle": "계약→자료 받기→키워드·주제표→원고·디자인 확인→발행→첫 보고까지 주차별로, 대표가 할 일과 대행사가 할 일 구분",
+    "keywords": [
+      "블로그관리대행 진행 과정"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "blog-agency-first-month",
+    "date": "2026-11-14",
+    "time": "09:00"
+  },
+  {
+    "id": "naver-blog-ad-effect",
+    "title": "네이버 블로그 광고 효과, 무엇으로 확인할까",
+    "angle": "방법별(브랜드 블로그·체험단·기자단·파워컨텐츠) 효과 확인 지표와 기록 방법, 조회수만 보면 안 되는 이유",
+    "keywords": [
+      "네이버 블로그 광고 효과"
+    ],
+    "category": "블로그 마케팅",
+    "service": "blog-viral",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "naver-blog-ad-effect",
+    "date": "2026-11-15",
+    "time": "09:00"
+  },
+  {
+    "id": "gemini-brand-visibility",
+    "title": "제미나이 노출, 우리 회사가 나오게 하려면",
+    "angle": "제미나이 답변 일부는 구글 검색 결과를 근거로 함 → 구글 색인·서치 콘솔·구글 비즈니스 프로필·구조화 데이터·공식 페이지 정보 정리, 출처 버튼 확인과 반복 질문",
+    "keywords": [
+      "제미나이 노출"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "seo-aeo-geo",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "gemini-brand-visibility",
+    "date": "2026-11-16",
+    "time": "09:00"
+  },
+  {
+    "id": "aeo-meaning",
+    "title": "AEO란 무엇인가요? 답변 엔진 최적화 쉽게 정리",
+    "angle": "AEO(Answer Engine Optimization) 뜻, 검색 결과 답변 영역·AI 답변에 쓰이는 형식(질문형 소제목·첫 문장 답·FAQ), SEO·GEO와 관계(기존 글 GEO SEO 차이와 겹치지 않게 AEO 중심)",
+    "keywords": [
+      "AEO란"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "seo-aeo-geo",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "aeo-meaning",
+    "date": "2026-11-17",
+    "time": "09:00"
+  },
+  {
+    "id": "naver-ads-getting-started",
+    "title": "네이버 광고 시작 방법, 계정부터 첫 캠페인까지",
+    "angle": "광고주 계정→비즈채널 등록·검수→캠페인·광고그룹→키워드·소재→예산·입찰→첫 주 점검, 대행을 맡겨도 계정은 광고주 명의",
+    "keywords": [
+      "네이버 광고 시작"
+    ],
+    "category": "검색광고·플레이스",
+    "service": "naver-search-ads",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "naver-ads-getting-started",
+    "date": "2026-11-18",
+    "time": "09:00"
+  },
+  {
+    "id": "grok-brand-visibility",
+    "title": "그록 노출, X 게시물까지 보는 AI에 대비하려면",
+    "angle": "그록은 웹 검색과 X 게시물 검색을 함께 쓰고 출처를 웹·X로 나눠 보여 준다고 안내됨 → 공식 홈페이지 정보, X 계정이 있다면 프로필·고정 게시물 정리, 확인 방법. 확인 안 된 내부 동작은 단정하지 않음",
+    "keywords": [
+      "그록 노출"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "ai-visibility",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "grok-brand-visibility",
+    "date": "2026-11-19",
+    "time": "09:00"
+  },
+  {
+    "id": "homepage-seo-basics",
+    "title": "홈페이지 SEO 기본, 오픈 전에 손볼 일곱 곳",
+    "angle": "페이지별 제목·설명, H1, 주소 체계, 사이트맵·robots.txt, 서치 콘솔·서치어드바이저 등록, 이미지 대체 텍스트, 속도·모바일. 기존 글(구조화 데이터·서치어드바이저·리뉴얼)과 겹치면 링크로",
+    "keywords": [
+      "홈페이지 SEO"
+    ],
+    "category": "홈페이지",
+    "service": "seo-aeo-geo",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "homepage-seo-basics",
+    "date": "2026-11-20",
+    "time": "09:00"
+  },
+  {
+    "id": "blog-ad-vs-powerlink",
+    "title": "블로그 광고와 파워링크, 무엇부터 해야 할까",
+    "angle": "즉시성·비용 구조·쌓이는지 여부·업종 적합도 비교 표, 병행 순서",
+    "keywords": [
+      "블로그 광고 파워링크"
+    ],
+    "category": "검색광고·플레이스",
+    "service": "naver-search-ads",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "blog-ad-vs-powerlink",
+    "date": "2026-11-21",
+    "time": "09:00"
+  },
+  {
+    "id": "chatgpt-search-visibility",
+    "title": "챗GPT 검색 노출, 홈페이지에서 먼저 확인할 것",
+    "angle": "OpenAI 안내: 챗GPT 검색에 사이트가 나오려면 robots.txt에서 OAI-SearchBot을 막지 않아야 함(학습용 GPTBot과 별개), 반영까지 약 하루. 전체 차단 규칙 실수, 페이지 내용 정리. 측정은 기존 글 check-brand-in-ai-answers로 링크",
+    "keywords": [
+      "챗GPT 검색 노출"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "seo-aeo-geo",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "chatgpt-search-visibility",
+    "date": "2026-11-22",
+    "time": "09:00"
+  },
+  {
+    "id": "brand-blog-content-types",
+    "title": "브랜드 블로그 글 종류, 업체 블로그에 올릴 여덟 가지",
+    "angle": "공지·정보·사례·과정·FAQ·비교·지역·사람 소개 등 글 종류별 목적과 비율 예시",
+    "keywords": [
+      "브랜드 블로그 글 종류"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "brand-blog-content-types",
+    "date": "2026-11-23",
+    "time": "09:00"
+  },
+  {
+    "id": "blog-agency-prep-materials",
+    "title": "블로그 대행 맡기기 전 준비할 자료 목록",
+    "angle": "사진·가격표·자주 받는 질문·금지어·업종 규정·경쟁 키워드·말투 예시, 자료가 없을 때 대안",
+    "keywords": [
+      "블로그 대행 자료 준비"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "blog-agency-prep-materials",
+    "date": "2026-11-24",
+    "time": "09:00"
+  },
+  {
+    "id": "naver-ai-briefing",
+    "title": "네이버 AI 브리핑, 우리 글이 인용되려면",
+    "angle": "네이버 검색 상단 AI 브리핑이 블로그·웹문서·네이버 서비스 정보를 출처로 요약해 보여 줌. 모든 검색어에 뜨지 않고 출처 구성도 바뀜(단정 금지). 소제목 아래 짧은 답, 정확한 업체 정보, 블로그와 홈페이지 함께",
+    "keywords": [
+      "네이버 AI 브리핑"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "seo-aeo-geo",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "naver-ai-briefing",
+    "date": "2026-11-25",
+    "time": "09:00"
+  },
+  {
+    "id": "blog-keyword-research",
+    "title": "블로그 키워드 찾기, 손님이 쓰는 말로 고르는 법",
+    "angle": "네이버 검색광고 키워드 도구·자동완성·연관 검색어·손님 질문 기록으로 키워드 목록 만들고 글 하나에 1순위 하나 배정",
+    "keywords": [
+      "블로그 키워드 찾기"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "blog-keyword-research",
+    "date": "2026-11-26",
+    "time": "09:00"
+  },
+  {
+    "id": "homepage-build-process",
+    "title": "홈페이지 제작 과정, 계약부터 오픈까지 순서",
+    "angle": "기획(사이트맵)→원고·사진→디자인 시안→개발→검수(모바일·폼·속도)→오픈(도메인·검색 등록)→운영, 단계별 대표가 확인할 것",
+    "keywords": [
+      "홈페이지 제작 과정"
+    ],
+    "category": "홈페이지",
+    "service": "website",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "homepage-build-process",
+    "date": "2026-11-27",
+    "time": "09:00"
+  },
+  {
+    "id": "place-ads-basics",
+    "title": "플레이스 광고, 지역 손님을 부르는 구조",
+    "angle": "지역+업종 검색 때 플레이스 영역에 노출되는 광고, 플레이스 정보 정비가 먼저인 이유, 리뷰·사진과의 관계. 세부 과금 조건은 공식 안내 확인",
+    "keywords": [
+      "플레이스 광고"
+    ],
+    "category": "검색광고·플레이스",
+    "service": "naver-place",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "place-ads-basics",
+    "date": "2026-11-28",
+    "time": "09:00"
+  },
+  {
+    "id": "ai-recommendation-competitors",
+    "title": "AI 업체 추천에 경쟁사만 나올 때 볼 곳",
+    "angle": "AI에게 「추천해줘」를 물으면 경쟁사만 나오는 흔한 이유(출처 부족·정보 불일치·비교 글 부재)와 대응 순서, 보장 없음",
+    "keywords": [
+      "AI 업체 추천"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "ai-visibility",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "ai-recommendation-competitors",
+    "date": "2026-11-29",
+    "time": "09:00"
+  },
+  {
+    "id": "blog-agency-warning-signs",
+    "title": "블로그관리대행 주의, 다시 확인할 제안 다섯 가지",
+    "angle": "상위 노출 보장·계정 명의 대행사·원고 재사용·보고 없음·발행 전 확인 없음 같은 제안을 어떻게 되물을지. 타사 비방 금지",
+    "keywords": [
+      "블로그관리대행 주의"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "blog-agency-warning-signs",
+    "date": "2026-11-30",
+    "time": "09:00"
+  },
+  {
+    "id": "brand-blog-category-setup",
+    "title": "블로그 카테고리 구성, 손님이 찾는 갈래로 나누기",
+    "angle": "카테고리 다섯~일곱 개 기준, 업종별 예시 표, 바꿀 때 주의",
+    "keywords": [
+      "블로그 카테고리 구성"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "brand-blog-category-setup",
+    "date": "2026-12-01",
+    "time": "09:00"
+  },
+  {
+    "id": "blog-title-writing",
+    "title": "블로그 제목 짓는 법, 검색어와 질문을 함께 넣기",
+    "angle": "제목 길이, 1순위 검색어 앞쪽, 질문형·숫자형, 낚시성 제목이 안 되는 이유, 예시 전후 비교",
+    "keywords": [
+      "블로그 제목 짓는 법"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "blog-title-writing",
+    "date": "2026-12-02",
+    "time": "09:00"
+  },
+  {
+    "id": "brand-search-ads",
+    "title": "브랜드검색 광고, 언제 필요한가요",
+    "angle": "상호·브랜드 키워드를 검색할 때만 상단에 나오는 상품이라 인지도가 쌓인 뒤 의미, 기간 단위 집행, 자격·조건은 공식 안내 확인",
+    "keywords": [
+      "브랜드검색 광고"
+    ],
+    "category": "검색광고·플레이스",
+    "service": "naver-search-ads",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "brand-search-ads",
+    "date": "2026-12-03",
+    "time": "09:00"
+  },
+  {
+    "id": "diy-vs-agency-homepage",
+    "title": "홈페이지 직접 제작과 맡기기, 기준은 운영입니다",
+    "angle": "템플릿형 사이트 빌더로 직접 만들 때와 맡길 때 비교(업체명 쓰지 않음): 비용·시간·검색 구조·수정·소유권",
+    "keywords": [
+      "홈페이지 직접 제작"
+    ],
+    "category": "홈페이지",
+    "service": "website",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "diy-vs-agency-homepage",
+    "date": "2026-12-04",
+    "time": "09:00"
+  },
+  {
+    "id": "seo-agency-checklist",
+    "title": "SEO 대행 맡기기 전 확인할 여섯 가지",
+    "angle": "작업 범위(기술·콘텐츠·구조화 데이터)·보고·계정 권한·보장 표현·기간·AI 검색 포함 여부",
+    "keywords": [
+      "SEO 대행"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "seo-aeo-geo",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "seo-agency-checklist",
+    "date": "2026-12-05",
+    "time": "09:00"
+  },
+  {
+    "id": "brand-blog-tone-guide",
+    "title": "블로그 말투 가이드, 한 장으로 정하는 법",
+    "angle": "존댓말 수준·업체 호칭·금지어·숫자·가격 표기·사진 설명 규칙 예시 표",
+    "keywords": [
+      "블로그 말투 가이드"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "brand-blog-tone-guide",
+    "date": "2026-12-06",
+    "time": "09:00"
+  },
+  {
+    "id": "blog-post-structure",
+    "title": "블로그 글 구성, 첫 문단에 답부터 쓰는 이유",
+    "angle": "첫 문단 답·소제목·표·사진 설명·FAQ 순서, 검색과 AI 인용 모두에 유리한 형식(단정 없이)",
+    "keywords": [
+      "블로그 글 구성"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "blog-post-structure",
+    "date": "2026-12-07",
+    "time": "09:00"
+  },
+  {
+    "id": "powercontents-ads",
+    "title": "파워컨텐츠 광고, 블로그 글과 무엇이 다를까",
+    "angle": "정보형 검색어에 콘텐츠 형태로 노출되는 클릭당 과금 광고, 브랜드 블로그·체험단과 차이, 맞는 업종, 집행 조건은 공식 안내",
+    "keywords": [
+      "파워컨텐츠"
+    ],
+    "category": "검색광고·플레이스",
+    "service": "naver-search-ads",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "powercontents-ads",
+    "date": "2026-12-08",
+    "time": "09:00"
+  },
+  {
+    "id": "ai-search-report-reading",
+    "title": "AI 검색 리포트, 어떻게 읽어야 하나요",
+    "angle": "질문셋·측정 조건·언급·인용 출처·전후 비교를 읽는 법, 한 번 결과로 판단하지 않는 이유",
+    "keywords": [
+      "AI 검색 리포트"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "ai-visibility",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "ai-search-report-reading",
+    "date": "2026-11-16",
+    "time": "18:00"
+  },
+  {
+    "id": "blog-marketing-diy-or-agency",
+    "title": "블로그 마케팅, 직접 할까 맡길까 판단 기준",
+    "angle": "대표가 직접 쓸 때 드는 시간·필요 역량, 맡길 때 비용(사실 목록 가격만), 반반 운영 방법",
+    "keywords": [
+      "블로그 마케팅 직접"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "blog-marketing-diy-or-agency",
+    "date": "2026-11-21",
+    "time": "18:00"
+  },
+  {
+    "id": "blog-agency-contract-term",
+    "title": "블로그관리대행 계약 기간, 몇 개월로 시작할까",
+    "angle": "처음 계약 기간을 정할 때 볼 것(검색 반영 기간·보고 주기·해지 조건·계정 명의), 장기 할인 조건 확인. 사실 목록에 없는 할인율 쓰지 않음",
+    "keywords": [
+      "블로그관리대행 계약 기간"
+    ],
+    "category": "블로그 마케팅",
+    "service": "brand-blog",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "blog-agency-contract-term",
+    "date": "2026-11-27",
+    "time": "18:00"
+  },
+  {
+    "id": "online-ad-agency-role",
+    "title": "온라인광고대행사 하는 일, 맡기는 범위 나누기",
+    "angle": "검색광고·블로그·SNS·홈페이지·보고 중 대행사가 하는 일과 광고주가 하는 일, 계정 명의",
+    "keywords": [
+      "온라인광고대행사 하는 일"
+    ],
+    "category": "업종별 가이드",
+    "service": "industry-consulting",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "online-ad-agency-role",
+    "date": "2026-11-11",
+    "time": "18:00"
+  },
+  {
+    "id": "hospital-blog-topics",
+    "title": "병원 블로그, 진료 과목별로 무엇을 써야 할까",
+    "angle": "진료 안내·검사 과정·비용 안내·자주 묻는 질문 중심 주제, 치료경험담·효과 단정 표현 금지와 의료광고 심의 확인",
+    "keywords": [
+      "병원 블로그"
+    ],
+    "category": "업종별 가이드",
+    "service": "brand-blog",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "hospital-blog-topics",
+    "date": "2026-11-13",
+    "time": "18:00"
+  },
+  {
+    "id": "viral-marketing-cost",
+    "title": "바이럴 마케팅 비용, 방식별로 돈이 나가는 구조",
+    "angle": "체험단·기자단·카페 바이럴의 비용 구조(인원·건수·제공 물품·원고)를 수치 없이 비교, 견적서 확인 항목",
+    "keywords": [
+      "바이럴 마케팅 비용"
+    ],
+    "category": "블로그 마케팅",
+    "service": "blog-viral",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "viral-marketing-cost",
+    "date": "2026-11-18",
+    "time": "18:00"
+  },
+  {
+    "id": "academy-homepage",
+    "title": "학원 홈페이지, 학부모가 상담 전에 찾는 정보",
+    "angle": "커리큘럼·강사·시간표·수강료 표시·상담 예약, 선행학습 광고 금지(공교육정상화법) 확인",
+    "keywords": [
+      "학원 홈페이지"
+    ],
+    "category": "업종별 가이드",
+    "service": "website",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "academy-homepage",
+    "date": "2026-11-24",
+    "time": "18:00"
+  },
+  {
+    "id": "smallbiz-ai-search",
+    "title": "소상공인 AI 검색, 동네 가게도 준비해야 할까",
+    "angle": "동네 가게가 할 수 있는 최소 준비(플레이스·공식 정보 일관성·자주 묻는 질문), 홈페이지가 없을 때와 있을 때",
+    "keywords": [
+      "소상공인 AI 검색"
+    ],
+    "category": "AI 검색·SEO",
+    "service": "seo-aeo-geo",
+    "status": "done",
+    "note": "2026-11-08 지정 키워드 한 달치",
+    "slug": "smallbiz-ai-search",
+    "date": "2026-11-30",
+    "time": "18:00"
   }
 ]
