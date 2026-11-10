@@ -11,6 +11,7 @@ export const COMPANY = {
   bizNo: '237-30-01762',
   address: '서울특별시 송파구 중대로 146 유나프라자 8층',
   phone: '02-6481-6603',
+  email: 'dlejrgud9793@naver.com',
   kakao: 'https://open.kakao.com/o/glzPMi4f',
   naverBlog: 'https://blog.naver.com/dlejrgud9793',
   brochure: 'https://drive.google.com/file/d/1n3WeBi6A1U8Kqk3gn2zT-Oxb5VQbPsvO/view?usp=sharing',

@@ -126,7 +126,7 @@ export function footer(R) {
     <nav class="ft__kw" aria-label="주요 서비스 키워드"><p>주요 서비스</p><ul>${KEYWORD_LINKS.map(([t, h]) => `<li><a href="${R}${h}">${t}</a></li>`).join('')}</ul></nav>
     <div class="ft__biz">
       <p><span>상호 ${COMPANY.name}</span><span>대표 ${COMPANY.ceo}</span><span>사업자등록번호 ${COMPANY.bizNo}</span></p>
-      <p><span>${COMPANY.address}</span><span>대표번호 ${COMPANY.phone}</span></p>
+      <p><span>${COMPANY.address}</span><span>대표번호 ${COMPANY.phone}</span><span>이메일 <a href="mailto:${COMPANY.email}">${COMPANY.email}</a></span></p>
       <p class="ft__legal">AI 검색·검색 노출은 최적화 작업과 리포트를 제공하며 특정 순위나 노출을 보장하지 않습니다. 모든 가격은 부가세 별도입니다.</p>
       <p class="ft__copy">© ${new Date().getFullYear()} ${COMPANY.name}. All rights reserved.</p>
     </div>
@@ -227,7 +227,7 @@ ${layers(R)}
 
 export const ORG = {
   '@type': ['Organization', 'ProfessionalService'], '@id': SITE + '#org', name: COMPANY.name, alternateName: [COMPANY.nameEn, 'MIRAEADONE', '미래애드원 광고대행사'], url: SITE,
-  logo: SITE + 'assets/img/brand/icon-512.png', image: SITE + 'assets/img/og.jpg', telephone: COMPANY.phone, founder: { '@type': 'Person', name: COMPANY.ceo },
+  logo: SITE + 'assets/img/brand/icon-512.png', image: SITE + 'assets/img/og.jpg', telephone: COMPANY.phone, email: COMPANY.email, founder: { '@type': 'Person', name: COMPANY.ceo },
   address: { '@type': 'PostalAddress', streetAddress: '중대로 146 유나프라자 8층', addressLocality: '송파구', addressRegion: '서울특별시', addressCountry: 'KR' },
   taxID: COMPANY.bizNo, sameAs: [COMPANY.naverBlog], areaServed: 'KR', slogan: COMPANY.slogan,
   knowsAbout: KEYWORDS,

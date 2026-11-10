@@ -75,6 +75,7 @@ wr('llms.txt', `# ${COMPANY.name} (${COMPANY.nameEn})
 - 상호: ${COMPANY.name} / 대표: ${COMPANY.ceo} / 사업자등록번호: ${COMPANY.bizNo}
 - 주소: ${COMPANY.address}
 - 대표번호: ${COMPANY.phone}
+- 이메일: ${COMPANY.email}
 - 운영 방식: 1개 업체를 작가·디자이너·마케터 3인이 전담, 발행 전 원고·디자인 확인, 전용 단톡방, 1~2주 단위·월간 보고
 - 대표자는 광고업과 별도로 식자재 유통 사업을 운영합니다(미래애드원 법인 사업 아님).
 
