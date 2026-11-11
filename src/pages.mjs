@@ -266,7 +266,7 @@ export function serviceDetail(s, posts) {
   const pf = s.portfolio.length && !['brand-blog', 'website', 'press-pr'].includes(s.slug) ? PORTFOLIO.filter(x => s.portfolio.includes(x.cat)).slice(0, 6) : [];
   const toc = [['problem', '이런 상황'], ['scope', '제공 범위'], ...(s.slug === 'website' ? [['web-refs', '레퍼런스']] : []), ['price', '가격'], ['process', '진행'], ...(pf.length || s.slug === 'press-pr' ? [['cases', s.slug === 'press-pr' ? '언론사' : '사례']] : []), ['svc-faq', 'FAQ']];
   const faqs = [...s.faq.map(([q, a]) => ({ q, a })), ...(s.slug === 'brand-blog' ? BLOG_FAQ.map(([q, a]) => ({ q, a })) : FAQ.filter(f => f.c === '계약').slice(0, 2))];
-  const relPosts = posts.filter(x => x.service === s.slug).slice(0, 3);
+  const relAll = posts.filter(x => x.service === s.slug), relPosts = relAll.slice(0, 6); // 최신 공개 글 6편 — 새 글이 공개되자마자 서비스 페이지에서 링크를 받도록
   const body = `
 ${pageHero({ R, eyebrow: `${axis.en} · ${String(s.no).padStart(2, '0')}`, title: esc(SEO['svc:' + s.slug]?.h1 || s.name), lead: `<strong>${esc(s.copy)}</strong><br>${esc(s.lead)}`, crumbs: crumbNav(R, [['홈', ''], ['서비스', 'services/'], [s.name, p]]), ctas: `${quoteBtn('이 상품으로 상담하기', s.slug)}<a class="btn btn--glass" href="#price">가격·판매 구조</a>`, cls: `phero--svc phero--${s.slug}` })}
 <nav class="subnav glass glass--light" aria-label="이 페이지 목차" data-subnav>${toc.map(([id, t]) => `<a href="#${id}">${t}</a>`).join('')}</nav>
@@ -280,7 +280,7 @@ ${priceBox(R, s)}
 ${s.slug === 'press-pr' ? `<section class="sec sec--gray" id="cases"><div class="wrap">${sectionHead({ eyebrow: 'MEDIA', title: '협력 언론사', lead: '보도자료를 송출하는 주요 매체입니다. 게재 결과는 기사 URL로 보고합니다.', center: true })}${pressWall(R)}</div></section>` : ''}
 ${pf.length ? `<section class="sec sec--gray" id="cases"><div class="wrap">${sectionHead({ eyebrow: 'CASES', title: '관련 사례' })}${portfolioGrid(R, pf, { filters: false, group: 'svc-pf' })}<div class="center"><a class="btn btn--line" href="${R}portfolio/">포트폴리오 전체 ${icon('arrow')}</a></div></div></section>` : ''}
 <section class="sec" id="svc-faq"><div class="wrap wrap--narrow">${sectionHead({ eyebrow: 'FAQ', title: `${esc(s.short)} 자주 묻는 질문`, center: true })}${faqBlock(faqs, { chips: false, idp: 'sf' })}</div></section>
-${relPosts.length ? `<section class="sec sec--gray"><div class="wrap">${sectionHead({ eyebrow: 'INSIGHTS', title: '관련 글' })}<div class="pgrid">${relPosts.map(x => postCard(R, x)).join('')}</div></div></section>` : ''}
+${relPosts.length ? `<section class="sec sec--gray"><div class="wrap">${sectionHead({ eyebrow: 'INSIGHTS', title: '관련 글' })}<div class="pgrid">${relPosts.map(x => postCard(R, x)).join('')}</div>${relAll.length > relPosts.length ? `<div class="center"><a class="btn btn--line" href="${R}insights/">인사이트 글 전체 보기 ${icon('arrow')}</a></div>` : ''}</div></section>` : ''}
 <section class="sec ${relPosts.length ? '' : 'sec--gray'}"><div class="wrap">${sectionHead({ eyebrow: 'RELATED', title: `함께 보면 좋은 ${axis.ko} 서비스` })}<div class="sgrid sgrid--3">${related.map(x => serviceCard(R, x)).join('')}</div></div></section>
 ${ctaBand(R, { title: `${esc(s.name)}, 어디서부터 시작할지 같이 정해 보세요`, svc: s.slug })}
 <template id="tpl-report"><h2 id="modal-title">AI·검색 노출 리포트 표준</h2>${reportFieldsTable().replace(' data-reveal', '')}<p class="small">일부 플랫폼은 공식 전체 노출량을 제공하지 않으므로 수동 표본 테스트를 전체 노출량으로 보고하지 않습니다.</p></template>`;
