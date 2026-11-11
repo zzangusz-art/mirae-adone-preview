@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {
-  SITE, COMPANY, SERVICES, AXES, INDUSTRIES, PORTFOLIO, PORTFOLIO_CATS, REVIEWS, FAQ, BLOG_FAQ, BLOG_PLANS, WEB_AI_PLAN, PRICE_SHOW_WEB_AI,
+  SITE, COMPANY, SERVICES, AXES, INDUSTRIES, PORTFOLIO, PORTFOLIO_CATS, REVIEWS, FAQ, BLOG_FAQ, BLOG_PLANS, WEB_AI_PLAN, PRICE_SHOW_WEB_AI, WEB_BUILD_CHECKS, WEB_INDUSTRY_PAGES,
   CPC, BLOG_CATEGORIES, BLOG_AUTHOR, SEQUENCE, SEO, KEYWORD_LINKS, svc,
 } from './data.mjs';
 import { page, ORG, WEBSITE, crumbs, crumbNav, quoteForm } from './layout.mjs';
@@ -254,7 +254,11 @@ ${s.slug === 'seo-aeo-geo' ? `<section class="sec sec--gray" id="flow"><div clas
 <section class="sec" id="board"><div class="wrap two two--top"><div>${sectionHead({ eyebrow: 'STATUS', title: '지금 어디까지 왔는지<br>언제든 확인하세요', lead: '진행 단계·이번 작업·다음 일정을 표로 공유합니다. 연락이 닿지 않는 대행이 걱정이셨다면 이 부분을 먼저 보시면 됩니다.' })}</div>${statusBoard()}</div></section>
 <section class="sec sec--gray" id="fit"><div class="wrap">${sectionHead({ eyebrow: 'INDUSTRY', title: '이런 업종에 먼저 권합니다', lead: '네이버 검색 경쟁이 심하거나, 검색광고 비용이 부담되는 업종입니다.' })}${geoIndustries(R)}</div></section>` : ''}`;
   if (s.slug === 'website') return `
-${webCases(R)}
+<section class="sec" id="aeo-build"><div class="wrap">${sectionHead({ eyebrow: 'AEO · GEO · SEO', title: 'AEO GEO SEO 홈페이지 제작,<br>설계 때 넣는 여덟 가지', lead: 'AEO GEO SEO 홈페이지 제작은 디자인과 기능은 그대로 두고, 네이버·구글 검색과 챗GPT·제미나이·그록 같은 AI 답변이 읽을 구조를 설계 단계에서 함께 넣는 방식입니다. 아래 여덟 가지는 다 만든 뒤에 넣으려면 메뉴·주소·원고를 다시 손대야 하는 항목입니다.' })}
+<ol class="chk chk--4">${WEB_BUILD_CHECKS.map(([k, d], i) => `<li data-reveal style="--d:${i * 50}ms"><span>${String(i + 1).padStart(2, '0')}</span><div><b>${esc(k)}</b><p>${esc(d)}</p></div></li>`).join('')}</ol>
+<div class="center"><a class="btn btn--line" href="${R}insights/aeo-geo-seo-website-build/">여덟 가지를 넣는 방법 자세히 ${icon('arrow')}</a></div></div></section>
+${webCases(R, { gray: true })}
+<section class="sec" id="by-industry"><div class="wrap">${sectionHead({ eyebrow: 'BY INDUSTRY', title: '업종별로 먼저 만드는 페이지', lead: '상담이 매출로 이어지는 업종은 고객이 묻는 질문이 정해져 있습니다. 그 질문에 답할 페이지부터 설계합니다.' })}<div class="gind">${WEB_INDUSTRY_PAGES.map(([slug, items], i) => { const ind = INDUSTRIES.find(x => x.slug === slug); return `<a class="gind__c" href="${R}industries/${slug}/" data-reveal style="--d:${i * 70}ms">${icon(ind.icon)}<h4>${esc(ind.name)} 홈페이지</h4><ul>${items.map(t => `<li>${esc(t)}</li>`).join('')}</ul></a>`; }).join('')}</div></div></section>
 <section class="sec sec--gray" id="works"><div class="wrap">${sectionHead({ eyebrow: 'PORTFOLIO', title: '업종별 제작 사례', lead: '업종별 홈페이지 제작 사례입니다. 이미지를 누르면 크게 볼 수 있습니다.' })}${portfolioGrid(R, [...PORTFOLIO.filter(x => x.cat === 'web-set'), ...PORTFOLIO.filter(x => x.cat === 'web')], { group: 'svc-pf', limit: 9 })}</div></section>`;
   return '';
 }
@@ -264,7 +268,7 @@ export function serviceDetail(s, posts) {
   const axis = AXES.find(a => a.id === s.axis);
   const related = SERVICES.filter(x => x.axis === s.axis && x.slug !== s.slug).slice(0, 3);
   const pf = s.portfolio.length && !['brand-blog', 'website', 'press-pr'].includes(s.slug) ? PORTFOLIO.filter(x => s.portfolio.includes(x.cat)).slice(0, 6) : [];
-  const toc = [['problem', '이런 상황'], ['scope', '제공 범위'], ...(s.slug === 'website' ? [['web-refs', '레퍼런스']] : []), ['price', '가격'], ['process', '진행'], ...(pf.length || s.slug === 'press-pr' ? [['cases', s.slug === 'press-pr' ? '언론사' : '사례']] : []), ['svc-faq', 'FAQ']];
+  const toc = [['problem', '이런 상황'], ['scope', '제공 범위'], ...(s.slug === 'website' ? [['aeo-build', '설계 기준'], ['web-refs', '레퍼런스']] : []), ['price', '가격'], ['process', '진행'], ...(pf.length || s.slug === 'press-pr' ? [['cases', s.slug === 'press-pr' ? '언론사' : '사례']] : []), ['svc-faq', 'FAQ']];
   const faqs = [...s.faq.map(([q, a]) => ({ q, a })), ...(s.slug === 'brand-blog' ? BLOG_FAQ.map(([q, a]) => ({ q, a })) : FAQ.filter(f => f.c === '계약').slice(0, 2))];
   const relAll = posts.filter(x => x.service === s.slug), relPosts = relAll.slice(0, 6); // 최신 공개 글 6편 — 새 글이 공개되자마자 서비스 페이지에서 링크를 받도록
   const body = `

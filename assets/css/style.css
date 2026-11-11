@@ -621,9 +621,9 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 /* 체크리스트 */
 .chk{display:grid;gap:12px}
 @media (min-width:760px){.chk{grid-template-columns:repeat(2,1fr)}}
-@media (min-width:1100px){.chk{grid-template-columns:repeat(3,1fr)}}
+@media (min-width:1100px){.chk{grid-template-columns:repeat(3,1fr)}.chk--4{grid-template-columns:repeat(4,1fr)}}
 .chk li{display:flex;gap:14px;padding:20px;border-radius:var(--r);background:#fff;border:1px solid var(--line)}
-.chk span{font-size:13px;font-weight:800;color:var(--blue)}
+.chk span{flex:none;font-size:13px;font-weight:800;color:var(--blue)}
 .chk b{display:block;font-size:16px;margin-bottom:2px}
 .chk p{font-size:14px;color:var(--ink-3)}
 
