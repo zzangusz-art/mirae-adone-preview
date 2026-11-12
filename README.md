@@ -63,7 +63,10 @@ gh api -X POST repos/<계정>/mirae-adone-preview/pages -f build_type=workflow
 ## 관리자 페이지 (/admin/)
 `https://www.mirae-adone.com/admin/` — 측정 결과 보기(AI·검색 노출 추이, 엔진별·검색어별 결과, 인용 도메인, 인사이트 발행, 구글 색인 요청, 서치콘솔 판독, 자동 측정 기록). Railway 서버(`tools/serve.mjs`)에서만 동작하고 GitHub Pages 미리보기에는 없습니다.
 - **로그인**: Railway → Variables 의 `ADMIN_PASSWORD` 하나. 12시간 유지, 같은 IP 15분에 5번 틀리면 15분 잠금. 비밀번호를 바꾸면 기존 로그인은 모두 풀립니다.
-- **데이터**: 측정 원본은 이 PC(상위 폴더 `측정/`)에만 있고, 저장소가 공개라 `tools/admin/data.enc` 에 **암호화해서** 올립니다. 상위 폴더 `tools/admin-export.mjs` 가 만들고, `deploy.bat` 이 배포 때마다 먼저 실행합니다(내용이 같으면 다시 쓰지 않음). 화면의 「측정 데이터 … 기준」이 마지막 배포 시점입니다.
+- **데이터**: 측정 원본은 이 PC(상위 폴더 `측정/`)에만 있고, 저장소가 공개라 `tools/admin/data.enc` 에 **암호화해서** 올립니다. 상위 폴더 `tools/admin-export.mjs` 가 만들고(내용이 같으면 다시 쓰지 않음), 두 곳에서 올라갑니다.
+  - **매일 자동**: 일일 측정(`daily.mjs`)이 끝나면 `tools/admin-publish.mjs` 가 GitHub main 최신 커밋 위에 **data.enc 한 파일만** 바꾼 커밋 「관리자 측정 데이터 자동 갱신」을 만들어 푸시 → Railway 자동 배포. 로컬 작업 폴더·브랜치는 건드리지 않아 작업 중인 변경이 함께 올라가지 않습니다. 시험: `node tools/admin-publish.mjs --dry-run`.
+  - **배포 때**: `deploy.bat` 이 먼저 내보내기를 실행합니다.
+  - 화면의 「측정 데이터 … 기준」이 마지막으로 올린 시각입니다.
 - **키**: 상위 폴더 `.admin-data-key`(저장소 밖, 처음 내보낼 때 자동 생성)의 한 줄을 Railway Variables 의 `ADMIN_DATA_KEY` 에 넣습니다. 키를 잃어버리면 파일을 지우고 다시 내보낸 뒤 새 값을 Railway 에 넣으면 됩니다.
 - 코드: `tools/admin/server.mjs`(로그인·데이터 API), `index.html`(화면, 외부 라이브러리 없음), `crypto.mjs`(AES-256-GCM). robots.txt 는 모든 로봇에 `/admin/` 제외.
 
