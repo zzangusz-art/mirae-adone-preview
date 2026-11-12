@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>미래애드원 관리자</title>
+<style>
+:root{
+  color-scheme:light;
+  --page:#f2f4f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#6f6d68;--grid:#e1e0d9;--axis:#c3c2b7;--ring:rgba(11,11,11,.10);
+  --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--neutral:#d6d5cf;
+  --good:#006300;--bad:#c03030;--warn:#fab219;
+  --navy:#111D30;--wash:#eef3fb;
+  --font:-apple-system,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:where(:not([data-theme="light"])){
+    color-scheme:dark;
+    --page:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#9a988f;--grid:#2c2c2a;--axis:#383835;--ring:rgba(255,255,255,.10);
+    --s1:#3987e5;--s2:#d95926;--s3:#199e70;--neutral:#4a4a46;
+    --good:#0ca30c;--bad:#e66767;--wash:#1f2633;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#9a988f;--grid:#2c2c2a;--axis:#383835;--ring:rgba(255,255,255,.10);
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--neutral:#4a4a46;
+  --good:#0ca30c;--bad:#e66767;--wash:#1f2633;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--page);color:var(--ink);font:15px/1.55 var(--font);word-break:keep-all;overflow-wrap:anywhere}
+button,select,input{font:inherit;color:inherit}
+a{color:var(--s1)}
+.top{background:var(--navy);color:#fff;position:sticky;top:0;z-index:20}
+.top__in{max-width:1240px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.top__brand{font-weight:800;font-size:16px;letter-spacing:-.01em}
+.top__brand span{font-weight:500;opacity:.7;margin-left:6px;font-size:14px}
+.top__meta{margin-left:auto;font-size:13px;opacity:.75}
+.top button{background:rgba(255,255,255,.12);border:0;border-radius:8px;padding:6px 12px;color:#fff;cursor:pointer;font-size:13px}
+.top button:hover{background:rgba(255,255,255,.22)}
+.subnav{position:sticky;top:var(--hd,52px);z-index:15;background:var(--page);border-bottom:1px solid var(--grid)}
+.subnav__in{max-width:1240px;margin:0 auto;padding:0 16px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.subnav a{flex:none;padding:10px 10px;color:var(--ink2);text-decoration:none;font-size:14px;font-weight:600;border-bottom:2px solid transparent}
+.subnav a:hover{color:var(--ink);border-color:var(--axis)}
+main{max-width:1240px;margin:0 auto;padding:20px 16px 64px}
+.card{background:var(--surface);border-radius:16px;box-shadow:0 0 0 1px var(--ring);padding:20px;margin-top:16px;scroll-margin-top:calc(var(--hd,52px) + 56px)}
+.card h2{margin:0;font-size:18px;letter-spacing:-.01em}
+.card .sub{margin:4px 0 0;color:var(--ink2);font-size:13.5px}
+.card__head{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;justify-content:space-between;margin-bottom:14px}
+.muted{color:var(--muted)}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;scroll-margin-top:110px}
+@media (min-width:900px){.tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:340px){.tiles{grid-template-columns:1fr}}
+@media (max-width:480px){.tile{padding:13px}.tile__v{font-size:24px}.tile__s,.tile__d{font-size:12.5px}}
+.tile{background:var(--surface);border-radius:14px;box-shadow:0 0 0 1px var(--ring);padding:16px}
+.tile__l{font-size:13.5px;color:var(--ink2);font-weight:600}
+.tile__v{font-size:30px;font-weight:700;letter-spacing:-.02em;margin-top:2px;line-height:1.2}
+.tile__v small{font-size:15px;font-weight:600;color:var(--ink2);margin-left:3px}
+.tile__s{font-size:13px;color:var(--ink2);margin-top:6px}
+.tile__d{font-size:13px;margin-top:6px;display:flex;flex-direction:column;gap:2px}
+.delta{font-weight:700;font-variant-numeric:tabular-nums}
+.delta.up{color:var(--good)}.delta.down{color:var(--bad)}.delta.flat{color:var(--muted)}
+.flag{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600}
+.flag::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--good)}
+.flag.warn::before{background:var(--warn)}.flag.bad::before{background:#d03b3b}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--ink2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:3px;border-radius:2px;display:inline-block}
+.legend i.sq{width:12px;height:12px;border-radius:3px}
+.chart{width:100%;position:relative}
+.chart svg{display:block;overflow:visible}
+.grid{stroke:var(--grid);stroke-width:1}
+.grid.base{stroke:var(--axis)}
+.tick{fill:var(--muted);font-size:11.5px;font-variant-numeric:tabular-nums}
+.ln{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.dot{stroke:var(--surface);stroke-width:2}
+.endv{fill:var(--ink);font-size:12.5px;font-weight:700}
+.anno{stroke:var(--axis);stroke-width:1}
+.anno-t{fill:var(--muted);font-size:11.5px}
+.cross{stroke:var(--axis);stroke-width:1}
+.hit{cursor:crosshair}
+details.table{margin-top:12px}
+details.table summary{cursor:pointer;color:var(--ink2);font-size:13.5px;font-weight:600}
+.tbl{overflow-x:auto;margin-top:8px}
+.tbl table{border-collapse:collapse;width:100%;font-size:13.5px}
+.tbl th,.tbl td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--grid);white-space:nowrap}
+.tbl th{color:var(--ink2);font-weight:600}
+.tbl td.n,.tbl th.n{text-align:right;font-variant-numeric:tabular-nums}
+.mini{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.mini__c{border-radius:12px;box-shadow:0 0 0 1px var(--ring);padding:12px 12px 8px}
+.mini__h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:14px;font-weight:700}
+.mini__h span{font-weight:600;font-size:13px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.mini__f{font-size:12px;color:var(--muted);margin-top:2px;min-height:18px}
+.ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.seg{display:inline-flex;background:var(--page);border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13.5px;color:var(--ink2);font-weight:600}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 0 0 1px var(--ring)}
+select{background:var(--surface);border:1px solid var(--axis);border-radius:8px;padding:6px 10px;font-size:14px}
+.hm{overflow-x:auto;margin:0 -4px}
+.hm table{border-collapse:separate;border-spacing:2px;font-size:12.5px;min-width:760px;width:100%}
+.hm th{font-weight:600;color:var(--ink2);padding:4px 6px;text-align:center;white-space:nowrap}
+.hm th.q{text-align:left;position:sticky;left:0;background:var(--surface);z-index:1;min-width:150px;max-width:190px;white-space:normal;color:var(--ink);font-weight:600}
+.hm td{height:30px;text-align:center;border-radius:4px;font-weight:700;white-space:nowrap;min-width:56px}
+.hm td.c-site{background:var(--s1);color:#fff}
+.hm td.c-brand{background:color-mix(in srgb,var(--s2) 16%,var(--surface));box-shadow:inset 0 0 0 1.5px var(--s2);color:var(--ink)}
+.hm td.c-none{background:var(--page);color:var(--muted);font-weight:400}
+.hm td.c-fail{background:repeating-linear-gradient(135deg,var(--page) 0 5px,var(--surface) 5px 9px);color:var(--muted);font-weight:500}
+.hm td.c-na{background:transparent;color:var(--muted);font-weight:400}
+.hm td.trend{min-width:110px;background:transparent;padding:0 4px}
+.bars{display:flex;flex-direction:column;gap:6px}
+.bar{display:grid;grid-template-columns:minmax(120px,190px) 1fr 44px;align-items:center;gap:10px;font-size:13.5px;padding:2px 0;cursor:default}
+.bar .bl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .bt{height:14px;position:relative}
+.bar .bt i{position:absolute;left:0;top:0;bottom:0;background:var(--s1);border-radius:0 4px 4px 0;min-width:2px}
+.bar .bv{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.bar:hover .bt i{filter:brightness(1.1)}
+.note{background:var(--wash);border-radius:10px;padding:10px 12px;font-size:13.5px;color:var(--ink2);margin-top:12px}
+.segbar{display:flex;gap:2px;height:28px;margin:6px 0 10px}
+.segbar div{border-radius:4px;display:flex;align-items:center;padding:0 8px;color:#fff;font-size:12.5px;font-weight:700;overflow:hidden;white-space:nowrap;min-width:3px}
+.segbar div.lt{color:#0b0b0b}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:14px}
+.two h3{font-size:15px;margin:0 0 6px}
+.list{list-style:none;margin:0;padding:0}
+.list li{padding:7px 0;border-bottom:1px solid var(--grid);font-size:13.5px;display:flex;gap:8px;align-items:baseline}
+.list li:last-child{border-bottom:0}
+.list .w{color:var(--muted);font-size:12.5px;font-variant-numeric:tabular-nums;flex:none;min-width:84px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 10px;font-size:13px;box-shadow:0 0 0 1px var(--ring);background:var(--surface)}
+.chip b{font-weight:700}
+.chip.ok::before,.chip.wait::before,.chip.no::before{content:"";width:8px;height:8px;border-radius:50%}
+.chip.ok::before{background:var(--s1)}.chip.wait::before{background:var(--neutral);box-shadow:inset 0 0 0 1px var(--axis)}.chip.no::before{background:#d03b3b}
+.md{font-size:14px}
+.md h2{font-size:17px;margin:4px 0 8px}.md h3{font-size:15px;margin:16px 0 6px}.md h4,.md h5{font-size:14px;margin:14px 0 6px}
+.md p,.md ul{margin:6px 0}.md ul{padding-left:20px}
+.md code{background:var(--page);padding:1px 5px;border-radius:5px;font-size:12.5px}
+#tip{position:fixed;z-index:50;pointer-events:none;background:var(--surface);color:var(--ink);box-shadow:0 0 0 1px var(--ring),0 8px 24px rgba(0,0,0,.18);border-radius:10px;padding:9px 11px;font-size:13px;max-width:320px;line-height:1.45}
+#tip .tr{display:flex;align-items:center;gap:6px;margin-top:3px;white-space:nowrap}
+#tip .tr i{width:10px;height:10px;border-radius:3px;flex:none}
+#tip .tr b{margin-left:auto;padding-left:12px;font-variant-numeric:tabular-nums}
+#tip .dm{color:var(--ink2);margin-top:4px;white-space:normal}
+.login{max-width:380px;margin:12vh auto 0;background:var(--surface);border-radius:18px;box-shadow:0 0 0 1px var(--ring);padding:28px}
+.login h1{font-size:20px;margin:0 0 4px}
+.login p{margin:0 0 18px;color:var(--ink2);font-size:14px}
+.login label{display:block;font-size:13.5px;font-weight:600;margin-bottom:6px}
+.login input{width:100%;padding:11px 12px;border:1px solid var(--axis);border-radius:10px;background:var(--surface);font-size:16px}
+.login input:focus{outline:2px solid var(--s1);outline-offset:1px}
+.login button{width:100%;margin-top:14px;padding:12px;border:0;border-radius:10px;background:var(--navy);color:#fff;font-weight:700;cursor:pointer;font-size:15px}
+.login button:disabled{opacity:.6;cursor:wait}
+.login .err{color:var(--bad);font-size:13.5px;margin-top:10px;min-height:20px}
+.msg{max-width:560px;margin:10vh auto 0;background:var(--surface);border-radius:18px;box-shadow:0 0 0 1px var(--ring);padding:28px;font-size:14.5px}
+.msg h1{font-size:19px;margin:0 0 8px}
+@media (max-width:640px){
+  .card{padding:16px;border-radius:14px}
+  .tile__v{font-size:26px}
+  .bar{grid-template-columns:minmax(96px,132px) 1fr 36px;font-size:13px}
+  .hm th.q{min-width:104px;font-size:12px}
+  .top__meta{order:3;width:100%;margin-left:0}
+}
+@media print{.top,.subnav{position:static}}
+</style>
+</head>
+<body>
+<header class="top"><div class="top__in">
+  <div class="top__brand">미래애드원 관리자<span>측정 결과</span></div>
+  <div class="top__meta" id="asof"></div>
+  <button type="button" id="logout" hidden>로그아웃</button>
+</div></header>
+
+<main id="main">
+  <section class="login" id="login" hidden>
+    <h1>관리자 로그인</h1>
+    <p id="loginNote">측정 결과는 로그인한 뒤에만 보입니다.</p>
+    <form id="loginForm" autocomplete="on">
+      <input type="text" name="username" value="admin" autocomplete="username" hidden>
+      <label for="pw">비밀번호</label>
+      <input type="password" id="pw" name="password" autocomplete="current-password" required>
+      <button type="submit" id="loginBtn">로그인</button>
+      <div class="err" id="loginErr" role="alert"></div>
+    </form>
+  </section>
+  <section class="msg" id="msg" hidden></section>
+  <div id="dash" hidden></div>
+</main>
+<div id="tip" role="tooltip" hidden></div>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmtD = d => `${+d.slice(5, 7)}/${+d.slice(8, 10)}`;
+const fmtDK = d => `${+d.slice(5, 7)}월 ${+d.slice(8, 10)}일`;
+const num = n => Number(n).toLocaleString('ko-KR');
+const SITE_RE = /mirae-?adone/i;
+
+// ── 툴팁(한 개를 같이 씀): data-tip="<키>" 요소 위에 올리면 TIPS 의 내용을 보여 준다
+const tip = $('#tip');
+const TIPS = new Map();
+let tipSeq = 0;
+const addTip = html => { const k = 't' + (++tipSeq); TIPS.set(k, html); return k; };
+function showTip(html, cx, cy) {
+  tip.innerHTML = html; tip.hidden = false;
+  const r = tip.getBoundingClientRect();
+  let l = cx + 14, t = cy + 16;
+  if (l + r.width > innerWidth - 8) l = cx - r.width - 14;
+  if (t + r.height > innerHeight - 8) t = cy - r.height - 14;
+  tip.style.left = Math.max(8, l) + 'px'; tip.style.top = Math.max(8, t) + 'px';
+}
+const hideTip = () => { tip.hidden = true; };
+document.addEventListener('pointermove', e => {
+  const el = e.target.closest && e.target.closest('[data-tip]');
+  if (el && TIPS.has(el.dataset.tip)) showTip(TIPS.get(el.dataset.tip), e.clientX, e.clientY);
+  else if (!e.target.closest || !e.target.closest('.hit')) hideTip();
+});
+document.addEventListener('pointerdown', e => {
+  const el = e.target.closest && e.target.closest('[data-tip]');
+  if (el && TIPS.has(el.dataset.tip)) showTip(TIPS.get(el.dataset.tip), e.clientX, e.clientY);
+});
+addEventListener('scroll', hideTip, { passive: true });
+// 머리글 높이(휴대폰에서는 두 줄) → 구역 메뉴가 그 아래에 붙도록
+const setHd = () => document.documentElement.style.setProperty('--hd', $('.top').offsetHeight + 'px');
+setHd(); addEventListener('resize', setHd);
+
+// ── 눈금
+function niceTicks(max, n = 4) {
+  const raw = max / n, p = 10 ** Math.floor(Math.log10(raw));
+  const step = Math.max(1, [1, 2, 5, 10].map(s => s * p).find(s => s >= raw));
+  const top = Math.ceil(max / step) * step;
+  return Array.from({ length: Math.round(top / step) + 1 }, (_, i) => i * step);
+}
+// 가로축 날짜 눈금: 처음·마지막은 늘 넣고, 사이 날짜는 화면에서 gap(px) 이상 떨어진 것만(날짜 간격이 고르지 않아서)
+function pickTicks(n, x, gap) {
+  if (n < 2) return n ? [0] : [];
+  const out = [0];
+  for (let i = 1; i < n - 1; i++) if (x(i) - x(out[out.length - 1]) >= gap && x(n - 1) - x(i) >= gap) out.push(i);
+  out.push(n - 1);
+  return out;
+}
+const lastIdx = a => { for (let i = a.length - 1; i >= 0; i--) if (a[i] != null) return i; return -1; };
+
+// ── 선 그래프(전체 크기 / 작은 추이선). 가로축은 실제 날짜 간격, 측정 없는 날은 선을 끊는다
+function lineChart(host, o) {
+  const { dates, series, compact = false, annotations = [], tipExtra, unit = '건', label = '' } = o;
+  const height = o.height || (compact ? 34 : 232);
+  const T = dates.map(d => Date.parse(d + 'T00:00:00Z'));
+  let lastW = 0;
+  function draw() {
+    const W = Math.round(host.clientWidth);
+    if (!W || W === lastW) return;
+    lastW = W;
+    const H = height;
+    const m = compact ? { l: 4, r: 8, t: 6, b: 6 } : { l: 34, r: 36, t: 24, b: 26 };
+    const pw = Math.max(10, W - m.l - m.r), ph = H - m.t - m.b;
+    const t0 = T[0], t1 = T.length > 1 ? T[T.length - 1] : t0 + 864e5;
+    const x = i => m.l + (T.length > 1 ? (T[i] - t0) / (t1 - t0) * pw : pw / 2);
+    const vals = series.flatMap(s => s.values).filter(v => v != null);
+    const ticks = niceTicks(Math.max(1, o.yMax || 0, ...vals)); // yMax: 작은 그래프끼리 같은 눈금으로 비교
+    const top = ticks[ticks.length - 1];
+    const y = v => m.t + (1 - v / top) * ph;
+    let s = '';
+    if (!compact) {
+      for (const tv of ticks) s += `<line class="grid${tv === 0 ? ' base' : ''}" x1="${m.l}" x2="${W - m.r}" y1="${y(tv)}" y2="${y(tv)}"/><text class="tick" x="${m.l - 8}" y="${y(tv) + 4}" text-anchor="end">${num(tv)}</text>`;
+      for (const i of pickTicks(T.length, x, 46))
+        s += `<text class="tick" x="${x(i)}" y="${H - 6}" text-anchor="${T.length > 1 && i === 0 ? 'start' : T.length > 1 && i === T.length - 1 ? 'end' : 'middle'}">${fmtD(dates[i])}</text>`;
+      for (const a of annotations) {
+        const i = dates.indexOf(a.date); if (i < 0) continue;
+        const ax = x(i), right = ax > W - 150;
+        s += `<line class="anno" x1="${ax}" x2="${ax}" y1="${m.t - 10}" y2="${H - m.b}"/><text class="anno-t" x="${right ? ax - 5 : ax + 5}" y="${m.t - 12}" text-anchor="${right ? 'end' : 'start'}">${esc(a.text)}</text>`;
+      }
+    }
+    for (const se of series) {
+      let d = '', pen = false;
+      se.values.forEach((v, i) => { if (v == null) { pen = false; return; } d += `${pen ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`; pen = true; });
+      s += `<path class="ln" d="${d}" style="stroke:var(--${se.color})"/>`;
+      se.values.forEach((v, i) => {
+        if (v == null) return;
+        const isolated = (i === 0 || se.values[i - 1] == null) && (i === se.values.length - 1 || se.values[i + 1] == null);
+        if (!compact || isolated || i === lastIdx(se.values)) s += `<circle class="dot" cx="${x(i)}" cy="${y(v)}" r="4" style="fill:var(--${se.color})"/>`;
+      });
+    }
+    if (!compact) {
+      const ends = series.map(se => { const i = lastIdx(se.values); return i < 0 ? null : { i, v: se.values[i], yy: y(se.values[i]) }; }).filter(Boolean);
+      const collide = ends.some((a, k) => ends.some((b, j) => j > k && Math.abs(a.yy - b.yy) < 14));
+      if (!collide) for (const e of ends) s += `<text class="endv" x="${x(e.i) + 9}" y="${e.yy + 4}">${num(e.v)}</text>`;
+    }
+    s += `<line class="cross" x1="0" x2="0" y1="${m.t}" y2="${H - m.b}" visibility="hidden"/><g class="hl"></g><rect class="hit" x="${m.l - 8}" y="0" width="${pw + 16}" height="${H}" fill="transparent"/>`;
+    host.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(label)}">${s}</svg>`;
+    const svg = host.firstChild, cross = svg.querySelector('.cross'), hl = svg.querySelector('.hl'), hit = svg.querySelector('.hit');
+    const move = ev => {
+      const px = ev.clientX - svg.getBoundingClientRect().left;
+      let bi = 0, bd = Infinity;
+      T.forEach((_, i) => { const dd = Math.abs(x(i) - px); if (dd < bd) { bd = dd; bi = i; } });
+      cross.setAttribute('x1', x(bi)); cross.setAttribute('x2', x(bi)); cross.setAttribute('visibility', 'visible');
+      hl.innerHTML = series.map(se => se.values[bi] == null ? '' : `<circle class="dot" cx="${x(bi)}" cy="${y(se.values[bi])}" r="5.5" style="fill:var(--${se.color})"/>`).join('');
+      showTip(`<b>${fmtDK(dates[bi])}</b>` + series.map(se => `<div class="tr"><i style="background:var(--${se.color})"></i>${esc(se.name)}<b>${se.values[bi] == null ? '측정 없음' : num(se.values[bi]) + unit}</b></div>`).join('') + (tipExtra ? tipExtra(bi) : ''), ev.clientX, ev.clientY);
+    };
+    hit.addEventListener('pointermove', move);
+    hit.addEventListener('pointerdown', move);
+    hit.addEventListener('pointerleave', () => { cross.setAttribute('visibility', 'hidden'); hl.innerHTML = ''; hideTip(); });
+  }
+  draw();
+  new ResizeObserver(() => requestAnimationFrame(draw)).observe(host);
+}
+
+// ── 간단한 마크다운(서치콘솔 판독 메모용): 제목·목록·표·굵게·코드
+function md(src) {
+  const L = String(src).replace(/\r/g, '').split('\n');
+  const inline = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\[([^\]]+)\]\([^)]*\)/g, '$1');
+  const cells = r => r.trim().replace(/^\||\|$/g, '').split('|').map(c => c.trim());
+  let out = '', list = false, i = 0;
+  const close = () => { if (list) { out += '</ul>'; list = false; } };
+  while (i < L.length) {
+    const l = L[i]; let mm;
+    if (/^\s*\|/.test(l) && /^\s*\|?\s*:?-{3,}/.test(L[i + 1] || '')) {
+      close();
+      const head = cells(l); i += 2; let body = '';
+      while (i < L.length && /^\s*\|/.test(L[i])) { body += '<tr>' + cells(L[i]).map((c, k) => `<td${k && /^[\d.,%천만\s|-]+$/.test(c) ? ' class="n"' : ''}>${inline(c)}</td>`).join('') + '</tr>'; i++; }
+      out += `<div class="tbl"><table><thead><tr>${head.map((c, k) => `<th${k ? ' class="n"' : ''}>${inline(c)}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table></div>`;
+      continue;
+    }
+    if ((mm = l.match(/^(#{1,4})\s+(.*)/))) { close(); const lv = Math.min(mm[1].length + 1, 5); out += `<h${lv}>${inline(mm[2])}</h${lv}>`; }
+    else if ((mm = l.match(/^\s*[-*]\s+(.*)/))) { if (!list) { out += '<ul>'; list = true; } out += `<li>${inline(mm[1])}</li>`; }
+    else if (!l.trim()) close();
+    else { close(); out += `<p>${inline(l)}</p>`; }
+    i++;
+  }
+  close();
+  return out;
+}
+
+// ── 데이터 모양 잡기
+function model(D) {
+  const E = D.engines.map(([id, name]) => ({ id, name }));
+  const Q = D.ai.queries, dates = D.ai.dates;
+  const rows = D.ai.rows.map(([d, e, q, site, brand, fail, err, dom]) => ({ d, e, q, site, brand, fail, err, dom: dom ? dom.split('|').filter(Boolean) : [] }));
+  const byDate = dates.map((_, i) => rows.filter(r => r.d === i));
+  const cell = new Map(rows.map(r => [`${r.d}|${r.e}|${r.q}`, r]));
+  const daily = dates.map((date, i) => {
+    const rs = byDate[i], ok = rs.filter(r => !r.fail);
+    return { date, tried: rs.length, ok: ok.length, site: ok.filter(r => r.site).length, brand: ok.filter(r => r.brand).length };
+  });
+  // 같은 엔진×검색어끼리 비교(측정 범위가 늘어도 공정하게)
+  function compare(i, j) {
+    if (i < 0 || j < 0 || i === j) return null;
+    const B = new Map(byDate[j].filter(r => !r.fail).map(r => [r.e + '|' + r.q, r]));
+    let n = 0, site = 0, brand = 0;
+    for (const a of byDate[i]) { if (a.fail) continue; const b = B.get(a.e + '|' + a.q); if (!b) continue; n++; site += a.site - b.site; brand += a.brand - b.brand; }
+    return n ? { n, site, brand } : null;
+  }
+  // 측정 범위가 늘어난 날(새 검색어·새 엔진)
+  const firstQ = new Map(), firstE = new Map();
+  for (const r of rows) { if (!firstQ.has(r.q) || firstQ.get(r.q) > r.d) firstQ.set(r.q, r.d); if (!firstE.has(r.e) || firstE.get(r.e) > r.d) firstE.set(r.e, r.d); }
+  const annotations = [];
+  dates.forEach((date, i) => {
+    if (!i) return;
+    const nq = [...firstQ].filter(([, d]) => d === i).length, ne = [...firstE].filter(([, d]) => d === i).map(([e]) => E[e]?.name);
+    if (nq || ne.length) annotations.push({ date, text: [nq ? `검색어 +${nq}` : '', ne.length ? `${ne.join('·')} 추가` : ''].filter(Boolean).join(' · ') });
+  });
+  return { E, Q, dates, rows, byDate, cell, daily, compare, annotations };
+}
+
+const deltaHtml = (v, label) => v == null ? '' :
+  `<span><span class="delta ${v > 0 ? 'up' : v < 0 ? 'down' : 'flat'}">${v > 0 ? '▲ +' + v : v < 0 ? '▼ ' + v : '변화 없음'}</span> <span class="muted">${esc(label)}</span></span>`;
+
+function render(D) {
+  TIPS.clear();
+  const M = model(D);
+  const { E, Q, dates, daily } = M;
+  const L = dates.length - 1, P = L - 1, S = 0;
+  const last = daily[L] || { tried: 0, ok: 0, site: 0, brand: 0 };
+  const cP = M.compare(L, P), cS = M.compare(L, S);
+  const blog = D.blog[D.blog.length - 1];
+  const idx = D.index;
+  const nIndexed = Object.values(idx.indexed).reduce((a, x) => a + x.length, 0);
+  const nDone = Object.values(idx.done).reduce((a, x) => a + x.length, 0);
+  // 공개 여부는 보는 시각 기준(머리말 date·time, KST)으로 다시 판단 — 내보낸 뒤 공개된 글도 대기로 잡히게
+  const isPub = t => !t.when || Date.parse(t.when.replace(' ', 'T') + ':00+09:00') <= Date.now();
+  const waiting = idx.todo.filter(isPub), upcoming = idx.todo.filter(t => !isPub(t));
+  const run = D.runs[D.runs.length - 1];
+  const missing = [];
+  if (dates.length) for (let t = Date.parse(dates[0] + 'T00:00:00Z'); t <= Date.parse(dates[L] + 'T00:00:00Z'); t += 864e5) { const d = new Date(t).toISOString().slice(0, 10); if (!dates.includes(d)) missing.push(d); }
+  const reasons = {};
+  for (const r of M.byDate[L] || []) if (r.fail) reasons[r.err || '실패'] = (reasons[r.err || '실패'] || 0) + 1;
+  const reasonTxt = Object.entries(reasons).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k, v]) => `${k} ${v}`).join(' · ');
+  const okRate = last.tried ? Math.round(last.ok / last.tried * 100) : 0;
+
+  $('#asof').textContent = `측정 데이터 ${D.exportedAt} 기준 · 마지막 측정 ${dates.length ? fmtDK(dates[L]) : '없음'}`;
+  const dash = $('#dash');
+  dash.innerHTML = `
+  <nav class="subnav" aria-label="구역"><div class="subnav__in">
+    <a href="#s-sum">한눈에</a><a href="#s-trend">AI·검색 노출</a><a href="#s-engine">엔진별</a><a href="#s-grid">검색어별</a><a href="#s-dom">인용 도메인</a><a href="#s-blog">글 발행</a><a href="#s-idx">구글 색인</a><a href="#s-gsc">서치콘솔</a><a href="#s-run">자동 측정</a>
+  </div></nav>
+  <div style="height:16px"></div>
+  <div class="tiles" id="s-sum">
+    <div class="tile"><div class="tile__l">우리 사이트 등장</div>
+      <div class="tile__v">${num(last.site)}<small>건</small></div>
+      <div class="tile__s">${dates.length ? fmtDK(dates[L]) : ''} 측정 성공 ${num(last.ok)}건 중</div>
+      <div class="tile__d">${deltaHtml(cP?.site, `지난 측정(${P >= 0 ? fmtD(dates[P]) : '-'}) 대비`)}${deltaHtml(cS?.site, `시작일(${fmtD(dates[S] || D.start)}) 대비`)}</div></div>
+    <div class="tile"><div class="tile__l">「미래애드원」 상호 언급</div>
+      <div class="tile__v">${num(last.brand)}<small>건</small></div>
+      <div class="tile__s">검색 결과·AI 답변 본문에 상호가 나온 수</div>
+      <div class="tile__d">${deltaHtml(cP?.brand, `지난 측정 대비`)}${deltaHtml(cS?.brand, `시작일 대비`)}</div></div>
+    <div class="tile"><div class="tile__l">측정 성공률</div>
+      <div class="tile__v">${okRate}<small>%</small></div>
+      <div class="tile__s">시도 ${num(last.tried)}건 중 ${num(last.ok)}건 성공</div>
+      <div class="tile__d"><span class="flag ${okRate < 70 ? 'warn' : ''}">${okRate < 70 ? '실패 많음' : '정상'}</span>${reasonTxt ? `<span class="muted">${esc(reasonTxt)}</span>` : ''}</div></div>
+    <div class="tile"><div class="tile__l">인사이트 글</div>
+      <div class="tile__v">${num(blog?.published ?? 0)}<small>편 공개</small></div>
+      <div class="tile__s">예약 ${num(blog?.scheduled ?? 0)}편 · 마지막 ${esc(blog?.lastScheduled || '-')}</div>
+      <div class="tile__d"><span class="flag ${blog && blog.daysLeft < 7 ? 'warn' : ''}">예약 글 ${blog?.daysLeft ?? '-'}일분 남음</span></div></div>
+    <div class="tile"><div class="tile__l">구글 색인</div>
+      <div class="tile__v">${num(nIndexed + nDone)}<small>편 처리</small></div>
+      <div class="tile__s">색인 확인 ${num(nIndexed)} · 요청 완료 ${num(nDone)}</div>
+      <div class="tile__d"><span class="flag ${waiting.length > 3 ? 'warn' : ''}">공개됐지만 대기 ${num(waiting.length)}편</span></div></div>
+    <div class="tile"><div class="tile__l">자동 측정</div>
+      <div class="tile__v" style="font-size:22px;padding-top:6px">${run ? fmtDK(run.date) : '기록 없음'}</div>
+      <div class="tile__s">${run ? `${esc(run.start)}~${esc(run.end)} 실행` : ''}</div>
+      <div class="tile__d"><span class="flag ${run && run.ok ? '' : 'bad'}">${run && run.ok ? '4단계 모두 성공' : '실패 또는 미완료'}</span>${missing.length ? `<span class="muted">측정 빠진 날 ${missing.length}일</span>` : ''}</div></div>
+  </div>
+
+  <section class="card" id="s-trend">
+    <div class="card__head"><div><h2>AI·검색 노출 추이</h2><p class="sub">측정한 날마다 검색어 ${Q.length}개를 엔진 ${E.length}곳에 물었을 때 우리 사이트가 나온 수와 상호가 언급된 수입니다. 측정에 실패한 결과는 세지 않았습니다.</p></div>
+      <div class="legend"><span><i style="background:var(--s1)"></i>우리 사이트 등장</span><span><i style="background:var(--s2)"></i>상호 언급</span></div></div>
+    <div class="chart" id="trend"></div>
+    <details class="table"><summary>표로 보기</summary><div class="tbl"><table><thead><tr><th>측정일</th><th class="n">시도</th><th class="n">성공</th><th class="n">사이트 등장</th><th class="n">상호 언급</th></tr></thead><tbody>
+      ${daily.map(d => `<tr><td>${d.date}</td><td class="n">${d.tried}</td><td class="n">${d.ok}</td><td class="n">${d.site}</td><td class="n">${d.brand}</td></tr>`).join('')}</tbody></table></div></details>
+    ${M.annotations.length ? `<div class="note">세로선은 측정 범위가 늘어난 날입니다(${M.annotations.map(a => `${fmtD(a.date)} ${esc(a.text)}`).join(', ')}). 위 「지난 측정 대비」 증감은 두 날짜에 모두 성공한 같은 엔진×검색어끼리만 비교한 값입니다.</div>` : ''}
+  </section>
+
+  <section class="card" id="s-engine">
+    <div class="card__head"><div><h2>엔진별 우리 사이트 등장</h2><p class="sub">엔진마다 우리 사이트가 나온 검색어 수의 추이입니다. 선이 끊긴 날은 그 엔진 측정이 모두 실패했거나 측정하지 않은 날입니다.</p></div></div>
+    <div class="mini" id="mini"></div>
+  </section>
+
+  <section class="card" id="s-grid">
+    <div class="card__head"><div><h2>검색어 × 엔진</h2><p class="sub">칸에 올리면 인용된 도메인과 실패 사유가 보입니다. 대화형 AI(ChatGPT·Claude·Gemini)는 검색어 ${D.chatQueries.length}개만 매일 측정합니다.</p></div>
+      <div class="ctl"><label for="gridDate" class="muted" style="font-size:13.5px">측정일</label><select id="gridDate">${dates.map((d, i) => `<option value="${i}"${i === L ? ' selected' : ''}>${d}</option>`).reverse().join('')}</select></div></div>
+    <div class="legend" style="margin-bottom:10px"><span><i class="sq" style="background:var(--s1)"></i>사이트 등장</span><span><i class="sq" style="background:color-mix(in srgb,var(--s2) 16%,var(--surface));box-shadow:inset 0 0 0 1.5px var(--s2)"></i>상호만 언급</span><span><i class="sq" style="background:var(--page);box-shadow:inset 0 0 0 1px var(--axis)"></i>안 나옴(·)</span><span><i class="sq" style="background:repeating-linear-gradient(135deg,var(--page) 0 3px,var(--surface) 3px 6px);box-shadow:inset 0 0 0 1px var(--axis)"></i>측정 실패</span></div>
+    <div class="hm" id="hm"></div>
+  </section>
+
+  <section class="card" id="s-dom">
+    <div class="card__head"><div><h2>자주 인용되는 도메인</h2><p class="sub">검색 결과·AI 답변에 함께 나온 도메인입니다. 같은 엔진×검색어 결과 한 건에서 한 번만 셉니다. 경쟁 출처를 볼 때 씁니다.</p></div>
+      <div class="seg" role="group" aria-label="기간" id="domWin"><button type="button" data-w="1" aria-pressed="true">최근 측정일</button><button type="button" data-w="7" aria-pressed="false">최근 7회</button><button type="button" data-w="all" aria-pressed="false">전체</button></div></div>
+    <div id="dom"></div>
+  </section>
+
+  <section class="card" id="s-blog">
+    <div class="card__head"><div><h2>인사이트 글 발행</h2><p class="sub">점검한 날마다 공개된 글과 예약 대기 글 수입니다. 예약 글은 09:00·13:00·18:00(KST) 빌드 때 공개됩니다.</p></div>
+      <div class="legend"><span><i style="background:var(--s1)"></i>공개</span><span><i style="background:var(--s2)"></i>예약 대기</span></div></div>
+    <div class="chart" id="blogChart"></div>
+    <div class="two">
+      <div><h3>우선 검색어 중심 글 (${(blog?.priority || []).length}개)</h3><div class="chips">${(blog?.priority || []).map(p => `<span class="chip ${p.slug ? (p.public ? 'ok' : 'wait') : 'no'}" data-tip="${addTip(`<b>${esc(p.keyword)}</b><div class="dm">${p.slug ? `${esc(p.slug)}<br>${p.public ? '공개' : '예약'} ${esc(p.when || '')}` : '중심 글 없음'}</div>`)}">${esc(p.keyword)}</span>`).join('')}</div>
+        <div class="legend" style="margin-top:8px"><span><i class="sq" style="background:var(--s1);border-radius:50%;width:8px;height:8px"></i>공개</span><span><i class="sq" style="background:var(--neutral);border-radius:50%;width:8px;height:8px"></i>예약</span><span><i class="sq" style="background:#d03b3b;border-radius:50%;width:8px;height:8px"></i>없음</span></div></div>
+      <div><h3>${blog ? fmtDK(blog.date) : ''} 점검</h3><ul class="list">
+        ${(blog?.todays || []).map(t => `<li><span class="w">${esc(t.time)} 공개</span><span>${esc(t.title)} <span class="muted">· ${esc(t.keyword)}</span></span></li>`).join('') || '<li><span class="muted">그날 공개된 글 없음</span></li>'}
+        <li><span class="w">검색어 겹침</span><span class="flag ${blog?.issues.dup ? 'warn' : ''}">${blog?.issues.dup ?? 0}건</span></li>
+        <li><span class="w">제목 비슷</span><span class="flag ${blog?.issues.similar ? 'warn' : ''}">${blog?.issues.similar ?? 0}건</span></li>
+        <li><span class="w">공개 누락</span><span class="flag ${blog?.issues.missing ? 'bad' : ''}">${blog?.issues.missing ?? 0}건</span> <span class="muted">(공개 시각이 지났는데 운영 사이트맵에 없는 글)</span></li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section class="card" id="s-idx">
+    <div class="card__head"><div><h2>구글 색인 요청</h2><p class="sub">서치콘솔 URL 검사로 처리한 글입니다. 「색인 확인」은 검사 때 이미 등록돼 있던 글, 「요청 완료」는 색인 생성을 요청한 글입니다.</p></div></div>
+    <div class="segbar" id="segbar"></div>
+    <div class="legend" id="seglegend"></div>
+    <div class="two">
+      <div><h3>공개됐지만 처리 대기 (${waiting.length}편)</h3><ul class="list">${waiting.map(t => `<li><span class="w">${esc(t.when)}</span><span>${esc(t.title || t.path)}</span></li>`).join('') || '<li><span class="muted">없음</span></li>'}</ul></div>
+      <div><h3>날짜별 처리</h3><div class="tbl"><table><thead><tr><th>날짜</th><th class="n">색인 확인</th><th class="n">요청 완료</th></tr></thead><tbody>
+        ${[...new Set([...Object.keys(idx.indexed), ...Object.keys(idx.done)])].sort().reverse().map(d => `<tr data-tip="${addTip(`<b>${esc(d)}</b>` + [...(idx.indexed[d] || []).map(t => `<div class="dm">색인 확인 · ${esc(t.title || t.path)}</div>`), ...(idx.done[d] || []).map(t => `<div class="dm">요청 완료 · ${esc(t.title || t.path)}</div>`)].join(''))}"><td>${d}</td><td class="n">${(idx.indexed[d] || []).length}</td><td class="n">${(idx.done[d] || []).length}</td></tr>`).join('')}
+      </tbody></table></div></div>
+    </div>
+    ${upcoming.length ? `<div class="note">다음 공개 예정: ${upcoming.slice(0, 3).map(t => `${esc(t.when)} 「${esc(t.title)}」`).join(' · ')}${upcoming.length > 3 ? ` 외 ${upcoming.length - 3}편` : ''}</div>` : ''}
+  </section>
+
+  <section class="card" id="s-gsc">
+    <div class="card__head"><div><h2>서치콘솔 판독</h2><p class="sub">서치콘솔 실적 화면을 읽어 옮긴 메모입니다(내보내기 파일이 아님).</p></div>
+      <div class="seg" role="group" aria-label="판독일" id="gscPick">${D.gsc.map((g, i) => `<button type="button" data-i="${i}" aria-pressed="${i === D.gsc.length - 1}">${fmtD(g.date)}</button>`).join('')}</div></div>
+    <div class="md" id="gscBody">${D.gsc.length ? '' : '<p class="muted">아직 판독 기록이 없습니다.</p>'}</div>
+  </section>
+
+  <section class="card" id="s-run">
+    <div class="card__head"><div><h2>자동 측정 실행 기록</h2><p class="sub">이 PC의 예약 작업(mirae-ai-daily, 매일 12:20)이 남긴 기록입니다. 앱이 꺼져 있던 날은 측정이 빠집니다.</p></div></div>
+    <div class="tbl"><table><thead><tr><th>날짜</th><th>실행</th><th>결과</th><th>마지막 기록</th></tr></thead><tbody>
+      ${[...D.runs].reverse().map(r => `<tr><td>${r.date}</td><td>${esc(r.start)}~${esc(r.end)}</td><td><span class="flag ${r.ok ? '' : 'bad'}">${r.ok ? '성공' : '확인 필요'}</span>${r.errBytes ? ' <span class="muted">오류 로그 있음</span>' : ''}</td><td class="muted" style="white-space:normal">${esc(r.last)}</td></tr>`).join('')}
+    </tbody></table></div>
+    ${missing.length ? `<div class="note">측정이 빠진 날(${missing.length}일): ${missing.map(fmtD).join(', ')}</div>` : ''}
+  </section>`;
+  dash.hidden = false;
+  setHd();
+
+  // 추이 그래프
+  lineChart($('#trend'), {
+    dates, label: `AI·검색 노출 추이. 마지막 측정 ${dates[L]} 우리 사이트 ${last.site}건, 상호 언급 ${last.brand}건`,
+    series: [{ name: '우리 사이트 등장', color: 's1', values: daily.map(d => d.site) }, { name: '상호 언급', color: 's2', values: daily.map(d => d.brand) }],
+    annotations: M.annotations,
+    tipExtra: i => `<div class="dm">측정 성공 ${daily[i].ok} / 시도 ${daily[i].tried}</div>`,
+  });
+
+  // 엔진별 작은 그래프(모두 같은 세로 눈금)
+  const mini = $('#mini');
+  const engVals = E.map((e, ei) => dates.map((_, di) => { const rs = M.byDate[di].filter(r => r.e === ei && !r.fail); return rs.length ? rs.filter(r => r.site).length : null; }));
+  const engMax = Math.max(1, ...engVals.flat().filter(v => v != null));
+  E.forEach((e, ei) => {
+    const vals = engVals[ei];
+    const latest = M.byDate[L].filter(r => r.e === ei), lok = latest.filter(r => !r.fail);
+    const foot = !latest.length ? '이날 측정 안 함' : !lok.length ? `측정 실패 · ${esc(latest[0].err || '')}` : `성공 ${lok.length}/${latest.length} · 상호 언급 ${lok.filter(r => r.brand).length}`;
+    const c = document.createElement('div');
+    c.className = 'mini__c';
+    c.innerHTML = `<div class="mini__h">${esc(e.name)}<span>${lok.length ? `${lok.filter(r => r.site).length}<span class="muted"> / ${lok.length}</span>` : '—'}</span></div><div class="chart"></div><div class="mini__f">${foot}</div>`;
+    mini.appendChild(c);
+    lineChart(c.querySelector('.chart'), { dates, compact: true, height: 44, yMax: engMax, label: `${e.name} 우리 사이트 등장 추이`, series: [{ name: `${e.name} 사이트 등장`, color: 's1', values: vals }], unit: '개 검색어' });
+  });
+
+  // 검색어 × 엔진 표
+  const drawGrid = di => {
+    const hm = $('#hm');
+    let h = `<table><thead><tr><th class="q">검색어</th>${E.map(e => `<th>${esc(e.name)}</th>`).join('')}<th>사이트 등장 엔진 수 추이</th></tr></thead><tbody>`;
+    Q.forEach((q, qi) => {
+      h += `<tr><th class="q" scope="row">${esc(q)}</th>`;
+      E.forEach((e, ei) => {
+        const r = M.cell.get(`${di}|${ei}|${qi}`);
+        let cls = 'c-na', txt = '', state = '이날 측정 안 함';
+        if (r) {
+          if (r.fail) { cls = 'c-fail'; txt = '실패'; state = `측정 실패 · ${r.err}`; }
+          else if (r.site) { cls = 'c-site'; txt = '사이트'; state = `우리 사이트 등장${r.brand ? ' · 상호 언급' : ''}`; }
+          else if (r.brand) { cls = 'c-brand'; txt = '언급'; state = '상호만 언급(사이트 링크 없음)'; }
+          else { cls = 'c-none'; txt = '·'; state = '안 나옴'; }
+        }
+        const doms = r && r.dom.length ? r.dom.slice(0, 6).map(d => SITE_RE.test(d) ? `<b>${esc(d)}</b>` : esc(d)).join(', ') + (r.dom.length > 6 ? ` 외 ${r.dom.length - 6}` : '') : '';
+        const k = addTip(`<b>${esc(e.name)} · ${esc(q)}</b><div class="dm">${esc(state)}</div>${doms ? `<div class="dm">인용: ${doms}</div>` : ''}`);
+        h += `<td class="${cls}" data-tip="${k}" aria-label="${esc(`${e.name} ${q}: ${state}`)}">${txt}</td>`;
+      });
+      h += `<td class="trend"><div class="chart" data-q="${qi}"></div></td></tr>`;
+    });
+    hm.innerHTML = h + '</tbody></table>';
+    const qVals = Q.map((_, qi) => dates.map((_, d) => { const rs = M.byDate[d].filter(r => r.q === qi && !r.fail); return rs.length ? rs.filter(r => r.site).length : null; }));
+    const qMax = Math.max(1, ...qVals.flat().filter(v => v != null));
+    hm.querySelectorAll('.chart[data-q]').forEach(el => {
+      const qi = +el.dataset.q;
+      lineChart(el, { dates, compact: true, height: 28, yMax: qMax, label: `${Q[qi]} 추이`, series: [{ name: '사이트 등장 엔진', color: 's1', values: qVals[qi] }], unit: '곳' });
+    });
+  };
+  drawGrid(L);
+  $('#gridDate').addEventListener('change', e => drawGrid(+e.target.value));
+
+  // 인용 도메인
+  const drawDom = w => {
+    const from = w === 'all' ? 0 : Math.max(0, dates.length - +w);
+    const count = new Map();
+    for (const r of M.rows) {
+      if (r.d < from || r.fail) continue;
+      for (const d of new Set(r.dom)) {
+        const c = count.get(d) || { n: 0, e: {}, q: {} };
+        c.n++; c.e[r.e] = (c.e[r.e] || 0) + 1; c.q[r.q] = (c.q[r.q] || 0) + 1;
+        count.set(d, c);
+      }
+    }
+    const all = [...count].sort((a, b) => b[1].n - a[1].n);
+    const others = all.filter(([d]) => !SITE_RE.test(d)).slice(0, 15);
+    const max = others.length ? others[0][1].n : 1;
+    const ourRank = all.findIndex(([d]) => SITE_RE.test(d));
+    const ours = ourRank >= 0 ? all[ourRank] : null;
+    const tipOf = (d, c) => `<b>${esc(d)} · ${c.n}건</b><div class="dm">엔진: ${Object.entries(c.e).sort((a, b) => b[1] - a[1]).map(([e, n]) => `${esc(E[e]?.name)} ${n}`).join(', ')}</div><div class="dm">검색어: ${Object.entries(c.q).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([q, n]) => `${esc(Q[q])} ${n}`).join(', ')}</div>`;
+    $('#dom').innerHTML = `<div class="bars">${others.map(([d, c]) => `<div class="bar" data-tip="${addTip(tipOf(d, c))}"><span class="bl">${esc(d)}</span><span class="bt"><i style="width:${(c.n / max * 100).toFixed(1)}%"></i></span><span class="bv">${c.n}</span></div>`).join('') || '<p class="muted">인용 도메인이 없습니다.</p>'}</div>
+      <div class="note">${ours ? `우리 사이트(${esc(ours[0])})는 이 기간에 <b>${ours[1].n}건</b> 인용돼 전체 도메인 중 <b>${ourRank + 1}위</b>입니다. 위 목록에서는 뺐습니다.` : '이 기간에는 우리 사이트가 인용된 결과가 없습니다.'}</div>`;
+  };
+  drawDom('1');
+  $('#domWin').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    $('#domWin').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    drawDom(b.dataset.w);
+  });
+
+  // 글 발행 그래프
+  lineChart($('#blogChart'), {
+    dates: D.blog.map(b => b.date), unit: '편', label: `인사이트 글 공개 ${blog?.published}편, 예약 ${blog?.scheduled}편`,
+    series: [{ name: '공개', color: 's1', values: D.blog.map(b => b.published) }, { name: '예약 대기', color: 's2', values: D.blog.map(b => b.scheduled) }],
+    tipExtra: i => `<div class="dm">전체 ${D.blog[i].total}편 · 예약 ${D.blog[i].daysLeft}일분 남음</div>`,
+  });
+
+  // 색인 진행 막대
+  const parts = [['색인 확인', nIndexed, 's1', ''], ['요청 완료', nDone, 's2', ''], ['공개 후 대기', waiting.length, 's3', ''], ['공개 전(예약)', upcoming.length, 'neutral', 'lt']];
+  const total = parts.reduce((a, p) => a + p[1], 0) || 1;
+  $('#segbar').innerHTML = parts.filter(p => p[1]).map(p => `<div class="${p[3]}" style="flex:${p[1]} 0 0;background:var(--${p[2]})" data-tip="${addTip(`<b>${p[0]}</b><div class="dm">${p[1]}편 · ${Math.round(p[1] / total * 100)}%</div>`)}" aria-label="${p[0]} ${p[1]}편"><span>${p[1]}</span></div>`).join('');
+  $('#seglegend').innerHTML = parts.map(p => `<span><i class="sq" style="background:var(--${p[2]})"></i>${p[0]} ${p[1]}편</span>`).join('');
+  $('#segbar').querySelectorAll('div').forEach(el => { const s = el.firstChild; if (s && s.offsetWidth > el.clientWidth - 12) s.hidden = true; });
+
+  // 서치콘솔 판독
+  const showGsc = i => { if (D.gsc[i]) $('#gscBody').innerHTML = md(D.gsc[i].md); };
+  showGsc(D.gsc.length - 1);
+  $('#gscPick').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    $('#gscPick').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    showGsc(+b.dataset.i);
+  });
+}
+
+// ── 로그인·불러오기
+const MSG = {
+  key: ['데이터 키가 없습니다', '운영 서버에 <code>ADMIN_DATA_KEY</code> 변수가 없어 측정 데이터를 풀 수 없습니다. 이 PC의 <code>4. 미래애드원/.admin-data-key</code> 파일에 있는 한 줄을 Railway → Variables 에 <code>ADMIN_DATA_KEY</code> 로 넣어 주세요.'],
+  nodata: ['측정 데이터가 아직 없습니다', '<code>deploy.bat</code> 으로 배포하면 이 PC의 측정 결과가 암호화돼 함께 올라갑니다.'],
+  decrypt: ['측정 데이터를 풀 수 없습니다', 'Railway 의 <code>ADMIN_DATA_KEY</code> 값이 이 PC의 <code>.admin-data-key</code> 파일과 같은지 확인해 주세요.'],
+  error: ['불러오지 못했습니다', '잠시 뒤 새로고침해 주세요.'],
+};
+function showLogin(state) {
+  $('#dash').hidden = true; $('#msg').hidden = true; $('#logout').hidden = true; $('#asof').textContent = '';
+  $('#login').hidden = false;
+  const setup = state === 'setup';
+  $('#loginNote').innerHTML = setup ? '관리자 비밀번호가 아직 설정되지 않았습니다. Railway → Variables 에 <code>ADMIN_PASSWORD</code> 를 넣으면 로그인할 수 있습니다.' : '측정 결과는 로그인한 뒤에만 보입니다.';
+  $('#loginForm').hidden = setup;
+  if (!setup) $('#pw').focus();
+}
+function showMsg(code) {
+  const [t, b] = MSG[code] || MSG.error;
+  $('#login').hidden = true; $('#dash').hidden = true;
+  $('#msg').innerHTML = `<h1>${t}</h1><p>${b}</p>`; $('#msg').hidden = false;
+}
+async function boot() {
+  let r;
+  try { r = await fetch('api/data', { credentials: 'same-origin', cache: 'no-store' }); } catch { return showMsg('error'); }
+  if (r.status === 401) return showLogin();
+  if (r.status === 503) { const j = await r.json().catch(() => ({})); $('#logout').hidden = j.error === 'setup'; return j.error === 'setup' ? showLogin('setup') : showMsg(j.error); }
+  if (!r.ok) return showMsg('error');
+  const D = await r.json();
+  $('#login').hidden = true; $('#msg').hidden = true; $('#logout').hidden = false;
+  render(D);
+}
+$('#loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = $('#loginBtn'), err = $('#loginErr');
+  btn.disabled = true; err.textContent = '';
+  try {
+    const r = await fetch('api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ password: $('#pw').value }) });
+    if (r.ok) { $('#pw').value = ''; await boot(); }
+    else {
+      const j = await r.json().catch(() => ({}));
+      err.textContent = j.error === 'locked' ? '로그인 시도가 많아 15분 동안 막혔습니다. 잠시 뒤 다시 시도해 주세요.' : j.error === 'setup' ? '관리자 비밀번호가 아직 설정되지 않았습니다.' : '비밀번호가 맞지 않습니다.';
+    }
+  } catch { err.textContent = '서버에 연결하지 못했습니다.'; }
+  btn.disabled = false;
+});
+$('#logout').addEventListener('click', async () => {
+  await fetch('api/logout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin' }).catch(() => {});
+  showLogin();
+});
+boot();
+})();
+</script>
+</body>
+</html>

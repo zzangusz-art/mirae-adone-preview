@@ -64,7 +64,8 @@ ${POSTS.slice(0, 50).map(p => `<item><title>${x(p.title)}</title><link>${SITE}in
 // 6) sitemap / robots / llms.txt
 const urls = pages.filter(p => !p.file).map(p => ({ loc: SITE + p.path, lastmod: p.path.startsWith('insights/') && p.path !== 'insights/' ? (POSTS.find(q => p.path === `insights/${q.slug}/`)?.updated || POSTS.find(q => p.path === `insights/${q.slug}/`)?.date || today) : today }));
 wr('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u => `<url><loc>${u.loc}</loc><lastmod>${u.lastmod}</lastmod></url>`).join('\n')}\n</urlset>\n`);
-wr('robots.txt', `User-agent: *\nAllow: /\n\n# AI 검색·답변 서비스 크롤러도 공개 페이지 접근 허용\nUser-agent: OAI-SearchBot\nAllow: /\nUser-agent: ChatGPT-User\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: Google-Extended\nAllow: /\nUser-agent: ClaudeBot\nAllow: /\nUser-agent: Yeti\nAllow: /\n\nSitemap: ${SITE}sitemap.xml\n${SITE_VERIFICATION.daum ? `\n${SITE_VERIFICATION.daum}\n` : ''}`);
+// /admin/ (관리자 페이지, 로그인 필요)은 모든 로봇 그룹에서 제외
+wr('robots.txt', `User-agent: *\nAllow: /\n\n# AI 검색·답변 서비스 크롤러도 공개 페이지 접근 허용\nUser-agent: OAI-SearchBot\nAllow: /\nUser-agent: ChatGPT-User\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: Google-Extended\nAllow: /\nUser-agent: ClaudeBot\nAllow: /\nUser-agent: Yeti\nAllow: /\n\nSitemap: ${SITE}sitemap.xml\n${SITE_VERIFICATION.daum ? `\n${SITE_VERIFICATION.daum}\n` : ''}`.replaceAll('Allow: /\n', 'Allow: /\nDisallow: /admin/\n'));
 wr(`${INDEXNOW_KEY}.txt`, INDEXNOW_KEY); // IndexNow 키 확인 파일(https://www.mirae-adone.com/<키>.txt)
 const won = n => n.toLocaleString('ko-KR') + '원';
 wr('llms.txt', `# ${COMPANY.name} (${COMPANY.nameEn})

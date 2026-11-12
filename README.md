@@ -14,6 +14,7 @@
 | `tools/blog-ai/generate.mjs` | AI 글 작성기(Claude API) + 검증기 |
 | `tools/check-site.mjs` | 링크·이미지·JSON-LD·제목 중복 점검 |
 | `apps-script/` | 상담 신청 → 구글 시트·메일 (설정가이드.md) |
+| `tools/admin/` | 관리자 페이지 `/admin/` — 측정 결과 보기(아래 「관리자 페이지」) |
 | `.github/workflows/site.yml` | 빌드·배포 + 매일 09·13·18시(KST) 글 1편씩 |
 
 빌드 결과(`index.html`, `about/`, `services/` …)는 자동 생성물이라 git 에 올리지 않습니다.
@@ -58,6 +59,13 @@ gh api -X POST repos/<계정>/mirae-adone-preview/pages -f build_type=workflow
 - 예약 글: 서버가 09:00·13:00·18:00(KST)마다 다시 빌드해 그 시각 글을 공개합니다(푸시가 없어도).
 - 색인은 접속 주소로 나뉩니다: **www.mirae-adone.com = 운영(색인 허용)**, `*.up.railway.app`·그 밖 = 미리보기(noindex·robots 차단 — 같은 내용이 두 주소로 색인되는 것 방지). `mirae-adone.com` → `https://www.mirae-adone.com` 301. 모든 주소를 한쪽으로 고정하려면 Railway Variables 에 `PRODUCTION=true` 또는 `false`.
 - 로컬에서 똑같이 띄워 보기: `npm start` → http://localhost:8080 (미리보기 모드)
+
+## 관리자 페이지 (/admin/)
+`https://www.mirae-adone.com/admin/` — 측정 결과 보기(AI·검색 노출 추이, 엔진별·검색어별 결과, 인용 도메인, 인사이트 발행, 구글 색인 요청, 서치콘솔 판독, 자동 측정 기록). Railway 서버(`tools/serve.mjs`)에서만 동작하고 GitHub Pages 미리보기에는 없습니다.
+- **로그인**: Railway → Variables 의 `ADMIN_PASSWORD` 하나. 12시간 유지, 같은 IP 15분에 5번 틀리면 15분 잠금. 비밀번호를 바꾸면 기존 로그인은 모두 풀립니다.
+- **데이터**: 측정 원본은 이 PC(상위 폴더 `측정/`)에만 있고, 저장소가 공개라 `tools/admin/data.enc` 에 **암호화해서** 올립니다. 상위 폴더 `tools/admin-export.mjs` 가 만들고, `deploy.bat` 이 배포 때마다 먼저 실행합니다(내용이 같으면 다시 쓰지 않음). 화면의 「측정 데이터 … 기준」이 마지막 배포 시점입니다.
+- **키**: 상위 폴더 `.admin-data-key`(저장소 밖, 처음 내보낼 때 자동 생성)의 한 줄을 Railway Variables 의 `ADMIN_DATA_KEY` 에 넣습니다. 키를 잃어버리면 파일을 지우고 다시 내보낸 뒤 새 값을 Railway 에 넣으면 됩니다.
+- 코드: `tools/admin/server.mjs`(로그인·데이터 API), `index.html`(화면, 외부 라이브러리 없음), `crypto.mjs`(AES-256-GCM). robots.txt 는 모든 로봇에 `/admin/` 제외.
 
 ## 방문·전환 추적
 아이디는 `assets/js/config.js` 한 곳에만 넣고 `deploy.bat`. 비어 있는 도구는 불러오지 않습니다. 운영 주소(`TRACK_HOSTS`)에서만 켜지고, 미리보기에서 시험하려면 주소 끝에 `?track=on`(콘솔에 `[track]` 로그, 끄기 `?track=off`). 코드는 `assets/js/track.js`.

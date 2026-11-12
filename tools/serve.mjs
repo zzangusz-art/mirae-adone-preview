@@ -8,6 +8,7 @@
 // - 운영/미리보기는 접속 주소로 나눈다: SITE 도메인(www.mirae-adone.com)은 운영(색인 허용), 그 밖(*.up.railway.app 등)은 미리보기(noindex — 중복 색인 방지)
 //   mirae-adone.com(www 없음) → https://www.mirae-adone.com 으로 301. 환경 변수 PRODUCTION=true/false 로 모든 주소를 한쪽으로 고정할 수 있다
 // - IndexNow: Railway 에서 실행 중이면 오늘 공개된 인사이트 글 주소를 네이버·Bing 에 알린다(tools/indexnow.mjs)
+// - /admin/ 은 관리자 페이지(측정 결과 보기, 비밀번호 로그인) — tools/admin/server.mjs
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -16,6 +17,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { SITE } from '../src/data.mjs';
 import { submitIndexNow } from './indexnow.mjs';
+import { adminHandler } from './admin/server.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = path.join(ROOT, '_site'); // 빌드 단계(--build-only) 결과 — 이미지에 들어 있어 실행 중 빌드가 실패해도 이걸로 서빙
@@ -95,9 +97,10 @@ function send(req, res, file, status = 200) {
 }
 
 function handler(req, res) {
-  if (req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405, { Allow: 'GET, HEAD' }); return res.end(); }
   const host = String(req.headers.host || '').split(':')[0].toLowerCase();
   if (APEX !== SITE_HOST && host === APEX) { res.writeHead(301, { Location: `https://${SITE_HOST}${req.url}` }); return res.end(); }
+  if (/^\/admin(\/|\?|$)/.test(req.url)) return adminHandler(req, res).catch(e => { console.error('[admin]', e); if (!res.headersSent) res.writeHead(500); res.end(); });
+  if (req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405, { Allow: 'GET, HEAD' }); return res.end(); }
   const DIR = path.join(OUT, isProdHost(host) ? 'prod' : 'preview');
   let rel;
   try { rel = decodeURIComponent(new URL(req.url, 'http://x').pathname); } catch { res.writeHead(400); return res.end(); }
