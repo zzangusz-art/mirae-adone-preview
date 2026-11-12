@@ -1,5 +1,6 @@
 // 관리자 페이지 /admin/ — 측정 결과 보기(AI·검색 노출 추이, 인사이트 발행, 구글 색인 요청, 서치콘솔 판독)
-// - 로그인: Railway 변수 ADMIN_PASSWORD 하나. 맞으면 12시간짜리 HttpOnly 쿠키(서명값)를 준다. 비밀번호를 바꾸면 기존 로그인은 모두 풀린다
+// - 로그인: 아이디 ADMIN_USER(기본 admin) + 비밀번호 ADMIN_PASSWORD(Railway 변수 — 공개 저장소라 코드에 두지 않음).
+//   맞으면 12시간짜리 HttpOnly 쿠키(서명값)를 준다. 아이디·비밀번호를 바꾸면 기존 로그인은 모두 풀린다
 // - 데이터: 같은 폴더 data.enc(암호화, 저장소에 들어 있음)를 ADMIN_DATA_KEY 로 풀어 로그인한 사람에게만 보낸다
 //   data.enc 는 상위 폴더 tools/admin-export.mjs 가 이 PC 의 측정 폴더로 만든다(deploy.bat 이 배포 때 자동 실행)
 // - 로그인 실패: 한 IP 15분에 5번, 전체 15분에 30번이 넘으면 15분 동안 막는다
@@ -24,12 +25,13 @@ const SEC = {
 const CSP = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'";
 
 const password = () => process.env.ADMIN_PASSWORD || '';
+const username = () => (process.env.ADMIN_USER || 'admin').trim();
 function keyText() {
   if (process.env.ADMIN_DATA_KEY) return process.env.ADMIN_DATA_KEY;
   try { return fs.readFileSync(LOCAL_KEY, 'utf8'); } catch { return ''; }
 }
 const sha = s => crypto.createHash('sha256').update(s).digest();
-const secret = () => sha(['mirae-admin-session', password(), keyText().trim()].join('\0'));
+const secret = () => sha(['mirae-admin-session', username(), password(), keyText().trim()].join('\0'));
 const sign = exp => crypto.createHmac('sha256', secret()).update('v1.' + exp).digest('base64url');
 
 function cookies(req) {
@@ -115,9 +117,11 @@ export async function adminHandler(req, res) {
     const ip = ipOf(req);
     if (blocked(ip)) return json(res, 429, { error: 'locked', minutes: 15 });
     if (!/application\/json/.test(req.headers['content-type'] || '')) return json(res, 415, { error: 'type' });
-    let input = '';
-    try { input = String(JSON.parse(await readBody(req)).password || ''); } catch { return json(res, 400, { error: 'body' }); }
-    const ok = input.length > 0 && crypto.timingSafeEqual(sha(input), sha(password()));
+    let input = '', user = '';
+    try { const b = JSON.parse(await readBody(req)); input = String(b.password || ''); user = String(b.username || '').trim(); } catch { return json(res, 400, { error: 'body' }); }
+    const userOk = crypto.timingSafeEqual(sha(user), sha(username())); // 둘 다 늘 비교 — 어느 쪽이 틀렸는지 응답 시간으로 드러나지 않게
+    const pwOk = crypto.timingSafeEqual(sha(input), sha(password()));
+    const ok = input.length > 0 && userOk && pwOk;
     if (!ok) { fail(ip); await sleep(600); return json(res, 401, { error: 'wrong' }); }
     fails.delete(ip);
     const exp = Math.floor(Date.now() / 1000) + TTL;

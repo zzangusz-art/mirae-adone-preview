@@ -174,8 +174,9 @@ select{background:var(--surface);border:1px solid var(--axis);border-radius:8px;
     <h1>관리자 로그인</h1>
     <p id="loginNote">측정 결과는 로그인한 뒤에만 보입니다.</p>
     <form id="loginForm" autocomplete="on">
-      <input type="text" name="username" value="admin" autocomplete="username" hidden>
-      <label for="pw">비밀번호</label>
+      <label for="uid">아이디</label>
+      <input type="text" id="uid" name="username" autocomplete="username" autocapitalize="off" spellcheck="false" required>
+      <label for="pw" style="margin-top:12px">비밀번호</label>
       <input type="password" id="pw" name="password" autocomplete="current-password" required>
       <button type="submit" id="loginBtn">로그인</button>
       <div class="err" id="loginErr" role="alert"></div>
@@ -613,7 +614,7 @@ function showLogin(state) {
   const setup = state === 'setup';
   $('#loginNote').innerHTML = setup ? '관리자 비밀번호가 아직 설정되지 않았습니다. Railway → Variables 에 <code>ADMIN_PASSWORD</code> 를 넣으면 로그인할 수 있습니다.' : '측정 결과는 로그인한 뒤에만 보입니다.';
   $('#loginForm').hidden = setup;
-  if (!setup) $('#pw').focus();
+  if (!setup) ($('#uid').value ? $('#pw') : $('#uid')).focus();
 }
 function showMsg(code) {
   const [t, b] = MSG[code] || MSG.error;
@@ -635,11 +636,12 @@ $('#loginForm').addEventListener('submit', async e => {
   const btn = $('#loginBtn'), err = $('#loginErr');
   btn.disabled = true; err.textContent = '';
   try {
-    const r = await fetch('api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ password: $('#pw').value }) });
+    const r = await fetch('api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ username: $('#uid').value, password: $('#pw').value }) });
     if (r.ok) { $('#pw').value = ''; await boot(); }
     else {
       const j = await r.json().catch(() => ({}));
-      err.textContent = j.error === 'locked' ? '로그인 시도가 많아 15분 동안 막혔습니다. 잠시 뒤 다시 시도해 주세요.' : j.error === 'setup' ? '관리자 비밀번호가 아직 설정되지 않았습니다.' : '비밀번호가 맞지 않습니다.';
+      $('#pw').value = ''; $('#pw').focus();
+      err.textContent = j.error === 'locked' ? '로그인 시도가 많아 15분 동안 막혔습니다. 잠시 뒤 다시 시도해 주세요.' : j.error === 'setup' ? '관리자 비밀번호가 아직 설정되지 않았습니다.' : '아이디 또는 비밀번호가 맞지 않습니다.';
     }
   } catch { err.textContent = '서버에 연결하지 못했습니다.'; }
   btn.disabled = false;
