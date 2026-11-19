@@ -4,6 +4,10 @@
 // - 데이터: 같은 폴더 data.enc(암호화, 저장소에 들어 있음)를 ADMIN_DATA_KEY 로 풀어 로그인한 사람에게만 보낸다
 //   data.enc 는 상위 폴더 tools/admin-export.mjs 가 이 PC 의 측정 폴더로 만든다(deploy.bat 이 배포 때 자동 실행)
 // - 로그인 실패: 한 IP 15분에 5번, 전체 15분에 30번이 넘으면 15분 동안 막는다
+// - 임시 계정(사용자 요청 2026-11-19): Railway 에 ADMIN_PASSWORD 가 없는 동안만 admin / 1234 로 들어갈 수 있다.
+//   이 값은 공개 저장소에 있어 비밀이 아니므로, 임시 계정 상태에서는 서버가 데이터를 절대 풀지 않고 암호문(data.enc)을 그대로 보낸다.
+//   브라우저가 사용자가 붙여 넣은 데이터 키(.admin-data-key)로 직접 푼다(키는 그 브라우저 localStorage 에만 저장, 서버로 보내지 않음).
+//   ADMIN_PASSWORD 를 넣으면 임시 계정은 자동으로 꺼지고, ADMIN_DATA_KEY 까지 있으면 예전처럼 서버가 풀어서 보낸다.
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -12,8 +16,8 @@ import { open, parseKey } from './crypto.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PAGE = path.join(HERE, 'index.html');
-const DATA = path.join(HERE, 'data.enc');
-const LOCAL_KEY = path.resolve(HERE, '..', '..', '..', '.admin-data-key'); // 이 PC 에서만 있는 키 파일(로컬 실행용). 서버에는 없음
+const DATA = process.env.ADMIN_DATA_FILE || path.join(HERE, 'data.enc'); // ADMIN_DATA_FILE: 로컬 시험용
+const LOCAL_KEY = path.resolve(HERE, '..', '..', '..', '.admin-data-key'); // 이 PC 에서만 있는 키 파일(로컬 실행용). 서버에는 없음. ADMIN_LOCAL_KEY=off 로 끔(시험용)
 const COOKIE = 'ma_admin';
 const TTL = 12 * 3600;
 const WINDOW = 15 * 60e3, PER_IP = 5, GLOBAL = 30;
@@ -24,10 +28,13 @@ const SEC = {
 };
 const CSP = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'";
 
-const password = () => process.env.ADMIN_PASSWORD || '';
-const username = () => (process.env.ADMIN_USER || 'admin').trim();
+const TEMP_USER = 'admin', TEMP_PW = '1234';
+const isTemp = () => !process.env.ADMIN_PASSWORD;
+const password = () => process.env.ADMIN_PASSWORD || TEMP_PW;
+const username = () => (process.env.ADMIN_PASSWORD ? process.env.ADMIN_USER || 'admin' : TEMP_USER).trim();
 function keyText() {
   if (process.env.ADMIN_DATA_KEY) return process.env.ADMIN_DATA_KEY;
+  if (process.env.ADMIN_LOCAL_KEY === 'off') return '';
   try { return fs.readFileSync(LOCAL_KEY, 'utf8'); } catch { return ''; }
 }
 const sha = s => crypto.createHash('sha256').update(s).digest();
@@ -43,7 +50,6 @@ function cookies(req) {
   return out;
 }
 function authed(req) {
-  if (!password()) return false;
   const [exp, mac] = String(cookies(req)[COOKIE] || '').split('.');
   if (!exp || !mac || !/^\d+$/.test(exp) || +exp < Date.now() / 1000) return false;
   const a = Buffer.from(mac), b = Buffer.from(sign(exp));
@@ -113,7 +119,6 @@ export async function adminHandler(req, res) {
   }
 
   if (p === '/admin/api/login' && m === 'POST') {
-    if (!password()) return json(res, 503, { error: 'setup' });
     const ip = ipOf(req);
     if (blocked(ip)) return json(res, 429, { error: 'locked', minutes: 15 });
     if (!/application\/json/.test(req.headers['content-type'] || '')) return json(res, 415, { error: 'type' });
@@ -131,8 +136,13 @@ export async function adminHandler(req, res) {
   if (p === '/admin/api/logout' && m === 'POST') return json(res, 200, { ok: true }, { 'Set-Cookie': setCookie(req, '', 0) });
 
   if (p === '/admin/api/data' && (m === 'GET' || m === 'HEAD')) {
-    if (!password()) return json(res, 503, { error: 'setup' });
     if (!authed(req)) return json(res, 401, { error: 'login' });
+    // 임시 계정이거나 서버에 키가 없으면 풀지 않고 암호문 그대로 — 브라우저가 사용자의 데이터 키로 푼다
+    if (isTemp() || !keyText().trim()) {
+      let buf;
+      try { buf = fs.readFileSync(DATA); } catch { return json(res, 503, { error: 'nodata' }); }
+      return json(res, 200, { encrypted: buf.toString('base64'), temp: isTemp() });
+    }
     const r = loadData();
     if (r.error) return json(res, 503, { error: r.error });
     return json(res, 200, r.data);

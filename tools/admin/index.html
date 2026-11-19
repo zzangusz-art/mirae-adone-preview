@@ -182,6 +182,17 @@ select{background:var(--surface);border:1px solid var(--axis);border-radius:8px;
       <div class="err" id="loginErr" role="alert"></div>
     </form>
   </section>
+  <section class="login" id="keybox" hidden>
+    <h1>측정 데이터 열기</h1>
+    <p>측정 데이터는 암호화돼 있어 데이터 키가 있어야 열립니다. 이 PC의 <code>4. 미래애드원/.admin-data-key</code> 파일(메모장으로 열기)에 있는 한 줄을 그대로 붙여 넣어 주세요. 키는 이 브라우저 안에서만 쓰이고 서버로 보내지 않습니다.</p>
+    <form id="keyForm" autocomplete="off">
+      <label for="dkey">데이터 키</label>
+      <input type="password" id="dkey" autocomplete="off" spellcheck="false" required>
+      <label class="chk" style="display:flex;gap:8px;align-items:center;margin-top:10px;font-weight:500"><input type="checkbox" id="dkeySave" checked style="width:auto">이 브라우저에 기억하기(공용 PC에서는 끄세요)</label>
+      <button type="submit" id="keyBtn">열기</button>
+      <div class="err" id="keyErr" role="alert"></div>
+    </form>
+  </section>
   <section class="msg" id="msg" hidden></section>
   <div id="dash" hidden></div>
 </main>
@@ -608,8 +619,51 @@ const MSG = {
   decrypt: ['측정 데이터를 풀 수 없습니다', 'Railway 의 <code>ADMIN_DATA_KEY</code> 값이 이 PC의 <code>.admin-data-key</code> 파일과 같은지 확인해 주세요.'],
   error: ['불러오지 못했습니다', '잠시 뒤 새로고침해 주세요.'],
 };
+// 임시 계정 상태(또는 서버에 키가 없을 때)는 서버가 암호문을 그대로 보낸다 → 사용자가 붙여 넣은 데이터 키로 브라우저에서 푼다
+// 형식: 'MAD1' + iv(12) + tag(16) + 암호문(AES-256-GCM, AAD 'mirae-admin-data') → gzip JSON (tools/admin/crypto.mjs 와 같음)
+const KEY_STORE = 'ma_admin_data_key';
+const getKey = () => { try { return localStorage.getItem(KEY_STORE) || ''; } catch { return ''; } };
+const setKey = v => { try { v ? localStorage.setItem(KEY_STORE, v) : localStorage.removeItem(KEY_STORE); } catch { } };
+const fromB64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function openBlob(encB64, keyB64) {
+  const raw = fromB64(String(keyB64).trim());
+  if (raw.length !== 32) throw new Error('key');
+  const buf = fromB64(encB64);
+  if (new TextDecoder().decode(buf.slice(0, 4)) !== 'MAD1') throw new Error('format');
+  const ct = buf.slice(32), withTag = new Uint8Array(ct.length + 16);
+  withTag.set(ct); withTag.set(buf.slice(16, 32), ct.length);
+  const key = await crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['decrypt']);
+  const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: buf.slice(4, 16), additionalData: new TextEncoder().encode('mirae-admin-data') }, key, withTag);
+  const text = await new Response(new Blob([plain]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+  return JSON.parse(text);
+}
+let ENC = null, TEMP = false;
+function show(D) {
+  $('#login').hidden = true; $('#msg').hidden = true; $('#keybox').hidden = true; $('#logout').hidden = false;
+  render(D);
+  if (TEMP) $('#s-sum').insertAdjacentHTML('beforebegin', '<div class="note" style="margin:0 0 12px;border-left:4px solid var(--warn)"><b>임시 계정으로 열려 있습니다.</b> Railway → Variables 에 <code>ADMIN_PASSWORD</code>(와 <code>ADMIN_DATA_KEY</code>)를 넣으면 그 비밀번호로 바뀌고 임시 계정은 자동으로 꺼집니다.</div>');
+}
+function showKeyBox(errText = '') {
+  $('#login').hidden = true; $('#msg').hidden = true; $('#dash').hidden = true; $('#logout').hidden = false;
+  $('#keybox').hidden = false; $('#keyErr').textContent = errText; $('#dkey').focus();
+}
+$('#keyForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const v = $('#dkey').value.trim(), btn = $('#keyBtn');
+  btn.disabled = true; $('#keyErr').textContent = '';
+  try {
+    if (typeof DecompressionStream === 'undefined' || !window.crypto || !crypto.subtle) throw new Error('browser');
+    const D = await openBlob(ENC, v);
+    if ($('#dkeySave').checked) setKey(v); else setKey('');
+    $('#dkey').value = '';
+    show(D);
+  } catch (err) {
+    $('#keyErr').textContent = err.message === 'browser' ? '이 브라우저에서는 열 수 없습니다. 크롬·엣지 최신 버전에서 열어 주세요.' : '키가 맞지 않습니다. .admin-data-key 파일의 한 줄 전체를 그대로 붙여 넣어 주세요.';
+  }
+  btn.disabled = false;
+});
 function showLogin(state) {
-  $('#dash').hidden = true; $('#msg').hidden = true; $('#logout').hidden = true; $('#asof').textContent = '';
+  $('#dash').hidden = true; $('#msg').hidden = true; $('#keybox').hidden = true; $('#logout').hidden = true; $('#asof').textContent = '';
   $('#login').hidden = false;
   const setup = state === 'setup';
   $('#loginNote').innerHTML = setup ? '관리자 비밀번호가 아직 설정되지 않았습니다. Railway → Variables 에 <code>ADMIN_PASSWORD</code> 를 넣으면 로그인할 수 있습니다.' : '측정 결과는 로그인한 뒤에만 보입니다.';
@@ -618,7 +672,7 @@ function showLogin(state) {
 }
 function showMsg(code) {
   const [t, b] = MSG[code] || MSG.error;
-  $('#login').hidden = true; $('#dash').hidden = true;
+  $('#login').hidden = true; $('#dash').hidden = true; $('#keybox').hidden = true;
   $('#msg').innerHTML = `<h1>${t}</h1><p>${b}</p>`; $('#msg').hidden = false;
 }
 async function boot() {
@@ -628,8 +682,14 @@ async function boot() {
   if (r.status === 503) { const j = await r.json().catch(() => ({})); $('#logout').hidden = j.error === 'setup'; return j.error === 'setup' ? showLogin('setup') : showMsg(j.error); }
   if (!r.ok) return showMsg('error');
   const D = await r.json();
-  $('#login').hidden = true; $('#msg').hidden = true; $('#logout').hidden = false;
-  render(D);
+  if (D.encrypted) {
+    ENC = D.encrypted; TEMP = !!D.temp;
+    const k = getKey();
+    if (k) { try { return show(await openBlob(ENC, k)); } catch { setKey(''); return showKeyBox('저장된 데이터 키가 맞지 않아 지웠습니다. 다시 붙여 넣어 주세요.'); } }
+    return showKeyBox();
+  }
+  TEMP = false;
+  show(D);
 }
 $('#loginForm').addEventListener('submit', async e => {
   e.preventDefault();
