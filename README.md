@@ -67,7 +67,7 @@ gh api -X POST repos/<계정>/mirae-adone-preview/pages -f build_type=workflow
 - **검색 노출·콘텐츠**: AI·검색 노출(성공률·추이·엔진별·검색어×엔진·인용 도메인) / 콘텐츠·SEO(인사이트 발행·구글 색인 요청·서치콘솔 판독).
 - **운영**: 자동 측정 기록.
 - **홈페이지 수정은 꺼 둠**(사용자 요청 11-19). `tools/admin/editor.js`·`literal.mjs` 는 남아 있으나 서버가 제공하지 않음 — 다시 켜는 방법은 `server.mjs` 의 CSP 주석.
-- **계정 두 종류**: 총괄 담당자 `ADMIN_USER`(기본 admin) + `ADMIN_PASSWORD` — 전체. 미래애드원 업체 `ADMIN_CLIENT_USER`(기본 miraeadone) + `ADMIN_CLIENT_PASSWORD` — 「운영(자동 측정 기록)」·측정 성공률·내부 알림 없음(서버가 운영 데이터를 빼고 보냄). 업체 계정은 Railway 에 `ADMIN_CLIENT_PASSWORD` 를 넣어야 켜지고, 서버에 `ADMIN_DATA_KEY` 가 있어야 열림. 화면: 흰색 톤·Noto Sans KR·로그인 화면에 로고.
+- **계정**: Railway 변수 계정 2개(총괄 `ADMIN_USER`/`ADMIN_PASSWORD`, 업체 `ADMIN_CLIENT_USER`/`ADMIN_CLIENT_PASSWORD` — 업체 변수는 없어도 됨) + 총괄 화면 「계정 관리」에서 만드는 계정(총괄 또는 업체 권한). 화면에서 만든 계정은 Railway 볼륨(`RAILWAY_VOLUME_MOUNT_PATH`)의 `mirae-admin-accounts.json` 에 scrypt 해시로만 저장, 비밀번호 바꾸기·지우기 즉시 그 계정 로그인 해제. 업체 권한은 「운영(자동 측정 기록)」·「계정 관리」·측정 성공률·내부 알림 없음(서버가 운영 데이터를 빼고 보냄). 화면: 흰색 톤·Noto Sans KR·로그인 화면에 로고.
 - **로그인**: 아이디 `ADMIN_USER`(기본 admin) + Railway Variables 의 `ADMIN_PASSWORD`. 비밀번호가 없는 동안은 임시 계정 admin / 1234(공개 저장소에 있어 비밀이 아님 → 이때 서버는 데이터를 풀지 않고 브라우저가 데이터 키로 풂). 12시간 유지, 같은 IP 15분에 5번 틀리면 15분 잠금. 비밀번호를 바꾸면 기존 로그인은 모두 풀립니다.
 - **GA4·문의 수집**: 상위 폴더 `tools/ai-visibility/pull-ga4-leads.mjs`(매일 측정 뒤) — 측정용 크롬 프로필의 구글 로그인으로 GA4 보고서(방문 페이지·트래픽 획득·이벤트)를 하루씩 읽고, 상담 시트는 집계만 저장(이름·연락처·문의 내용은 저장 안 함).
 - **데이터**: 측정 원본은 이 PC(상위 폴더 `측정/`)에만 있고, 저장소가 공개라 `tools/admin/data.enc` 에 **암호화해서** 올립니다. 상위 폴더 `tools/admin-export.mjs` 가 만들고(내용이 같으면 다시 쓰지 않음), 두 곳에서 올라갑니다.

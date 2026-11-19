@@ -1,5 +1,6 @@
 // 관리자 페이지 /admin/ — 측정 결과 보기(방문·전환, 문의, AI·검색 노출, 콘텐츠·SEO, 운영 기록)
 // - 계정: 총괄(ADMIN_USER/ADMIN_PASSWORD, 전체) · 업체(ADMIN_CLIENT_USER/ADMIN_CLIENT_PASSWORD, 운영 기록 제외 — 서버가 데이터에서 뺌)
+//   + 총괄 화면 「계정 관리」에서 만든 계정(Railway 볼륨에 scrypt 해시로 저장, /admin/api/accounts)
 // - 로그인: 아이디 ADMIN_USER(기본 admin) + 비밀번호 ADMIN_PASSWORD(Railway 변수 — 공개 저장소라 코드에 두지 않음).
 //   맞으면 12시간짜리 HttpOnly 쿠키(서명값)를 준다. 아이디·비밀번호를 바꾸면 기존 로그인은 모두 풀린다
 // - 데이터: 같은 폴더 data.enc(암호화, 저장소에 들어 있음)를 ADMIN_DATA_KEY 로 풀어 로그인한 사람에게만 보낸다
@@ -49,9 +50,37 @@ function keyText() {
   try { return fs.readFileSync(LOCAL_KEY, 'utf8'); } catch { return ''; }
 }
 const sha = s => crypto.createHash('sha256').update(s).digest();
-// 역할마다 서명 열쇠가 다르다 — 그 계정의 아이디·비밀번호를 바꾸면 그 계정의 기존 로그인만 풀린다
-const secret = role => sha(['mirae-admin-session', role, role === 'client' ? clientUser() : username(), role === 'client' ? clientPw() : password(), keyText().trim()].join('\0'));
-const sign = (exp, role) => crypto.createHmac('sha256', secret(role)).update(`v2.${exp}.${role}`).digest('base64url');
+
+// ── 관리자 화면에서 만든 계정(사용자 요청 11-19) — Railway 볼륨(RAILWAY_VOLUME_MOUNT_PATH)에 저장, 로컬 시험은 ADMIN_STORE_DIR
+//    비밀번호는 원문을 두지 않고 scrypt 해시만 저장. 계정 관리는 총괄 계정만, 임시 계정 상태에서는 막는다
+const storeDir = () => process.env.ADMIN_STORE_DIR || process.env.RAILWAY_VOLUME_MOUNT_PATH || '';
+const storeFile = () => (storeDir() ? path.join(storeDir(), 'mirae-admin-accounts.json') : '');
+function readAccounts() {
+  const f = storeFile(); if (!f) return [];
+  try { return JSON.parse(fs.readFileSync(f, 'utf8')).accounts || []; }
+  catch (e) { if (e.code !== 'ENOENT') console.error('[admin] 계정 파일을 읽지 못함:', e.message); return []; }
+}
+function writeAccounts(list) {
+  const f = storeFile(); if (!f) throw new Error('nostore');
+  fs.mkdirSync(path.dirname(f), { recursive: true });
+  const tmp = `${f}.${process.pid}.tmp`;
+  fs.writeFileSync(tmp, JSON.stringify({ v: 1, accounts: list }, null, 1), { mode: 0o600 });
+  fs.renameSync(tmp, f);
+}
+const SCRYPT = { N: 16384, r: 8, p: 1 };
+const hashPw = pw => { const salt = crypto.randomBytes(16).toString('hex'); return { salt, hash: crypto.scryptSync(pw, salt, 32, SCRYPT).toString('hex') }; };
+const checkPw = (pw, acc) => { const h = crypto.scryptSync(pw, acc.salt, 32, SCRYPT), b = Buffer.from(acc.hash, 'hex'); return b.length === h.length && crypto.timingSafeEqual(h, b); };
+
+// 로그인 쿠키 「만료.역할.계정.서명」 — 계정: m = Railway 변수 총괄, c = Railway 변수 업체, 그 밖 = 화면에서 만든 계정 id
+// 서명 열쇠는 계정마다 다르다 → 그 계정의 비밀번호를 바꾸거나 지우면 그 계정의 로그인만 풀린다
+function secretFor(aid) {
+  const k = keyText().trim();
+  if (aid === 'm') return sha(['mirae-admin-session', 'm', username(), password(), k].join('\0'));
+  if (aid === 'c') return clientPw() ? sha(['mirae-admin-session', 'c', clientUser(), clientPw(), k].join('\0')) : null;
+  const a = readAccounts().find(x => x.id === aid && !x.disabled);
+  return a ? sha(['mirae-admin-session', aid, a.role, a.user, a.hash, k].join('\0')) : null;
+}
+const sign = (exp, role, aid, sec) => crypto.createHmac('sha256', sec).update(`v3.${exp}.${role}.${aid}`).digest('base64url');
 
 function cookies(req) {
   const out = {};
@@ -61,13 +90,17 @@ function cookies(req) {
   }
   return out;
 }
-// 로그인 쿠키 「만료.역할.서명」 → 맞으면 역할('master'|'client'), 아니면 ''
+// 쿠키가 맞으면 { role, aid, user }, 아니면 null
 function authed(req) {
-  const [exp, role, mac] = String(cookies(req)[COOKIE] || '').split('.');
-  if (!exp || !mac || !ROLES.includes(role) || !/^\d+$/.test(exp) || +exp < Date.now() / 1000) return '';
-  if (role === 'client' && !clientPw()) return '';
-  const a = Buffer.from(mac), b = Buffer.from(sign(exp, role));
-  return a.length === b.length && crypto.timingSafeEqual(a, b) ? role : '';
+  const [exp, role, aid, mac] = String(cookies(req)[COOKIE] || '').split('.');
+  if (!exp || !aid || !mac || !ROLES.includes(role) || !/^\d+$/.test(exp) || +exp < Date.now() / 1000) return null;
+  if ((aid === 'm' && role !== 'master') || (aid === 'c' && role !== 'client')) return null;
+  let acc = null;
+  if (aid !== 'm' && aid !== 'c') { acc = readAccounts().find(x => x.id === aid && !x.disabled); if (!acc || acc.role !== role) return null; }
+  const sec = secretFor(aid); if (!sec) return null;
+  const a = Buffer.from(mac), b = Buffer.from(sign(exp, role, aid, sec));
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return null;
+  return { role, aid, user: aid === 'm' ? username() : aid === 'c' ? clientUser() : acc.user };
 }
 const isHttps = req => String(req.headers['x-forwarded-proto'] || '').includes('https');
 const setCookie = (req, val, age) => `${COOKIE}=${val}; Path=/admin; HttpOnly; SameSite=Strict; Max-Age=${age}${isHttps(req) ? '; Secure' : ''}`;
@@ -144,21 +177,68 @@ export async function adminHandler(req, res) {
     if (!/application\/json/.test(req.headers['content-type'] || '')) return json(res, 415, { error: 'type' });
     let input = '', user = '';
     try { const b = JSON.parse(await readBody(req)); input = String(b.password || ''); user = String(b.username || '').trim(); } catch { return json(res, 400, { error: 'body' }); }
-    // 두 계정 모두 늘 비교 — 어느 쪽·어느 칸이 틀렸는지 응답 시간으로 드러나지 않게
+    // 모든 계정을 늘 비교 — 어느 쪽·어느 칸이 틀렸는지 응답 시간으로 드러나지 않게
     const masterOk = crypto.timingSafeEqual(sha(user), sha(username())) & crypto.timingSafeEqual(sha(input), sha(password()));
     const cpw = clientPw();
     const clientOk = crypto.timingSafeEqual(sha(user), sha(clientUser())) & crypto.timingSafeEqual(sha(input), sha(cpw || '\0no-client'));
-    const role = input.length > 0 ? (masterOk ? 'master' : cpw && clientOk ? 'client' : '') : '';
-    if (!role) { fail(ip); await sleep(600); return json(res, 401, { error: 'wrong' }); }
+    const accs = readAccounts(), acc = accs.find(a => a.user === user.toLowerCase() && !a.disabled);
+    const accOk = acc ? checkPw(input, acc) : (crypto.scryptSync(input || '-', 'mirae-admin-dummy', 32, SCRYPT), false);
+    let who = null;
+    if (input.length > 0) {
+      if (masterOk) who = { role: 'master', aid: 'm' };
+      else if (cpw && clientOk) who = { role: 'client', aid: 'c' };
+      else if (accOk) who = { role: acc.role, aid: acc.id };
+    }
+    if (!who) { fail(ip); await sleep(600); return json(res, 401, { error: 'wrong' }); }
     fails.delete(ip);
+    if (acc && who.aid === acc.id) { acc.lastLogin = new Date().toISOString(); try { writeAccounts(accs); } catch { } }
     const exp = Math.floor(Date.now() / 1000) + TTL;
-    return json(res, 200, { ok: true, role }, { 'Set-Cookie': setCookie(req, `${exp}.${role}.${sign(exp, role)}`, TTL) });
+    return json(res, 200, { ok: true, role: who.role }, { 'Set-Cookie': setCookie(req, `${exp}.${who.role}.${who.aid}.${sign(exp, who.role, who.aid, secretFor(who.aid))}`, TTL) });
   }
 
   if (p === '/admin/api/logout' && m === 'POST') return json(res, 200, { ok: true }, { 'Set-Cookie': setCookie(req, '', 0) });
 
+  // 계정 관리(총괄만): 목록 / 만들기 / 비밀번호 바꾸기 / 지우기
+  if (p === '/admin/api/accounts') {
+    const who = authed(req);
+    if (!who) return json(res, 401, { error: 'login' });
+    if (who.role !== 'master') return json(res, 403, { error: 'forbidden' });
+    const view = () => ({
+      store: !!storeFile(), temp: isTemp(), me: who.aid,
+      env: [{ user: username(), role: 'master', active: !isTemp() }, { user: clientUser(), role: 'client', active: !!clientPw() }],
+      accounts: readAccounts().map(({ id, user, role, createdAt, createdBy, lastLogin, changedAt }) => ({ id, user, role, createdAt, createdBy, lastLogin, changedAt })),
+    });
+    if (m === 'GET') return json(res, 200, view());
+    if (m !== 'POST') return json(res, 405, { error: 'method' });
+    if (!/application\/json/.test(req.headers['content-type'] || '')) return json(res, 415, { error: 'type' });
+    if (isTemp()) return json(res, 403, { error: 'temp' }); // 임시 계정(공개된 1234)으로는 계정을 만들 수 없게
+    if (!storeFile()) return json(res, 503, { error: 'nostore' });
+    let b;
+    try { b = JSON.parse(await readBody(req)); } catch { return json(res, 400, { error: 'body' }); }
+    const list = readAccounts();
+    const pwBad = pw => typeof pw !== 'string' || pw.length < 8 || pw.length > 128;
+    if (b.action === 'create') {
+      const user = String(b.user || '').trim().toLowerCase(), role = ROLES.includes(b.role) ? b.role : 'client';
+      if (!/^[a-z0-9][a-z0-9._-]{2,29}$/.test(user)) return json(res, 400, { error: 'user', msg: '아이디는 영문 소문자·숫자·. _ - 로 3~30자입니다.' });
+      if (user === username().toLowerCase() || user === clientUser().toLowerCase() || list.some(a => a.user === user)) return json(res, 409, { error: 'dup', msg: '이미 있는 아이디입니다.' });
+      if (pwBad(b.password)) return json(res, 400, { error: 'pw', msg: '비밀번호는 8자 이상이어야 합니다.' });
+      if (list.length >= 50) return json(res, 400, { error: 'max', msg: '계정은 50개까지 만들 수 있습니다.' });
+      list.push({ id: crypto.randomBytes(6).toString('hex'), user, role, ...hashPw(b.password), createdAt: new Date().toISOString(), createdBy: who.user });
+    } else if (b.action === 'password') {
+      const a = list.find(x => x.id === b.id); if (!a) return json(res, 404, { error: 'none', msg: '계정을 찾지 못했습니다.' });
+      if (pwBad(b.password)) return json(res, 400, { error: 'pw', msg: '비밀번호는 8자 이상이어야 합니다.' });
+      Object.assign(a, hashPw(b.password), { changedAt: new Date().toISOString() });
+    } else if (b.action === 'delete') {
+      const i = list.findIndex(x => x.id === b.id); if (i < 0) return json(res, 404, { error: 'none', msg: '계정을 찾지 못했습니다.' });
+      if (list[i].id === who.aid) return json(res, 400, { error: 'self', msg: '지금 로그인한 계정은 지울 수 없습니다.' });
+      list.splice(i, 1);
+    } else return json(res, 400, { error: 'action' });
+    try { writeAccounts(list); } catch (e) { console.error('[admin] 계정 저장 실패:', e.message); return json(res, 500, { error: 'write', msg: '저장 공간에 쓰지 못했습니다.' }); }
+    return json(res, 200, { ok: true, ...view() });
+  }
+
   if (p === '/admin/api/data' && (m === 'GET' || m === 'HEAD')) {
-    const role = authed(req);
+    const who = authed(req), role = who?.role;
     if (!role) return json(res, 401, { error: 'login' });
     // 임시 계정이거나 서버에 키가 없으면 풀지 않고 암호문 그대로 — 브라우저가 사용자의 데이터 키로 푼다(총괄 계정만)
     if (isTemp() || !keyText().trim()) {
@@ -170,7 +250,7 @@ export async function adminHandler(req, res) {
     const r = loadData();
     if (r.error) return json(res, 503, { error: r.error });
     // 업체 계정: 운영(자동 측정 실행 기록)은 아예 보내지 않는다
-    return json(res, 200, role === 'master' ? { ...r.data, role } : { ...r.data, runs: [], role });
+    return json(res, 200, role === 'master' ? { ...r.data, role, me: who.user } : { ...r.data, runs: [], role, me: who.user });
   }
 
   return json(res, 404, { error: 'not found' });

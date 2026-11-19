@@ -156,6 +156,15 @@ select{background:var(--surface);border:1px solid var(--axis);border-radius:8px;
 .err{color:var(--bad);font-size:13.5px;margin-top:8px;min-height:18px}
 .pghead{margin:4px 0 14px}.pghead h1{font-size:22px;margin:0 0 2px;letter-spacing:-.02em}.pghead .sub{margin:0;color:var(--ink2);font-size:13.5px}
 #pg-ai .tiles,#pg-seo .tiles{margin-bottom:4px}
+.ac-form{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end}
+.ac-form label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:600;color:var(--ink2);min-width:180px;flex:1}
+.ac-form input,.ac-form select{padding:9px 10px;border:1px solid var(--axis);border-radius:8px;font-size:14px;background:#fff;color:var(--ink)}
+.ac-form input:focus,.ac-form select:focus{outline:2px solid var(--brand);outline-offset:1px}
+.ac-go{border:0;border-radius:8px;background:var(--brand);color:#fff;font-weight:700;padding:10px 18px;cursor:pointer;font-size:14px}
+.ac-go:disabled{opacity:.45;cursor:default}
+.ac-btn{border:1px solid var(--axis);background:#fff;border-radius:7px;padding:4px 10px;font-size:12.5px;cursor:pointer;color:var(--ink)}
+.ac-btn:hover{border-color:var(--brand);color:var(--brand)}.ac-btn.danger{color:var(--bad)}.ac-btn.danger:hover{border-color:var(--bad)}
+.ac-pwrow td{background:var(--page)}
 .home2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px;align-items:start}
 .home2 .card{margin-top:16px}
 .morelink{font-size:13.5px;font-weight:700;color:var(--brand);text-decoration:none;white-space:nowrap}
@@ -220,6 +229,7 @@ body.is-login{background:linear-gradient(180deg,#fff 0,var(--page) 100%)}
     <a href="#seo" data-page="seo">콘텐츠·SEO</a>
     <p class="side__g" data-master>운영</p>
     <a href="#ops" data-page="ops" data-master>자동 측정 기록</a>
+    <a href="#acct" data-page="acct" data-master>계정 관리</a>
     <p class="side__g">바로가기</p>
     <a href="/" target="_blank" rel="noopener">사이트 열기 ↗</a>
     <a href="#" id="sideSheet" target="_blank" rel="noopener noreferrer" hidden>문의 시트 열기 ↗</a>
@@ -663,6 +673,8 @@ function render(D) {
   </div>
   </div>
 
+  ${ROLE === 'master' ? '<div id="pg-acct"></div>' : ''}
+
   <div id="pg-ops">
     <div class="pghead"><h1>자동 측정 기록</h1><p class="sub">매일 12:20 이 PC에서 도는 측정(AI·검색 캡처 → 화면 캡처 → 글 점검 → 일일 점검 → GA4·문의 집계 → 관리자 데이터 갱신) 결과입니다.</p></div>
   </div>
@@ -890,10 +902,11 @@ async function openBlob(encB64, keyB64) {
 let ENC = null, TEMP = false;
 // 화면 전환(왼쪽 메뉴): 메뉴 하나 = 화면 하나(#home|conv|leads|ai|seo|ops). 그 화면에 속한 구역만 보인다
 let DATA_STATE = '';
-const PAGES = ['home', 'conv', 'leads', 'ai', 'seo', 'ops'];
-const PAGE_OF = { 'pg-home': 'home', 's-conv': 'conv', 's-leads': 'leads', 'pg-ai': 'ai', 's-trend': 'ai', 's-engine': 'ai', 's-grid': 'ai', 's-dom': 'ai', 'pg-seo': 'seo', 's-blog': 'seo', 's-idx': 'seo', 's-gsc': 'seo', 'pg-ops': 'ops', 's-run': 'ops' };
+const PAGES = ['home', 'conv', 'leads', 'ai', 'seo', 'ops', 'acct'];
+const MASTER_PAGES = ['ops', 'acct'];
+const PAGE_OF = { 'pg-acct': 'acct', 'pg-home': 'home', 's-conv': 'conv', 's-leads': 'leads', 'pg-ai': 'ai', 's-trend': 'ai', 's-engine': 'ai', 's-grid': 'ai', 's-dom': 'ai', 'pg-seo': 'seo', 's-blog': 'seo', 's-idx': 'seo', 's-gsc': 'seo', 'pg-ops': 'ops', 's-run': 'ops' };
 let ROLE = 'master'; // 'master' = 총괄 담당자, 'client' = 미래애드원 업체(운영 화면 없음 — 서버도 운영 데이터를 보내지 않음)
-const pageNow = () => { const h = location.hash.slice(1); return PAGES.includes(h) && !(h === 'ops' && ROLE !== 'master') ? h : 'home'; };
+const pageNow = () => { const h = location.hash.slice(1); return PAGES.includes(h) && !(MASTER_PAGES.includes(h) && ROLE !== 'master') ? h : 'home'; };
 function sideOpen(open) { $('#side').classList.toggle('open', open); $('#sideDim').hidden = !open; $('#menuBtn').setAttribute('aria-expanded', String(open)); }
 function applyView() {
   const inside = !$('#logout').hidden, page = pageNow();
@@ -904,6 +917,80 @@ function applyView() {
   for (const id of ['dash', 'keybox', 'msg']) $('#' + id).hidden = id !== DATA_STATE;
   for (const [id, pg] of Object.entries(PAGE_OF)) { const el = document.getElementById(id); if (el) el.hidden = pg !== page; }
   $('#side').querySelectorAll('a[data-page]').forEach(a => a.classList.toggle('on', a.dataset.page === page));
+  if (page === 'acct' && inside && DATA_STATE === 'dash') loadAcct();
+}
+
+// ── 계정 관리(총괄만): Railway 볼륨에 저장되는 계정 — 만들기·비밀번호 바꾸기·지우기
+const ROLE_NAME = { master: '총괄(전체·계정 관리)', client: '업체(리포트만, 운영 기록 없음)' };
+const kstAt = s => (s ? new Date(Date.parse(s) + 9 * 3600e3).toISOString().slice(0, 16).replace('T', ' ') : '—');
+async function acctCall(body) {
+  const r = await fetch('api/accounts', { method: body ? 'POST' : 'GET', cache: 'no-store', credentials: 'same-origin', headers: body ? { 'Content-Type': 'application/json' } : {}, body: body ? JSON.stringify(body) : undefined });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.msg || ({ login: '다시 로그인해 주세요.', forbidden: '총괄 계정만 할 수 있습니다.', temp: '임시 계정으로는 계정을 만들 수 없습니다.', nostore: '계정을 저장할 공간(볼륨)이 연결되지 않았습니다.' })[j.error] || `오류(${r.status})`);
+  return j;
+}
+async function loadAcct() {
+  const host = $('#pg-acct'); if (!host || host.dataset.loading) return;
+  host.dataset.loading = '1';
+  host.innerHTML = '<div class="pghead"><h1>계정 관리</h1><p class="sub">관리자 페이지에 들어올 아이디·비밀번호를 만들고 관리합니다. 비밀번호는 원래 글자를 저장하지 않고 되돌릴 수 없는 형태(해시)로만 저장합니다.</p></div><section class="card"><p class="muted">불러오는 중…</p></section>';
+  try { drawAcct(await acctCall()); } catch (e) { host.querySelector('.card').innerHTML = `<p class="err">${esc(e.message)}</p>`; }
+  delete host.dataset.loading;
+}
+function drawAcct(j, note = '') {
+  const host = $('#pg-acct');
+  const blocked = !j.store ? '계정을 저장할 공간(Railway 볼륨)이 아직 연결되지 않아 새 계정을 만들 수 없습니다. 볼륨을 붙이고 다시 배포되면 바로 쓸 수 있습니다.' : j.temp ? '임시 계정 상태에서는 계정을 만들 수 없습니다.' : '';
+  const envRows = j.env.map(e => `<tr><td><b>${esc(e.user)}</b></td><td>${ROLE_NAME[e.role]}</td><td class="muted">Railway 변수로 정한 계정</td><td>${e.active ? '<span class="flag">사용 중</span>' : '<span class="flag info">꺼짐(변수 없음)</span>'}</td><td class="muted" style="white-space:normal">Railway Variables 에서만 바꿀 수 있음</td></tr>`).join('');
+  const rows = j.accounts.map(a => `<tr data-id="${esc(a.id)}"><td><b>${esc(a.user)}</b>${a.id === j.me ? ' <span class="muted">(나)</span>' : ''}</td><td>${ROLE_NAME[a.role] || esc(a.role)}</td><td>${esc(kstAt(a.createdAt))}<div class="muted" style="font-size:12px">${esc(a.createdBy || '')} 만듦${a.changedAt ? ` · 비밀번호 변경 ${esc(kstAt(a.changedAt))}` : ''}</div></td><td>${esc(kstAt(a.lastLogin))}</td><td><button type="button" class="ac-btn" data-act="pw">비밀번호 바꾸기</button>${a.id === j.me ? '' : ' <button type="button" class="ac-btn danger" data-act="del">지우기</button>'}</td></tr>`).join('');
+  host.innerHTML = `
+    <div class="pghead"><h1>계정 관리</h1><p class="sub">관리자 페이지에 들어올 아이디·비밀번호를 만들고 관리합니다. 비밀번호는 원래 글자를 저장하지 않고 되돌릴 수 없는 형태(해시)로만 저장합니다.</p></div>
+    ${blocked ? `<div class="note" style="border-left:4px solid var(--warn)">${blocked}</div>` : ''}
+    ${note ? `<div class="note" style="border-left:4px solid var(--good)">${esc(note)}</div>` : ''}
+    <section class="card">
+      <h2 style="margin:0 0 4px">새 계정 만들기</h2>
+      <p class="sub" style="margin:0 0 12px">업체 계정은 대시보드·방문·전환·문의·AI·검색 노출·콘텐츠·SEO만 봅니다(운영 기록·계정 관리·내부 알림 없음). 만든 아이디·비밀번호를 담당자에게 따로 전해 주세요.</p>
+      <form id="acForm" class="ac-form" autocomplete="off">
+        <label>아이디<input name="user" required autocapitalize="off" spellcheck="false" placeholder="예: mirae-team" ${blocked ? 'disabled' : ''}></label>
+        <label>비밀번호(8자 이상)<input name="password" type="password" required autocomplete="new-password" ${blocked ? 'disabled' : ''}></label>
+        <label>비밀번호 확인<input name="password2" type="password" required autocomplete="new-password" ${blocked ? 'disabled' : ''}></label>
+        <label>권한<select name="role" ${blocked ? 'disabled' : ''}><option value="client">${ROLE_NAME.client}</option><option value="master">${ROLE_NAME.master}</option></select></label>
+        <button type="submit" class="ac-go" ${blocked ? 'disabled' : ''}>계정 만들기</button>
+      </form>
+      <div class="err" id="acErr"></div>
+    </section>
+    <section class="card">
+      <h2 style="margin:0 0 10px">계정 목록</h2>
+      <div class="tbl"><table><thead><tr><th>아이디</th><th>권한</th><th>만든 날</th><th>마지막 로그인</th><th>관리</th></tr></thead><tbody>${envRows}${rows || ''}</tbody></table></div>
+      ${j.accounts.length ? '' : '<p class="muted" style="margin:8px 0 0">아직 이 화면에서 만든 계정이 없습니다.</p>'}
+      <div class="err" id="acErr2"></div>
+    </section>`;
+  $('#acForm').onsubmit = async e => {
+    e.preventDefault();
+    const f = e.target, err = $('#acErr');
+    err.textContent = '';
+    if (f.password.value !== f.password2.value) { err.textContent = '비밀번호 확인이 다릅니다.'; return; }
+    if (f.role.value === 'master' && !confirm('총괄 권한은 모든 기록을 보고 계정도 만들 수 있습니다. 총괄 계정으로 만들까요?')) return;
+    try { const r = await acctCall({ action: 'create', user: f.user.value, password: f.password.value, role: f.role.value }); drawAcct(r, `「${f.user.value.trim().toLowerCase()}」 계정을 만들었습니다(${f.role.value === 'master' ? '총괄' : '업체'}).`); }
+    catch (x) { err.textContent = x.message; f.password.value = ''; f.password2.value = ''; }
+  };
+  host.querySelector('tbody').onclick = async e => {
+    const b = e.target.closest('[data-act]'); if (!b) return;
+    const tr = b.closest('tr'), id = tr.dataset.id, name = tr.querySelector('b').textContent, err = $('#acErr2');
+    err.textContent = '';
+    if (b.dataset.act === 'del') {
+      if (!confirm(`「${name}」 계정을 지울까요? 이 계정으로 로그인한 사람은 바로 로그아웃됩니다.`)) return;
+      try { drawAcct(await acctCall({ action: 'delete', id }), `「${name}」 계정을 지웠습니다.`); } catch (x) { err.textContent = x.message; }
+      return;
+    }
+    if (tr.nextElementSibling?.classList.contains('ac-pwrow')) { tr.nextElementSibling.remove(); return; }
+    tr.insertAdjacentHTML('afterend', `<tr class="ac-pwrow"><td colspan="5"><form class="ac-form"><label>「${esc(name)}」 새 비밀번호(8자 이상)<input type="password" name="pw" required autocomplete="new-password"></label><label>확인<input type="password" name="pw2" required autocomplete="new-password"></label><button type="submit" class="ac-go">바꾸기</button></form></td></tr>`);
+    const fm = tr.nextElementSibling.querySelector('form');
+    fm.pw.focus();
+    fm.onsubmit = async ev => {
+      ev.preventDefault();
+      if (fm.pw.value !== fm.pw2.value) { err.textContent = '비밀번호 확인이 다릅니다.'; return; }
+      try { drawAcct(await acctCall({ action: 'password', id, password: fm.pw.value }), `「${name}」 비밀번호를 바꿨습니다. 이 계정의 기존 로그인은 풀립니다.`); } catch (x) { err.textContent = x.message; }
+    };
+  };
 }
 addEventListener('hashchange', () => { applyView(); scrollTo(0, 0); });
 $('#side').addEventListener('click', e => { if (e.target.closest('a')) sideOpen(false); });
