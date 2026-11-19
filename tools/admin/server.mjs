@@ -26,9 +26,10 @@ const SEC = {
   'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow', 'X-Frame-Options': 'DENY',
   'Referrer-Policy': 'no-referrer', 'X-Content-Type-Options': 'nosniff',
 };
-// 홈페이지 수정(editor.js)은 브라우저에서 GitHub API 로 바로 저장한다 → api.github.com 연결, 수정 검증용 blob: 모듈 불러오기, 새 이미지 미리보기 blob:
-const CSP = `default-src 'self'; script-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.github.com${process.env.ADMIN_DEV_CONNECT ? ' ' + process.env.ADMIN_DEV_CONNECT : ''}; frame-ancestors 'none'; base-uri 'none'; form-action 'self'`; // ADMIN_DEV_CONNECT: 로컬 시험용(가짜 GitHub)
-const STATIC = { '/admin/editor.js': 'editor.js', '/admin/literal.mjs': 'literal.mjs' }; // 화면이 불러오는 스크립트(비밀 없음 — 공개 저장소의 코드와 같음)
+// 「홈페이지 수정」(editor.js·literal.mjs)은 사용자 요청(11-19)으로 꺼 둠 — 다시 켜려면 STATIC 에 두 파일을 넣고 CSP 에
+// script-src blob: · img-src blob: · connect-src https://api.github.com 를 더한 뒤 index.html 왼쪽 메뉴에 연결(커밋 2de2e07 참고)
+const CSP = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'";
+const STATIC = {};
 
 const TEMP_USER = 'admin', TEMP_PW = '1234';
 const isTemp = () => !process.env.ADMIN_PASSWORD;

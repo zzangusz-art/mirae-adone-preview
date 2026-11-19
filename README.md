@@ -61,13 +61,12 @@ gh api -X POST repos/<계정>/mirae-adone-preview/pages -f build_type=workflow
 - 로컬에서 똑같이 띄워 보기: `npm start` → http://localhost:8080 (미리보기 모드)
 
 ## 관리자 페이지 (/admin/)
-`https://www.mirae-adone.com/admin/` — 왼쪽 메뉴 두 묶음. Railway 서버(`tools/serve.mjs`)에서만 동작하고 GitHub Pages 미리보기에는 없습니다.
-- **측정·전환**: 한눈에, 방문·전환(GA4 일별 방문자·세션·상담 창 열기·폼 시작·접수·전화·카톡, 채널별, 월 방문자), 문의(상담 시트 집계 — 상태·서비스·유입·페이지·업종·예산·지역·기기, 「구글 시트 열기」), AI·검색 노출, 엔진별, 검색어별, 인용 도메인, 글 발행, 구글 색인, 서치콘솔, 자동 측정.
-- **홈페이지 수정**(`tools/admin/editor.js`): 브라우저에서 GitHub 저장소에 바로 커밋 → Railway·Pages 자동 배포(2~3분). 권한은 대표님이 발급한 Fine-grained 토큰(이 저장소 · Contents 읽기/쓰기)이며 그 브라우저에만 저장(서버로 보내지 않음).
-  - 문구·가격·FAQ: `src/data.mjs` 의 「글자 그대로 적힌 값」만 그 자리에서 바꿈(`tools/admin/literal.mjs`). 계산되는 값(템플릿·함수·변수)은 🔒 잠금. 항목 추가(마지막 항목 복사)·삭제, 문구 찾기, 저장 전 브라우저에서 새 파일을 실제로 불러 검증.
-  - 이미지: `assets/img` 교체(원래 이름·형식·크기로 변환)·추가(WebP). 빌드가 모든 이미지 주소에 내용 해시(`?v=`)를 붙여 같은 이름으로 바꿔도 바로 보임.
-  - 인사이트 글: 수정·새 글·삭제. 사이트 글 검증기(generate.mjs)와 같은 기준(제목 12~40·설명 40~80·본문 1,200~4,800자·소제목 4·FAQ 2·내부 링크·검색어 중복 등)을 저장 전에 검사. 새 글 썸네일은 매일 자동 갱신 때 생성.
-  - 수정 기록: 최근 커밋 30건, 「관리자 수정」은 되돌리기(그 커밋 직전 파일로 복구하는 새 커밋).
+`https://www.mirae-adone.com/admin/` — 왼쪽 메뉴 = 화면 하나씩(주소 #home·#conv·#leads·#ai·#seo·#ops). Railway 서버(`tools/serve.mjs`)에서만 동작하고 GitHub Pages 미리보기에는 없습니다.
+- **대시보드**: 카테고리별 핵심 숫자 하나씩(방문자 7일·상담 신청 30일·전환율·AI 노출·인사이트 글·자동 측정, 누르면 해당 화면) + 「확인할 것」(측정 실패·GA4 지연·성공률·예약 글·색인 대기·신규 문의).
+- **고객·전환**: 방문·전환(GA4 일별 방문자·세션·상담 창 열기·폼 시작·접수·전화·카톡, 채널, 월 방문자) / 문의(상담 시트 집계 — 상태·서비스·유입·페이지·업종·예산·지역·기기, 「구글 시트 열기」).
+- **검색 노출·콘텐츠**: AI·검색 노출(성공률·추이·엔진별·검색어×엔진·인용 도메인) / 콘텐츠·SEO(인사이트 발행·구글 색인 요청·서치콘솔 판독).
+- **운영**: 자동 측정 기록.
+- **홈페이지 수정은 꺼 둠**(사용자 요청 11-19). `tools/admin/editor.js`·`literal.mjs` 는 남아 있으나 서버가 제공하지 않음 — 다시 켜는 방법은 `server.mjs` 의 CSP 주석.
 - **로그인**: 아이디 `ADMIN_USER`(기본 admin) + Railway Variables 의 `ADMIN_PASSWORD`. 비밀번호가 없는 동안은 임시 계정 admin / 1234(공개 저장소에 있어 비밀이 아님 → 이때 서버는 데이터를 풀지 않고 브라우저가 데이터 키로 풂). 12시간 유지, 같은 IP 15분에 5번 틀리면 15분 잠금. 비밀번호를 바꾸면 기존 로그인은 모두 풀립니다.
 - **GA4·문의 수집**: 상위 폴더 `tools/ai-visibility/pull-ga4-leads.mjs`(매일 측정 뒤) — 측정용 크롬 프로필의 구글 로그인으로 GA4 보고서(방문 페이지·트래픽 획득·이벤트)를 하루씩 읽고, 상담 시트는 집계만 저장(이름·연락처·문의 내용은 저장 안 함).
 - **데이터**: 측정 원본은 이 PC(상위 폴더 `측정/`)에만 있고, 저장소가 공개라 `tools/admin/data.enc` 에 **암호화해서** 올립니다. 상위 폴더 `tools/admin-export.mjs` 가 만들고(내용이 같으면 다시 쓰지 않음), 두 곳에서 올라갑니다.
@@ -75,7 +74,7 @@ gh api -X POST repos/<계정>/mirae-adone-preview/pages -f build_type=workflow
   - **배포 때**: `deploy.bat` 이 먼저 내보내기를 실행합니다.
   - 화면의 「측정 데이터 … 기준」이 마지막으로 올린 시각입니다.
 - **키**: 상위 폴더 `.admin-data-key`(저장소 밖, 처음 내보낼 때 자동 생성)의 한 줄을 Railway Variables 의 `ADMIN_DATA_KEY` 에 넣습니다. 키를 잃어버리면 파일을 지우고 다시 내보낸 뒤 새 값을 Railway 에 넣으면 됩니다.
-- 코드: `tools/admin/server.mjs`(로그인·데이터 API·스크립트 제공), `index.html`(화면, 외부 라이브러리 없음), `editor.js`·`literal.mjs`(홈페이지 수정), `crypto.mjs`(AES-256-GCM). robots.txt 는 모든 로봇에 `/admin/` 제외.
+- 코드: `tools/admin/server.mjs`(로그인·데이터 API), `index.html`(화면, 외부 라이브러리 없음), `crypto.mjs`(AES-256-GCM). robots.txt 는 모든 로봇에 `/admin/` 제외.
 
 ## 방문·전환 추적
 아이디는 `assets/js/config.js` 한 곳에만 넣고 `deploy.bat`. 비어 있는 도구는 불러오지 않습니다. 운영 주소(`TRACK_HOSTS`)에서만 켜지고, 미리보기에서 시험하려면 주소 끝에 `?track=on`(콘솔에 `[track]` 로그, 끄기 `?track=off`). 코드는 `assets/js/track.js`.
