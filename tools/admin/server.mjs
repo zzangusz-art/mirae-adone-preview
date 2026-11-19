@@ -26,7 +26,9 @@ const SEC = {
   'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow', 'X-Frame-Options': 'DENY',
   'Referrer-Policy': 'no-referrer', 'X-Content-Type-Options': 'nosniff',
 };
-const CSP = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'";
+// 홈페이지 수정(editor.js)은 브라우저에서 GitHub API 로 바로 저장한다 → api.github.com 연결, 수정 검증용 blob: 모듈 불러오기, 새 이미지 미리보기 blob:
+const CSP = `default-src 'self'; script-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.github.com${process.env.ADMIN_DEV_CONNECT ? ' ' + process.env.ADMIN_DEV_CONNECT : ''}; frame-ancestors 'none'; base-uri 'none'; form-action 'self'`; // ADMIN_DEV_CONNECT: 로컬 시험용(가짜 GitHub)
+const STATIC = { '/admin/editor.js': 'editor.js', '/admin/literal.mjs': 'literal.mjs' }; // 화면이 불러오는 스크립트(비밀 없음 — 공개 저장소의 코드와 같음)
 
 const TEMP_USER = 'admin', TEMP_PW = '1234';
 const isTemp = () => !process.env.ADMIN_PASSWORD;
@@ -116,6 +118,12 @@ export async function adminHandler(req, res) {
     const html = fs.readFileSync(PAGE);
     res.writeHead(200, { ...SEC, 'Content-Type': 'text/html; charset=utf-8', 'Content-Security-Policy': CSP, 'Content-Length': html.length });
     return res.end(m === 'HEAD' ? undefined : html);
+  }
+
+  if (STATIC[p] && (m === 'GET' || m === 'HEAD')) {
+    const js = fs.readFileSync(path.join(HERE, STATIC[p]));
+    res.writeHead(200, { ...SEC, 'Content-Type': 'text/javascript; charset=utf-8', 'Content-Length': js.length });
+    return res.end(m === 'HEAD' ? undefined : js);
   }
 
   if (p === '/admin/api/login' && m === 'POST') {

@@ -35,18 +35,32 @@ body{margin:0;background:var(--page);color:var(--ink);font:15px/1.55 var(--font)
 button,select,input{font:inherit;color:inherit}
 a{color:var(--s1)}
 .top{background:var(--navy);color:#fff;position:sticky;top:0;z-index:20}
-.top__in{max-width:1240px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.top__in{padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .top__brand{font-weight:800;font-size:16px;letter-spacing:-.01em}
 .top__brand span{font-weight:500;opacity:.7;margin-left:6px;font-size:14px}
 .top__meta{margin-left:auto;font-size:13px;opacity:.75}
 .top button{background:rgba(255,255,255,.12);border:0;border-radius:8px;padding:6px 12px;color:#fff;cursor:pointer;font-size:13px}
 .top button:hover{background:rgba(255,255,255,.22)}
-.subnav{position:sticky;top:var(--hd,52px);z-index:15;background:var(--page);border-bottom:1px solid var(--grid)}
-.subnav__in{max-width:1240px;margin:0 auto;padding:0 16px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
-.subnav a{flex:none;padding:10px 10px;color:var(--ink2);text-decoration:none;font-size:14px;font-weight:600;border-bottom:2px solid transparent}
-.subnav a:hover{color:var(--ink);border-color:var(--axis)}
-main{max-width:1240px;margin:0 auto;padding:20px 16px 64px}
-.card{background:var(--surface);border-radius:16px;box-shadow:0 0 0 1px var(--ring);padding:20px;margin-top:16px;scroll-margin-top:calc(var(--hd,52px) + 56px)}
+/* 왼쪽 메뉴 + 본문 */
+.shell{display:flex;align-items:flex-start;min-height:calc(100vh - var(--hd,52px))}
+.side{flex:none;width:224px;position:sticky;top:var(--hd,52px);height:calc(100vh - var(--hd,52px));overflow-y:auto;background:var(--surface);border-right:1px solid var(--grid);padding:12px 10px 24px}
+.side nav{display:flex;flex-direction:column;gap:1px}
+.side__g{margin:14px 10px 6px;font-size:11.5px;font-weight:700;letter-spacing:.04em;color:var(--muted)}
+.side__g:first-child{margin-top:4px}
+.side a{display:block;padding:8px 12px;border-radius:8px;color:var(--ink2);text-decoration:none;font-size:14.5px;font-weight:600}
+.side a:hover{background:var(--page);color:var(--ink)}
+.side a.on{background:color-mix(in srgb,var(--s1) 12%,var(--surface));color:var(--s1)}
+.side__dim{display:none}
+.top__menu{display:none;background:transparent!important;font-size:20px!important;padding:2px 8px!important;line-height:1}
+main{flex:1;min-width:0;max-width:1240px;margin:0 auto;padding:20px 20px 64px}
+.card{background:var(--surface);border-radius:16px;box-shadow:0 0 0 1px var(--ring);padding:20px;margin-top:16px;scroll-margin-top:calc(var(--hd,52px) + 16px)}
+@media (max-width:960px){
+  .top__menu:not([hidden]){display:inline-block}
+  .side{position:fixed;left:0;top:var(--hd,52px);bottom:0;height:auto;z-index:40;transform:translateX(-105%);transition:transform .2s ease;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+  .side.open{transform:none}
+  .side__dim:not([hidden]){display:block;position:fixed;inset:var(--hd,52px) 0 0 0;background:rgba(0,0,0,.35);z-index:35}
+  main{padding:16px 16px 64px}
+}
 .card h2{margin:0;font-size:18px;letter-spacing:-.01em}
 .card .sub{margin:4px 0 0;color:var(--ink2);font-size:13.5px}
 .card__head{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;justify-content:space-between;margin-bottom:14px}
@@ -112,6 +126,17 @@ select{background:var(--surface);border:1px solid var(--axis);border-radius:8px;
 .hm td.trend{min-width:110px;background:transparent;padding:0 4px}
 .bars{display:flex;flex-direction:column;gap:6px}
 .bar{display:grid;grid-template-columns:minmax(120px,190px) 1fr 44px;align-items:center;gap:10px;font-size:13.5px;padding:2px 0;cursor:default}
+.bar .bv small{font-weight:500;color:var(--muted);margin-left:4px;font-size:12px}
+.btnlink{display:inline-flex;align-items:center;gap:6px;background:var(--navy);color:#fff;text-decoration:none;border-radius:10px;padding:9px 14px;font-weight:700;font-size:14px;white-space:nowrap}
+.btnlink:hover{filter:brightness(1.15)}
+.funnel{display:flex;flex-direction:column;gap:8px;margin:6px 0 4px}
+.fn{display:grid;grid-template-columns:150px 1fr 120px;align-items:center;gap:10px;font-size:14px}
+.fn .bt{height:22px;position:relative;background:var(--page);border-radius:4px}
+.fn .bt i{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0;background:var(--s1);min-width:2px}
+.fn b{font-variant-numeric:tabular-nums}.fn small{color:var(--muted);margin-left:6px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:14px}
+.grid3 h3,.two h3{font-size:15px;margin:0 0 8px}
+@media (max-width:640px){.fn{grid-template-columns:96px 1fr 92px;font-size:13px}}
 .bar .bl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bar .bt{height:14px;position:relative}
 .bar .bt i{position:absolute;left:0;top:0;bottom:0;background:var(--s1);border-radius:0 4px 4px 0;min-width:2px}
@@ -136,6 +161,54 @@ select{background:var(--surface);border:1px solid var(--axis);border-radius:8px;
 .md h2{font-size:17px;margin:4px 0 8px}.md h3{font-size:15px;margin:16px 0 6px}.md h4,.md h5{font-size:14px;margin:14px 0 6px}
 .md p,.md ul{margin:6px 0}.md ul{padding-left:20px}
 .md code{background:var(--page);padding:1px 5px;border-radius:5px;font-size:12.5px}
+.err{color:var(--bad);font-size:13.5px;margin-top:8px;min-height:18px}
+/* 홈페이지 수정 */
+.ed-token{max-width:720px}.ed-token ol{padding-left:20px;line-height:1.8;font-size:14px}.ed-token h3{margin:0 0 6px}
+.ed-token form label{display:block;font-weight:600;font-size:13.5px;margin:12px 0 6px}
+.ed-in{width:100%;padding:8px 10px;border:1px solid var(--axis);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit;font-size:14px}
+.ed-in:focus{outline:2px solid var(--s1);outline-offset:1px}
+.ed-in.is-changed{border-color:var(--s2);background:color-mix(in srgb,var(--s2) 7%,var(--surface))}
+.ed-in.num{max-width:200px}.ed-in.mono{font-family:ui-monospace,Consolas,monospace;font-size:13.5px;line-height:1.55}
+textarea.ed-in{resize:vertical;line-height:1.5}
+.ed-btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:10px;padding:9px 16px;background:var(--navy);color:#fff;font-weight:700;font-size:14px;cursor:pointer;white-space:nowrap}
+.ed-btn:disabled{opacity:.5;cursor:default}.ed-btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--axis)}.ed-btn.danger{color:var(--bad)}
+.ed-link{background:none;border:0;color:var(--s1);cursor:pointer;font-size:13px;padding:2px 4px;font-weight:600}.ed-link.del{color:var(--bad);font-weight:500}
+.ed-chk{display:flex!important;align-items:center;gap:8px;font-weight:500!important;font-size:13.5px;margin:10px 0}
+.ed-chk input{width:auto}
+.ed-bar{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
+.ed-bar label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--ink2);font-weight:600}
+.ed-bar select,.ed-bar input{padding:7px 10px;border:1px solid var(--axis);border-radius:8px;background:var(--surface);color:var(--ink);font-size:14px;min-width:220px}
+.ed-grow{flex:1;min-width:220px}.ed-grow input{width:100%}
+.ed-row{display:grid;grid-template-columns:200px 1fr;gap:12px;padding:8px 0;border-bottom:1px solid var(--grid);align-items:start}
+.ed-key{font-size:13.5px;font-weight:600;color:var(--ink2);padding-top:7px;overflow-wrap:anywhere}.ed-key small{font-weight:400;color:var(--muted);margin-left:4px}
+.ed-val{min-width:0;position:relative}
+.ed-obj .ed-obj{border-left:3px solid var(--grid);padding-left:12px}
+.ed-arr{display:flex;flex-direction:column;gap:6px}
+.ed-li{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:start}
+.ed-num{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;border-radius:12px;background:var(--page);font-size:12px;font-weight:700;color:var(--ink2);margin-top:4px}
+.ed-item{border:1px solid var(--grid);border-radius:10px;padding:6px 12px}
+.ed-item>summary{cursor:pointer;font-weight:600;font-size:14px;padding:4px 0;display:flex;gap:8px;align-items:center}
+.ed-item[open]>summary{border-bottom:1px solid var(--grid);margin-bottom:6px}
+.ed-item>summary .del{margin-left:auto}
+.ed-lock{font-size:12.5px;color:var(--muted);background:var(--page);border-radius:8px;padding:6px 10px}.ed-lock code{font-size:12px}
+.ed-cnt{display:inline-block;font-size:12px;color:var(--muted);margin-top:3px}.ed-cnt.over{color:var(--bad);font-weight:700}
+.ed-save{position:sticky;bottom:10px;z-index:5;display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap;margin-top:16px;background:var(--surface);box-shadow:0 0 0 1px var(--ring),0 8px 24px rgba(0,0,0,.12);border-radius:12px;padding:10px 12px}
+.ed-save>span{margin-right:auto;font-size:13.5px;font-weight:600}
+.ed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.ed-img{border:1px solid var(--grid);border-radius:10px;background:var(--surface);padding:6px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:6px;color:var(--ink)}
+.ed-img:hover{box-shadow:0 0 0 2px var(--s1)}
+.ed-img img{width:100%;aspect-ratio:4/3;object-fit:contain;background:repeating-conic-gradient(var(--page) 0 25%,var(--surface) 0 50%) 0 0/16px 16px;border-radius:6px}
+.ed-img span{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ed-img small{color:var(--muted);margin-left:4px}
+.ed-detail{display:flex;gap:16px;flex-wrap:wrap;border:1px solid var(--grid);border-radius:12px;padding:14px;margin:12px 0}
+.ed-prev{flex:1 1 260px;max-width:420px}.ed-prev img{width:100%;max-height:300px;object-fit:contain;background:repeating-conic-gradient(var(--page) 0 25%,var(--surface) 0 50%) 0 0/16px 16px;border-radius:8px}
+.ed-act{flex:1 1 260px;display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.ed-act label{font-size:13.5px}
+.ed-form{display:flex;flex-direction:column;gap:6px}
+.ed-f{display:flex;flex-direction:column;gap:4px;font-size:13.5px;font-weight:600;color:var(--ink2);margin-top:6px}
+.ed-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.ed-toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:60;max-width:min(680px,calc(100% - 32px));background:var(--navy);color:#fff;border-radius:12px;padding:12px 16px;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.ed-toast.ok{background:#0b6b32}.ed-toast.bad{background:#a12a2a}.ed-toast.busy{background:var(--navy)}
+@media (max-width:640px){.ed-row{grid-template-columns:1fr;gap:4px}.ed-key{padding-top:0}.modes{order:2;margin-left:0}}
 #tip{position:fixed;z-index:50;pointer-events:none;background:var(--surface);color:var(--ink);box-shadow:0 0 0 1px var(--ring),0 8px 24px rgba(0,0,0,.18);border-radius:10px;padding:9px 11px;font-size:13px;max-width:320px;line-height:1.45}
 #tip .tr{display:flex;align-items:center;gap:6px;margin-top:3px;white-space:nowrap}
 #tip .tr i{width:10px;height:10px;border-radius:3px;flex:none}
@@ -164,11 +237,37 @@ select{background:var(--surface);border:1px solid var(--axis);border-radius:8px;
 </head>
 <body>
 <header class="top"><div class="top__in">
-  <div class="top__brand">미래애드원 관리자<span>측정 결과</span></div>
+  <button type="button" class="top__menu" id="menuBtn" aria-label="메뉴 열기" aria-controls="side" aria-expanded="false" hidden>☰</button>
+  <div class="top__brand">미래애드원 관리자</div>
   <div class="top__meta" id="asof"></div>
   <button type="button" id="logout" hidden>로그아웃</button>
 </div></header>
 
+<div class="shell">
+<aside class="side" id="side" hidden aria-label="관리자 메뉴">
+  <nav>
+    <p class="side__g">측정·전환</p>
+    <a href="#" data-go="s-sum">한눈에</a>
+    <a href="#" data-go="s-conv">방문·전환</a>
+    <a href="#" data-go="s-leads">문의</a>
+    <a href="#" data-go="s-trend">AI·검색 노출</a>
+    <a href="#" data-go="s-engine">엔진별</a>
+    <a href="#" data-go="s-grid">검색어별</a>
+    <a href="#" data-go="s-dom">인용 도메인</a>
+    <a href="#" data-go="s-blog">글 발행</a>
+    <a href="#" data-go="s-idx">구글 색인</a>
+    <a href="#" data-go="s-gsc">서치콘솔</a>
+    <a href="#" data-go="s-run">자동 측정</a>
+    <p class="side__g">홈페이지 수정</p>
+    <a href="#edit/text" data-edit="text">문구·가격·FAQ</a>
+    <a href="#edit/img" data-edit="img">이미지</a>
+    <a href="#edit/blog" data-edit="blog">인사이트 글</a>
+    <a href="#edit/log" data-edit="log">수정 기록</a>
+    <p class="side__g">바로가기</p>
+    <a href="/" target="_blank" rel="noopener">사이트 열기 ↗</a>
+  </nav>
+</aside>
+<div class="side__dim" id="sideDim" hidden></div>
 <main id="main">
   <section class="login" id="login" hidden>
     <h1>관리자 로그인</h1>
@@ -195,7 +294,9 @@ select{background:var(--surface);border:1px solid var(--axis);border-radius:8px;
   </section>
   <section class="msg" id="msg" hidden></section>
   <div id="dash" hidden></div>
+  <div id="edit" hidden></div>
 </main>
+</div>
 <div id="tip" role="tooltip" hidden></div>
 
 <script>
@@ -377,6 +478,96 @@ function model(D) {
 const deltaHtml = (v, label) => v == null ? '' :
   `<span><span class="delta ${v > 0 ? 'up' : v < 0 ? 'down' : 'flat'}">${v > 0 ? '▲ +' + v : v < 0 ? '▼ ' + v : '변화 없음'}</span> <span class="muted">${esc(label)}</span></span>`;
 
+// ── 방문·전환(GA4 일별) / 문의 취합(상담 시트)
+const topN = (o, n = 8) => Object.entries(o || {}).filter(([k]) => k).sort((a, b) => b[1] - a[1]).slice(0, n);
+function barsHtml(o, n = 8, unit = '건') {
+  const rows = topN(o, n), max = rows.length ? rows[0][1] : 1;
+  return rows.length ? `<div class="bars">${rows.map(([k, v]) => `<div class="bar" data-tip="${addTip(`<b>${esc(k)}</b><div class="dm">${v}${unit}</div>`)}"><span class="bl">${esc(k)}</span><span class="bt"><i style="width:${(v / max * 100).toFixed(1)}%"></i></span><span class="bv">${num(v)}</span></div>`).join('')}</div>` : '<p class="muted">없음</p>';
+}
+const pctTxt = (a, b) => (b ? `${Math.round(a / b * 1000) / 10}%` : '—');
+function renderConv(D) {
+  const host = $('#conv');
+  const days = (D.ga4 || []).slice().sort((a, b) => (a.date < b.date ? -1 : 1));
+  if (!days.length) { host.innerHTML = '<p class="muted">아직 GA4 일별 데이터가 없습니다. 다음 자동 측정 뒤 채워집니다.</p>'; return; }
+  const sumOf = (list, f) => list.reduce((a, d) => a + (f(d) || 0), 0);
+  const ev = (list, k, i = 0) => sumOf(list, d => d.events?.[k]?.[i]);
+  const draw = w => {
+    const n = w === 'all' ? days.length : Math.min(+w, days.length);
+    const sel = days.slice(-n), prev = w === 'all' ? [] : days.slice(-2 * n, -n);
+    const U = sumOf(sel, d => d.users), S = sumOf(sel, d => d.sessions), E = sumOf(sel, d => d.engaged);
+    const quote = ev(sel, 'open_quote'), fstart = ev(sel, 'form_start'), lead = ev(sel, 'generate_lead'), tel = ev(sel, 'click_tel'), kakao = ev(sel, 'click_kakao');
+    const uAvg = U / sel.length, pAvg = prev.length === n ? sumOf(prev, d => d.users) / n : null;
+    const leadPrev = prev.length === n ? ev(prev, 'generate_lead') : null;
+    const label = `${fmtD(sel[0].date)}~${fmtD(sel.at(-1).date)} · ${sel.length}일`;
+    const ch = {};
+    for (const d of sel) for (const [k, v] of Object.entries(d.channels || {})) { ch[k] = ch[k] || [0, 0]; ch[k][0] += v[0]; ch[k][1] += v[1]; }
+    const chRows = Object.entries(ch).sort((a, b) => b[1][0] - a[1][0]);
+    const fn = [['세션(방문)', S], ['상담 창 열기', quote], ['폼 입력 시작', fstart], ['상담 신청 접수', lead]];
+    const months = Object.entries(D.ga4Months || {}).sort();
+    host.innerHTML = `
+      <div class="tiles" style="margin-bottom:16px">
+        <div class="tile"><div class="tile__l">방문자(일별 합)</div><div class="tile__v">${num(U)}<small>명</small></div><div class="tile__s">${label} · 하루 평균 ${uAvg.toFixed(1)}명</div><div class="tile__d">${pAvg != null ? deltaHtml(Math.round((uAvg - pAvg) * 10) / 10, `직전 ${n}일 하루 평균(${pAvg.toFixed(1)}명) 대비`) : ''}</div></div>
+        <div class="tile"><div class="tile__l">세션</div><div class="tile__v">${num(S)}</div><div class="tile__s">참여 세션 ${num(E)}(${pctTxt(E, S)})</div></div>
+        <div class="tile"><div class="tile__l">상담 신청 접수</div><div class="tile__v">${num(lead)}<small>건</small></div><div class="tile__s">세션 대비 전환율 ${pctTxt(lead, S)}</div><div class="tile__d">${leadPrev != null ? deltaHtml(lead - leadPrev, `직전 ${n}일 대비`) : ''}</div></div>
+        <div class="tile"><div class="tile__l">상담 창 열기</div><div class="tile__v">${num(quote)}<small>회</small></div><div class="tile__s">폼 입력 시작 ${num(fstart)}회</div></div>
+        <div class="tile"><div class="tile__l">전화·카톡 버튼</div><div class="tile__v">${num(tel + kakao)}<small>회</small></div><div class="tile__s">전화 ${num(tel)} · 카카오톡 ${num(kakao)}</div></div>
+        <div class="tile"><div class="tile__l">전체 문의 행동</div><div class="tile__v">${num(lead + tel + kakao)}<small>회</small></div><div class="tile__s">접수 + 전화 + 카톡 · 세션 대비 ${pctTxt(lead + tel + kakao, S)}</div></div>
+      </div>
+      <h3 style="font-size:15px;margin:0 0 8px">전환 단계(${label})</h3>
+      <div class="funnel">${fn.map(([k, v]) => `<div class="fn"><span>${k}</span><span class="bt"><i style="width:${(S ? Math.min(100, v / S * 100) : 0).toFixed(1)}%"></i></span><span><b>${num(v)}</b><small>${k.startsWith('세션') ? '' : pctTxt(v, S)}</small></span></div>`).join('')}</div>
+      <p class="muted" style="font-size:12.5px;margin:4px 0 0">상담 페이지 폼에서 바로 신청하는 경우도 있어 뒤 단계 수가 앞 단계보다 클 수 있습니다. 비율은 모두 세션 대비입니다.</p>
+      <div class="two" style="margin-top:18px">
+        <div><h3>하루 방문자</h3><div class="chart" id="cvU"></div></div>
+        <div><h3>하루 상담 행동</h3><div class="legend" style="margin-bottom:4px"><span><i style="background:var(--s1)"></i>상담 창 열기</span><span><i style="background:var(--s2)"></i>폼 입력 시작</span><span><i style="background:var(--s3)"></i>접수</span></div><div class="chart" id="cvA"></div></div>
+      </div>
+      <div class="two" style="margin-top:18px">
+        <div><h3>채널별 세션</h3><div class="tbl"><table><thead><tr><th>채널</th><th class="n">세션</th><th class="n">비중</th><th class="n">참여율</th></tr></thead><tbody>${chRows.map(([k, v]) => `<tr><td>${esc(k)}</td><td class="n">${num(v[0])}</td><td class="n">${pctTxt(v[0], S)}</td><td class="n">${pctTxt(v[1], v[0])}</td></tr>`).join('')}</tbody></table></div></div>
+        <div><h3>월 방문자(고유)</h3><div class="tbl"><table><thead><tr><th>월</th><th class="n">방문자</th><th class="n">일수</th><th class="n">하루 평균</th><th class="n">전월 대비</th></tr></thead><tbody>${months.map(([m, v], i) => { const a = v.users / v.days, p = i ? months[i - 1][1].users / months[i - 1][1].days : null; return `<tr><td>${esc(m)} <span class="muted" style="font-size:12px">${fmtD(v.from)}~${fmtD(v.to)}</span></td><td class="n">${num(v.users)}</td><td class="n">${v.days}</td><td class="n">${a.toFixed(1)}</td><td class="n">${p ? `<span class="delta ${a >= p ? 'up' : 'down'}">${a >= p ? '+' : ''}${Math.round((a - p) / p * 100)}%</span>` : '—'}</td></tr>`; }).join('')}</tbody></table></div>
+        <p class="muted" style="font-size:12px">달이 다 차지 않은 달은 하루 평균으로 비교합니다.</p></div>
+      </div>`;
+    const ds = sel.map(d => d.date);
+    lineChart($('#cvU'), { dates: ds, height: 200, unit: '명', label: '하루 방문자', series: [{ name: '방문자', color: 's1', values: sel.map(d => d.users) }], tipExtra: i => `<div class="dm">세션 ${sel[i].sessions}</div>` });
+    lineChart($('#cvA'), { dates: ds, height: 200, unit: '회', label: '하루 상담 행동', series: [{ name: '상담 창 열기', color: 's1', values: sel.map(d => d.events?.open_quote?.[0] || 0) }, { name: '폼 입력 시작', color: 's2', values: sel.map(d => d.events?.form_start?.[0] || 0) }, { name: '접수', color: 's3', values: sel.map(d => d.events?.generate_lead?.[0] || 0) }] });
+  };
+  draw('30');
+  $('#convWin').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    $('#convWin').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    draw(b.dataset.w);
+  });
+}
+function renderLeads(D) {
+  const L = D.leads, host = $('#leads');
+  if (!L) { host.innerHTML = '<p class="muted">상담 시트 집계가 아직 없습니다. 다음 자동 측정 뒤 채워집니다.</p>'; return; }
+  const dates = Object.keys(L.byDate || {}).filter(Boolean).sort();
+  const today = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+  const within = n => dates.filter(d => (Date.parse(today) - Date.parse(d)) / 864e5 < n).reduce((a, d) => a + L.byDate[d], 0);
+  const series = [];
+  if (dates.length) for (let t = Date.parse(dates[0] + 'T00:00:00Z'); t <= Date.parse(today + 'T00:00:00Z'); t += 864e5) { const d = new Date(t).toISOString().slice(0, 10); series.push([d, L.byDate[d] || 0]); }
+  const upd = L.updated ? new Date(Date.parse(L.updated) + 9 * 3600e3).toISOString().slice(0, 16).replace('T', ' ') : '';
+  const st = topN(L.byStatus, 3).map(([k, v]) => `${esc(k)} ${v}`).join(' · ');
+  host.innerHTML = `
+    <div class="tiles" style="margin-bottom:16px">
+      <div class="tile"><div class="tile__l">전체 접수</div><div class="tile__v">${num(L.total)}<small>건</small></div><div class="tile__s">${dates.length ? `${fmtD(dates[0])} 첫 접수부터` : ''}${L.excluded ? ` · 시험 접수 ${L.excluded}건 제외` : ''}</div></div>
+      <div class="tile"><div class="tile__l">최근 7일 / 30일</div><div class="tile__v">${within(7)} / ${within(30)}<small>건</small></div><div class="tile__s">평균 작성 시간 ${L.avgDwell ? `${Math.floor(L.avgDwell / 60)}분 ${L.avgDwell % 60}초` : '—'}</div></div>
+      <div class="tile"><div class="tile__l">진행 상태</div><div class="tile__v" style="font-size:20px;padding-top:6px">${st || '—'}</div><div class="tile__s">시트 「상태」 칸 기준</div></div>
+    </div>
+    <h3 style="font-size:15px;margin:0 0 8px">날짜별 접수</h3><div class="chart" id="ldD"></div>
+    <div class="grid3">
+      <div><h3>진행 상태</h3>${barsHtml(L.byStatus)}</div>
+      <div><h3>관심 서비스</h3>${barsHtml(L.byService)}</div>
+      <div><h3>유입 경로</h3>${barsHtml(L.bySource)}</div>
+      <div><h3>신청한 페이지</h3>${barsHtml(L.byPage)}</div>
+      <div><h3>처음 들어온 페이지</h3>${barsHtml(L.byLanding)}</div>
+      <div><h3>업종</h3>${barsHtml(L.byIndustry)}</div>
+      <div><h3>월 예산</h3>${barsHtml(L.byBudget)}</div>
+      <div><h3>지역</h3>${barsHtml(L.byRegion)}</div>
+      <div><h3>기기</h3>${barsHtml(L.byDevice)}</div>
+    </div>
+    <p class="muted" style="font-size:12.5px;margin-top:12px">시트 집계 ${esc(upd)} 기준(매일 측정 뒤 자동 갱신). 연락처·문의 내용은 「구글 시트 열기」에서 확인하세요 — 구글 계정 로그인이 필요합니다.</p>`;
+  if (series.length) lineChart($('#ldD'), { dates: series.map(s => s[0]), height: 170, unit: '건', label: '날짜별 접수', series: [{ name: '접수', color: 's1', values: series.map(s => s[1]) }] });
+}
+
 function render(D) {
   TIPS.clear();
   const M = model(D);
@@ -402,10 +593,6 @@ function render(D) {
   $('#asof').textContent = `측정 데이터 ${D.exportedAt} 기준 · 마지막 측정 ${dates.length ? fmtDK(dates[L]) : '없음'}`;
   const dash = $('#dash');
   dash.innerHTML = `
-  <nav class="subnav" aria-label="구역"><div class="subnav__in">
-    <a href="#s-sum">한눈에</a><a href="#s-trend">AI·검색 노출</a><a href="#s-engine">엔진별</a><a href="#s-grid">검색어별</a><a href="#s-dom">인용 도메인</a><a href="#s-blog">글 발행</a><a href="#s-idx">구글 색인</a><a href="#s-gsc">서치콘솔</a><a href="#s-run">자동 측정</a>
-  </div></nav>
-  <div style="height:16px"></div>
   <div class="tiles" id="s-sum">
     <div class="tile"><div class="tile__l">우리 사이트 등장</div>
       <div class="tile__v">${num(last.site)}<small>건</small></div>
@@ -432,6 +619,18 @@ function render(D) {
       <div class="tile__s">${run ? `${esc(run.start)}~${esc(run.end)} 실행` : ''}</div>
       <div class="tile__d"><span class="flag ${run && run.ok ? '' : 'bad'}">${run && run.ok ? '모든 단계 성공' : '실패 또는 미완료'}</span>${missing.length ? `<span class="muted">측정 빠진 날 ${missing.length}일</span>` : ''}</div></div>
   </div>
+
+  <section class="card" id="s-conv">
+    <div class="card__head"><div><h2>방문·전환</h2><p class="sub">GA4 일별 수치(매일 측정 뒤 자동 수집). 세션 → 상담 창 열기 → 폼 입력 시작 → 상담 신청 접수 순서로 얼마나 이어지는지 봅니다.</p></div>
+      <div class="seg" role="group" aria-label="기간" id="convWin"><button type="button" data-w="7" aria-pressed="false">최근 7일</button><button type="button" data-w="30" aria-pressed="true">최근 30일</button><button type="button" data-w="all" aria-pressed="false">전체</button></div></div>
+    <div id="conv"></div>
+  </section>
+
+  <section class="card" id="s-leads">
+    <div class="card__head"><div><h2>문의(상담 신청) 취합</h2><p class="sub">구글 시트 「미래애드원 상담신청」 기준 건수·유입·서비스·상태입니다. 이름·연락처·문의 내용은 관리자 페이지에 가져오지 않습니다.</p></div>
+      ${D.leads?.sheetUrl ? `<a class="btnlink" href="${esc(D.leads.sheetUrl)}" target="_blank" rel="noopener noreferrer">구글 시트 열기 ↗</a>` : ''}</div>
+    <div id="leads"></div>
+  </section>
 
   <section class="card" id="s-trend">
     <div class="card__head"><div><h2>AI·검색 노출 추이</h2><p class="sub">측정한 날마다 검색어 ${Q.length}개를 엔진 ${E.length}곳에 물었을 때 우리 사이트가 나온 수와 상호가 언급된 수입니다. 측정에 실패한 결과는 세지 않았습니다.</p></div>
@@ -504,6 +703,9 @@ function render(D) {
   </section>`;
   dash.hidden = false;
   setHd();
+
+  renderConv(D);
+  renderLeads(D);
 
   // 추이 그래프
   lineChart($('#trend'), {
@@ -638,14 +840,46 @@ async function openBlob(encB64, keyB64) {
   return JSON.parse(text);
 }
 let ENC = null, TEMP = false;
+// 화면 전환(왼쪽 메뉴): 측정·전환(DATA_STATE = dash|keybox|msg, 메뉴는 구역으로 이동) ↔ 홈페이지 수정(#edit/<탭>)
+let DATA_STATE = '';
+const editTab = () => (location.hash.match(/^#edit(?:\/(text|img|blog|log))?$/) || [])[1] || (location.hash.startsWith('#edit') ? 'text' : '');
+function sideOpen(open) { $('#side').classList.toggle('open', open); $('#sideDim').hidden = !open; $('#menuBtn').setAttribute('aria-expanded', String(open)); }
+function markSide(sel) { $('#side').querySelectorAll('a').forEach(a => a.classList.toggle('on', a.matches(sel))); }
+function applyView() {
+  const tab = editTab(), inside = !$('#logout').hidden;
+  $('#side').hidden = !inside; $('#menuBtn').hidden = !inside;
+  for (const id of ['dash', 'keybox', 'msg']) $('#' + id).hidden = !!tab || id !== DATA_STATE;
+  $('#edit').hidden = !(tab && inside);
+  if (tab && inside) {
+    markSide(`[data-edit="${tab}"]`);
+    import('./editor.js').then(m => m.mountEditor($('#edit'), tab)).catch(err => { $('#edit').innerHTML = `<p class="err">수정 화면을 불러오지 못했습니다: ${esc(err.message)}</p>`; });
+  } else if (!$('#side').querySelector('a.on[data-go]')) markSide('[data-go="s-sum"]');
+}
+addEventListener('hashchange', applyView);
+$('#side').addEventListener('click', e => {
+  const a = e.target.closest('a'); if (!a) return;
+  if (a.dataset.go) {
+    e.preventDefault();
+    if (editTab()) { history.replaceState(null, '', location.pathname); applyView(); }
+    markSide(`[data-go="${a.dataset.go}"]`);
+    const t = document.getElementById(a.dataset.go);
+    if (t && !$('#dash').hidden) t.scrollIntoView({ block: 'start' }); else scrollTo(0, 0);
+  } else if (a.dataset.edit) scrollTo(0, 0);
+  sideOpen(false);
+});
+$('#menuBtn').addEventListener('click', () => sideOpen(!$('#side').classList.contains('open')));
+$('#sideDim').addEventListener('click', () => sideOpen(false));
 function show(D) {
   $('#login').hidden = true; $('#msg').hidden = true; $('#keybox').hidden = true; $('#logout').hidden = false;
   render(D);
   if (TEMP) $('#s-sum').insertAdjacentHTML('beforebegin', '<div class="note" style="margin:0 0 12px;border-left:4px solid var(--warn)"><b>임시 계정으로 열려 있습니다.</b> Railway → Variables 에 <code>ADMIN_PASSWORD</code>(와 <code>ADMIN_DATA_KEY</code>)를 넣으면 그 비밀번호로 바뀌고 임시 계정은 자동으로 꺼집니다.</div>');
+  DATA_STATE = 'dash'; applyView();
 }
 function showKeyBox(errText = '') {
   $('#login').hidden = true; $('#msg').hidden = true; $('#dash').hidden = true; $('#logout').hidden = false;
-  $('#keybox').hidden = false; $('#keyErr').textContent = errText; $('#dkey').focus();
+  $('#keybox').hidden = false; $('#keyErr').textContent = errText;
+  DATA_STATE = 'keybox'; applyView();
+  if (!$('#keybox').hidden) $('#dkey').focus();
 }
 $('#keyForm').addEventListener('submit', async e => {
   e.preventDefault();
@@ -664,6 +898,7 @@ $('#keyForm').addEventListener('submit', async e => {
 });
 function showLogin(state) {
   $('#dash').hidden = true; $('#msg').hidden = true; $('#keybox').hidden = true; $('#logout').hidden = true; $('#asof').textContent = '';
+  $('#edit').hidden = true; $('#side').hidden = true; $('#menuBtn').hidden = true; sideOpen(false);
   $('#login').hidden = false;
   const setup = state === 'setup';
   $('#loginNote').innerHTML = setup ? '관리자 비밀번호가 아직 설정되지 않았습니다. Railway → Variables 에 <code>ADMIN_PASSWORD</code> 를 넣으면 로그인할 수 있습니다.' : '측정 결과는 로그인한 뒤에만 보입니다.';
@@ -674,6 +909,7 @@ function showMsg(code) {
   const [t, b] = MSG[code] || MSG.error;
   $('#login').hidden = true; $('#dash').hidden = true; $('#keybox').hidden = true;
   $('#msg').innerHTML = `<h1>${t}</h1><p>${b}</p>`; $('#msg').hidden = false;
+  DATA_STATE = 'msg'; applyView();
 }
 async function boot() {
   let r;

@@ -10,7 +10,11 @@ import { ROOT, imgUrl } from './src/lib.mjs';
 import { loadPosts } from './tools/blog/lib.mjs';
 
 const { SITE, COMPANY, SERVICES, INDUSTRIES, BLOG_CATEGORIES, BLOG_PLANS, WEB_AI_PLAN, PRICE_SHOW_WEB_AI, CPC, FAQ, SEO, KEYWORD_LINKS, SITE_VERIFICATION, INDEXNOW_KEY } = D;
-const wr = (rel, s) => { const f = path.join(ROOT, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s); };
+// 이미지 주소에 내용 해시(?v=)를 붙인다 — CDN·브라우저가 7일 캐시하므로, 관리자 화면에서 같은 이름으로 이미지를 바꿔도 바로 보이게
+const imgV = new Map();
+const verOf = rel => { if (!imgV.has(rel)) { let v = ''; try { v = crypto.createHash('md5').update(fs.readFileSync(path.join(ROOT, 'assets/img', rel))).digest('hex').slice(0, 8); } catch { } imgV.set(rel, v); } return imgV.get(rel); };
+const versionImages = html => html.replace(/(assets\/img\/)([^"'?#\s)<>]+?\.(?:webp|jpe?g|png|svg|gif))(?![?\w.])/gi, (m, pre, rel) => { let r = rel; try { r = decodeURI(rel); } catch { } const v = verOf(r); return v ? `${pre}${rel}?v=${v}` : m; });
+const wr = (rel, s) => { const f = path.join(ROOT, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, /\.html$/.test(rel) ? versionImages(s) : s); };
 const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' }).format(new Date());
 const nowTime = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date()).replace(/^24/, '00');
 
