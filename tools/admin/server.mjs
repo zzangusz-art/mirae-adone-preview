@@ -1,4 +1,5 @@
-// 관리자 페이지 /admin/ — 측정 결과 보기(AI·검색 노출 추이, 인사이트 발행, 구글 색인 요청, 서치콘솔 판독)
+// 관리자 페이지 /admin/ — 측정 결과 보기(방문·전환, 문의, AI·검색 노출, 콘텐츠·SEO, 운영 기록)
+// - 계정: 총괄(ADMIN_USER/ADMIN_PASSWORD, 전체) · 업체(ADMIN_CLIENT_USER/ADMIN_CLIENT_PASSWORD, 운영 기록 제외 — 서버가 데이터에서 뺌)
 // - 로그인: 아이디 ADMIN_USER(기본 admin) + 비밀번호 ADMIN_PASSWORD(Railway 변수 — 공개 저장소라 코드에 두지 않음).
 //   맞으면 12시간짜리 HttpOnly 쿠키(서명값)를 준다. 아이디·비밀번호를 바꾸면 기존 로그인은 모두 풀린다
 // - 데이터: 같은 폴더 data.enc(암호화, 저장소에 들어 있음)를 ADMIN_DATA_KEY 로 풀어 로그인한 사람에게만 보낸다
@@ -28,21 +29,29 @@ const SEC = {
 };
 // 「홈페이지 수정」(editor.js·literal.mjs)은 사용자 요청(11-19)으로 꺼 둠 — 다시 켜려면 STATIC 에 두 파일을 넣고 CSP 에
 // script-src blob: · img-src blob: · connect-src https://api.github.com 를 더한 뒤 index.html 왼쪽 메뉴에 연결(커밋 2de2e07 참고)
-const CSP = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'";
+// 글꼴: 사이트와 같은 구글 폰트 Noto Sans KR(fonts.googleapis.com 스타일 · fonts.gstatic.com 글꼴 파일)
+const CSP = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'";
 const STATIC = {};
 
 const TEMP_USER = 'admin', TEMP_PW = '1234';
 const isTemp = () => !process.env.ADMIN_PASSWORD;
 const password = () => process.env.ADMIN_PASSWORD || TEMP_PW;
 const username = () => (process.env.ADMIN_PASSWORD ? process.env.ADMIN_USER || 'admin' : TEMP_USER).trim();
+// 계정 두 종류(사용자 요청 11-19): master = 총괄 담당자(전체), client = 미래애드원 업체(운영 기록 제외)
+// 업체 계정은 Railway 변수 ADMIN_CLIENT_PASSWORD 를 넣었을 때만 켜진다(아이디 ADMIN_CLIENT_USER, 기본 miraeadone).
+// 업체 계정은 서버가 데이터를 풀어 운영 부분을 빼고 보내야 하므로 ADMIN_DATA_KEY 가 있어야 하고, 임시 계정 상태에서는 꺼진다.
+const clientUser = () => (process.env.ADMIN_CLIENT_USER || 'miraeadone').trim();
+const clientPw = () => (isTemp() ? '' : process.env.ADMIN_CLIENT_PASSWORD || '');
+const ROLES = ['master', 'client'];
 function keyText() {
   if (process.env.ADMIN_DATA_KEY) return process.env.ADMIN_DATA_KEY;
   if (process.env.ADMIN_LOCAL_KEY === 'off') return '';
   try { return fs.readFileSync(LOCAL_KEY, 'utf8'); } catch { return ''; }
 }
 const sha = s => crypto.createHash('sha256').update(s).digest();
-const secret = () => sha(['mirae-admin-session', username(), password(), keyText().trim()].join('\0'));
-const sign = exp => crypto.createHmac('sha256', secret()).update('v1.' + exp).digest('base64url');
+// 역할마다 서명 열쇠가 다르다 — 그 계정의 아이디·비밀번호를 바꾸면 그 계정의 기존 로그인만 풀린다
+const secret = role => sha(['mirae-admin-session', role, role === 'client' ? clientUser() : username(), role === 'client' ? clientPw() : password(), keyText().trim()].join('\0'));
+const sign = (exp, role) => crypto.createHmac('sha256', secret(role)).update(`v2.${exp}.${role}`).digest('base64url');
 
 function cookies(req) {
   const out = {};
@@ -52,11 +61,13 @@ function cookies(req) {
   }
   return out;
 }
+// 로그인 쿠키 「만료.역할.서명」 → 맞으면 역할('master'|'client'), 아니면 ''
 function authed(req) {
-  const [exp, mac] = String(cookies(req)[COOKIE] || '').split('.');
-  if (!exp || !mac || !/^\d+$/.test(exp) || +exp < Date.now() / 1000) return false;
-  const a = Buffer.from(mac), b = Buffer.from(sign(exp));
-  return a.length === b.length && crypto.timingSafeEqual(a, b);
+  const [exp, role, mac] = String(cookies(req)[COOKIE] || '').split('.');
+  if (!exp || !mac || !ROLES.includes(role) || !/^\d+$/.test(exp) || +exp < Date.now() / 1000) return '';
+  if (role === 'client' && !clientPw()) return '';
+  const a = Buffer.from(mac), b = Buffer.from(sign(exp, role));
+  return a.length === b.length && crypto.timingSafeEqual(a, b) ? role : '';
 }
 const isHttps = req => String(req.headers['x-forwarded-proto'] || '').includes('https');
 const setCookie = (req, val, age) => `${COOKIE}=${val}; Path=/admin; HttpOnly; SameSite=Strict; Max-Age=${age}${isHttps(req) ? '; Secure' : ''}`;
@@ -133,28 +144,33 @@ export async function adminHandler(req, res) {
     if (!/application\/json/.test(req.headers['content-type'] || '')) return json(res, 415, { error: 'type' });
     let input = '', user = '';
     try { const b = JSON.parse(await readBody(req)); input = String(b.password || ''); user = String(b.username || '').trim(); } catch { return json(res, 400, { error: 'body' }); }
-    const userOk = crypto.timingSafeEqual(sha(user), sha(username())); // 둘 다 늘 비교 — 어느 쪽이 틀렸는지 응답 시간으로 드러나지 않게
-    const pwOk = crypto.timingSafeEqual(sha(input), sha(password()));
-    const ok = input.length > 0 && userOk && pwOk;
-    if (!ok) { fail(ip); await sleep(600); return json(res, 401, { error: 'wrong' }); }
+    // 두 계정 모두 늘 비교 — 어느 쪽·어느 칸이 틀렸는지 응답 시간으로 드러나지 않게
+    const masterOk = crypto.timingSafeEqual(sha(user), sha(username())) & crypto.timingSafeEqual(sha(input), sha(password()));
+    const cpw = clientPw();
+    const clientOk = crypto.timingSafeEqual(sha(user), sha(clientUser())) & crypto.timingSafeEqual(sha(input), sha(cpw || '\0no-client'));
+    const role = input.length > 0 ? (masterOk ? 'master' : cpw && clientOk ? 'client' : '') : '';
+    if (!role) { fail(ip); await sleep(600); return json(res, 401, { error: 'wrong' }); }
     fails.delete(ip);
     const exp = Math.floor(Date.now() / 1000) + TTL;
-    return json(res, 200, { ok: true }, { 'Set-Cookie': setCookie(req, `${exp}.${sign(exp)}`, TTL) });
+    return json(res, 200, { ok: true, role }, { 'Set-Cookie': setCookie(req, `${exp}.${role}.${sign(exp, role)}`, TTL) });
   }
 
   if (p === '/admin/api/logout' && m === 'POST') return json(res, 200, { ok: true }, { 'Set-Cookie': setCookie(req, '', 0) });
 
   if (p === '/admin/api/data' && (m === 'GET' || m === 'HEAD')) {
-    if (!authed(req)) return json(res, 401, { error: 'login' });
-    // 임시 계정이거나 서버에 키가 없으면 풀지 않고 암호문 그대로 — 브라우저가 사용자의 데이터 키로 푼다
+    const role = authed(req);
+    if (!role) return json(res, 401, { error: 'login' });
+    // 임시 계정이거나 서버에 키가 없으면 풀지 않고 암호문 그대로 — 브라우저가 사용자의 데이터 키로 푼다(총괄 계정만)
     if (isTemp() || !keyText().trim()) {
+      if (role !== 'master') return json(res, 503, { error: 'key' }); // 업체 계정은 운영 부분을 빼고 보내야 하므로 서버에서 풀 수 있을 때만
       let buf;
       try { buf = fs.readFileSync(DATA); } catch { return json(res, 503, { error: 'nodata' }); }
-      return json(res, 200, { encrypted: buf.toString('base64'), temp: isTemp() });
+      return json(res, 200, { encrypted: buf.toString('base64'), temp: isTemp(), role });
     }
     const r = loadData();
     if (r.error) return json(res, 503, { error: r.error });
-    return json(res, 200, r.data);
+    // 업체 계정: 운영(자동 측정 실행 기록)은 아예 보내지 않는다
+    return json(res, 200, role === 'master' ? { ...r.data, role } : { ...r.data, runs: [], role });
   }
 
   return json(res, 404, { error: 'not found' });
