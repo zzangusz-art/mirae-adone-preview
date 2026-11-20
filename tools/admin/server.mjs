@@ -15,6 +15,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { open, parseKey } from './crypto.mjs';
+import { SERVICES, INDUSTRIES } from '../../src/data.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PAGE = path.join(HERE, 'index.html');
@@ -123,6 +124,56 @@ function fail(ip) {
   if (fails.size > 5000) fails.clear();
 }
 
+// ── 새 문의 바로 반영(사용자 요청 11-20 「신규 문의가 왔을 때마다」)
+//    상담 신청이 구글 시트에 저장되면 사이트(app.js)가 접수번호와 고른 항목만 알려 준다 — 이름·연락처·지역·주소·문의 내용은 받지 않는다.
+//    관리자 화면은 마지막 시트 집계(leads.updated) 뒤에 들어온 것만 더해 보여 주고, 다음 자동 집계 때 시트 값으로 자연히 대체된다.
+//    누구나 보낼 수 있는 주소라 형식·허용값을 검사하고 IP·전체 횟수를 제한한다(가짜가 섞여도 다음 시트 집계 때 빠짐).
+//    볼륨이 있으면 mirae-leads-live.json 에 저장(재배포에도 유지), 없으면 메모리(재시작 때 사라짐 — 시트 집계로 메워짐)
+const LIVE_DAYS = 45, LIVE_MAX = 300;
+const liveFile = () => (storeDir() ? path.join(storeDir(), 'mirae-leads-live.json') : '');
+let liveMem = [];
+function readLive() {
+  const f = liveFile(); if (!f) return liveMem;
+  try { return JSON.parse(fs.readFileSync(f, 'utf8')).leads || []; }
+  catch (e) { if (e.code !== 'ENOENT') console.error('[admin] 새 문의 파일을 읽지 못함:', e.message); return []; }
+}
+function writeLive(list) {
+  const f = liveFile(); if (!f) { liveMem = list; return; }
+  fs.mkdirSync(path.dirname(f), { recursive: true });
+  const tmp = `${f}.${process.pid}.tmp`;
+  fs.writeFileSync(tmp, JSON.stringify({ v: 1, leads: list }), { mode: 0o600 });
+  fs.renameSync(tmp, f);
+}
+const liveHits = new Map();
+let liveAll = [];
+function liveLimited(ip) { // 한 IP 1시간 5건, 전체 하루 100건
+  const now = Date.now();
+  liveAll = liveAll.filter(t => now - t < 864e5);
+  const mine = (liveHits.get(ip) || []).filter(t => now - t < 3600e3);
+  if (mine.length >= 5 || liveAll.length >= 100) return true;
+  liveHits.set(ip, [...mine, now]); liveAll.push(now);
+  if (liveHits.size > 5000) liveHits.clear();
+  return false;
+}
+const SVC_NAMES = new Set(SERVICES.map(s => s.name));
+const IND_NAMES = new Set([...INDUSTRIES.map(i => i.name), '기업·B2B', '기타']);
+const BUDGETS = new Set(['50만원 미만', '50~100만원', '100~300만원', '300~500만원', '500만원 이상']);
+const kstDay = t => new Date(t + 9 * 3600e3).toISOString().slice(0, 10);
+const cleanPath = v => (/^\/[A-Za-z0-9._~\-/]{0,120}$/.test(String(v || '')) ? String(v) : '');
+const cleanTok = (v, n) => (new RegExp(`^[\\w.\\- ]{1,${n}}$`).test(String(v || '')) ? String(v) : '');
+function liveEntry(b) {
+  const id = String(b.id || '');
+  const m = id.match(/^MA(\d{2})(\d{2})(\d{2})-\d{4}$/); if (!m) return null;
+  const day = `20${m[1]}-${m[2]}-${m[3]}`, now = Date.now();
+  if (day !== kstDay(now) && day !== kstDay(now - 864e5)) return null; // 접수번호 날짜가 오늘·어제(KST)가 아니면 무시
+  const services = (Array.isArray(b.services) ? b.services : []).map(String).filter(s => SVC_NAMES.has(s)).slice(0, 18);
+  const industry = IND_NAMES.has(b.industry) ? b.industry : '', budget = BUDGETS.has(b.budget) ? b.budget : '';
+  const us = cleanTok(b.utm_source, 40), um = cleanTok(b.utm_medium, 40), ref = /^[a-z0-9.-]{1,80}$/.test(String(b.ref || '')) ? b.ref : '';
+  const src = us ? `${us}${um ? ' / ' + um : ''}` : b.gclid === true ? 'google / cpc' : ref || '직접·알 수 없음'; // 시트 집계(pull-ga4-leads.mjs)와 같은 규칙
+  const dwell = Number.isInteger(b.dwell) && b.dwell >= 0 && b.dwell < 86400 ? b.dwell : 0;
+  return { id, at: new Date(now).toISOString(), services, industry, budget, src, page: cleanPath(b.page), landing: cleanPath(b.landing), device: b.device === '모바일' ? '모바일' : 'PC', dwell };
+}
+
 // 데이터(풀어 둔 것) — data.enc 가 바뀌거나 키가 바뀌면 다시 푼다
 let cache = { sig: '', data: null, error: '' };
 function loadData() {
@@ -197,6 +248,29 @@ export async function adminHandler(req, res) {
   }
 
   if (p === '/admin/api/logout' && m === 'POST') return json(res, 200, { ok: true }, { 'Set-Cookie': setCookie(req, '', 0) });
+
+  // 새 문의 알림(사이트 상담 폼 → 로그인 없이) / 새 문의 목록(관리자 화면 → 로그인 필요)
+  if (p === '/admin/api/lead-event') {
+    if (m !== 'POST') return json(res, 405, { error: 'method' });
+    if (!/application\/json/.test(req.headers['content-type'] || '')) return json(res, 415, { error: 'type' });
+    let b;
+    try { b = JSON.parse(await readBody(req, 4096)); } catch { return json(res, 400, { error: 'body' }); }
+    if (!b || typeof b !== 'object' || b.test === true) { res.writeHead(204, SEC); return res.end(); } // 시험 접수(이름에 테스트·test)는 세지 않음
+    const e = liveEntry(b);
+    if (!e) return json(res, 400, { error: 'invalid' });
+    const list = readLive();
+    if (list.some(x => x.id === e.id)) { res.writeHead(204, SEC); return res.end(); } // 같은 접수번호는 한 번만
+    if (liveLimited(ipOf(req))) return json(res, 429, { error: 'limit' });
+    const keep = Date.now() - LIVE_DAYS * 864e5;
+    try { writeLive([...list.filter(x => Date.parse(x.at) > keep), e].slice(-LIVE_MAX)); }
+    catch (err) { console.error('[admin] 새 문의 저장 실패:', err.message); return json(res, 500, { error: 'write' }); }
+    console.log(`[admin] 새 문의 ${e.id} · ${e.services.join(', ') || '서비스 미선택'} · ${e.src}`);
+    res.writeHead(204, SEC); return res.end();
+  }
+  if (p === '/admin/api/live' && m === 'GET') {
+    if (!authed(req)) return json(res, 401, { error: 'login' });
+    return json(res, 200, { leads: readLive(), stored: !!liveFile() });
+  }
 
   // 계정 관리(총괄만): 목록 / 만들기 / 비밀번호 바꾸기 / 지우기
   if (p === '/admin/api/accounts') {

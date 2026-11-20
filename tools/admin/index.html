@@ -504,6 +504,54 @@ function renderConv(D) {
     draw(b.dataset.w);
   });
 }
+// ── 새 문의 바로 반영(11-20): 서버(api/live)에 쌓인 「시트 집계 뒤 들어온 문의」를 시트 집계에 더해서 그린다.
+//    다음 자동 집계(leads.updated 가 그보다 뒤)가 되면 시트 값에 이미 들어 있으므로 자연히 빠진다.
+let BASE = null, LIVE = [], LIVE_SIG = '', livePollT = 0;
+const kstStamp = iso => new Date(Date.parse(iso) + 9 * 3600e3).toISOString().slice(0, 16).replace('T', ' ');
+function withLive(D) {
+  const since = Date.parse(D.leads?.updated || 0) || 0;
+  const fresh = LIVE.filter(x => Date.parse(x.at) > since).sort((a, b) => (a.at < b.at ? -1 : 1));
+  if (!fresh.length) return D;
+  const L = JSON.parse(JSON.stringify(D.leads || { total: 0, byDate: {}, byStatus: {}, byService: {}, byIndustry: {}, byRegion: {}, byBudget: {}, bySource: {}, byLanding: {}, byPage: {}, byDevice: {} }));
+  const inc = (k, v) => { L[k] = L[k] || {}; v = v || '(없음)'; L[k][v] = (L[k][v] || 0) + 1; };
+  for (const x of fresh) {
+    L.total = (L.total || 0) + 1;
+    inc('byDate', kstStamp(x.at).slice(0, 10)); inc('byStatus', '신규');
+    if (x.services.length) x.services.forEach(s => inc('byService', s)); else inc('byService', '(선택 안 함)');
+    inc('byIndustry', x.industry); inc('byBudget', x.budget); inc('bySource', x.src); inc('byLanding', x.landing); inc('byPage', x.page); inc('byDevice', x.device);
+  }
+  L.live = fresh;
+  return { ...D, leads: L };
+}
+const liveCard = L => !L.live?.length ? '' : `
+    <section class="card" style="border-left:4px solid var(--s2);margin-bottom:16px">
+      <div class="card__head"><div><h2>새 문의 ${L.live.length}건 <small class="muted" style="font-size:13px;font-weight:500">시트 집계 전 · 접수되는 즉시 표시</small></h2><p class="sub">이름·연락처·문의 내용은 알림 메일이나 구글 시트에서 확인하세요. 다음 자동 집계(매일 12:20 측정) 때 시트의 진행 상태와 합쳐집니다.</p></div></div>
+      <div class="tbl"><table><thead><tr><th>접수 시각</th><th>접수번호</th><th>관심 서비스</th><th>업종</th><th>월 예산</th><th>유입 경로</th><th>신청한 페이지</th><th>기기</th></tr></thead><tbody>
+        ${[...L.live].reverse().map(x => `<tr><td>${esc(kstStamp(x.at))}</td><td>${esc(x.id)}</td><td style="white-space:normal;min-width:180px">${esc(x.services.join(', ') || '선택 안 함')}</td><td>${esc(x.industry || '—')}</td><td>${esc(x.budget || '—')}</td><td>${esc(x.src)}</td><td>${esc(x.page || '—')}</td><td>${esc(x.device)}</td></tr>`).join('')}
+      </tbody></table></div>
+    </section>`;
+async function fetchLive() { // 바뀌었으면 true
+  try {
+    const r = await fetch('api/live', { credentials: 'same-origin', cache: 'no-store' });
+    if (r.status === 401) { clearInterval(livePollT); return false; }
+    if (!r.ok) return false;
+    const list = (await r.json()).leads || [], sig = list.map(x => x.id).join(',');
+    if (sig === LIVE_SIG) return false;
+    LIVE = list; LIVE_SIG = sig; return true;
+  } catch { return false; }
+}
+async function refreshLive() {
+  if (!BASE || DATA_STATE !== 'dash' || document.hidden) return;
+  if (!(await fetchLive())) return;
+  const y = scrollY; paint(); applyView(); scrollTo(0, y);
+}
+function startLive() {
+  clearInterval(livePollT);
+  livePollT = setInterval(refreshLive, 60e3); // 열어 둔 화면도 1분 안에 새 문의가 보이게
+  refreshLive();
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshLive(); });
+
 function renderLeads(D) {
   const L = D.leads, host = $('#leads');
   if (!L) { host.innerHTML = '<p class="muted">상담 시트 집계가 아직 없습니다. 다음 자동 측정 뒤 채워집니다.</p>'; return; }
@@ -514,7 +562,7 @@ function renderLeads(D) {
   if (dates.length) for (let t = Date.parse(dates[0] + 'T00:00:00Z'); t <= Date.parse(today + 'T00:00:00Z'); t += 864e5) { const d = new Date(t).toISOString().slice(0, 10); series.push([d, L.byDate[d] || 0]); }
   const upd = L.updated ? new Date(Date.parse(L.updated) + 9 * 3600e3).toISOString().slice(0, 16).replace('T', ' ') : '';
   const st = topN(L.byStatus, 3).map(([k, v]) => `${esc(k)} ${v}`).join(' · ');
-  host.innerHTML = `
+  host.innerHTML = `${liveCard(L)}
     <div class="tiles" style="margin-bottom:16px">
       <div class="tile"><div class="tile__l">전체 접수</div><div class="tile__v">${num(L.total)}<small>건</small></div><div class="tile__s">${dates.length ? `${fmtD(dates[0])} 첫 접수부터` : ''}${L.excluded ? ` · 시험 접수 ${L.excluded}건 제외` : ''}</div></div>
       <div class="tile"><div class="tile__l">최근 7일 / 30일</div><div class="tile__v">${within(7)} / ${within(30)}<small>건</small></div><div class="tile__s">평균 작성 시간 ${L.avgDwell ? `${Math.floor(L.avgDwell / 60)}분 ${L.avgDwell % 60}초` : '—'}</div></div>
@@ -532,7 +580,7 @@ function renderLeads(D) {
       <div><h3>지역</h3>${barsHtml(L.byRegion)}</div>
       <div><h3>기기</h3>${barsHtml(L.byDevice)}</div>
     </div>
-    <p class="muted" style="font-size:12.5px;margin-top:12px">시트 집계 ${esc(upd)} 기준(매일 측정 뒤 자동 갱신). 연락처·문의 내용은 「구글 시트 열기」에서 확인하세요 — 구글 계정 로그인이 필요합니다.</p>`;
+    <p class="muted" style="font-size:12.5px;margin-top:12px">시트 집계 ${esc(upd)} 기준(매일 측정 뒤 자동 갱신)${L.live?.length ? ` + 그 뒤 들어온 새 문의 ${L.live.length}건(지역은 시트 집계 때 반영)` : ''}. 새 문의는 접수되는 즉시 더해집니다. 연락처·문의 내용은 「구글 시트 열기」에서 확인하세요 — 구글 계정 로그인이 필요합니다.</p>`;
   if (series.length) lineChart($('#ldD'), { dates: series.map(s => s[0]), height: 170, unit: '건', label: '날짜별 접수', series: [{ name: '접수', color: 's1', values: series.map(s => s[1]) }] });
 }
 
@@ -600,7 +648,8 @@ function alertsHtml(D, { okRate, blog, waiting, run, missing }) {
   if (blog && blog.daysLeft < 10) a.push(['warn', 'seo', `예약 글이 ${blog.daysLeft}일분 남았습니다(${esc(blog.lastScheduled)}까지).`]);
   if (waiting.length > 3) a.push(['warn', 'seo', `공개됐지만 구글 색인 처리 전인 글이 ${waiting.length}편입니다.`]);
   if (missing.length) a.push(['info', 'ops', `AI·검색 측정이 빠진 날이 ${missing.length}일 있습니다.`]);
-  const st = D.leads?.byStatus || {}, fresh = st['신규'] || 0;
+  const st = D.leads?.byStatus || {}, fresh = st['신규'] || 0, live = D.leads?.live || [];
+  if (live.length) a.unshift(['bad', 'leads', `새 문의 ${live.length}건이 들어왔습니다(마지막 ${esc(kstStamp(live.at(-1).at).slice(5))}) — 알림 메일·시트에서 연락처를 확인하세요.`]);
   if (fresh) a.push(['warn', 'leads', `상태가 「신규」인 문의가 ${fresh}건 있습니다(연락 전).`]);
   if (ROLE !== 'master') a.splice(0, a.length, ...a.filter(x => x[1] === 'leads')); // 업체 계정: 측정·운영 관련 내부 알림은 빼고 문의만
   return `<section class="card"><h2 style="margin:0 0 8px">확인할 것</h2>${a.length ? `<ul class="alerts">${a.map(([lv, pg, t]) => `<li><span class="flag ${lv}"></span><a href="#${pg}">${t}</a></li>`).join('')}</ul>` : '<p class="muted" style="margin:0">지금 따로 확인할 것은 없습니다.</p>'}</section>`;
@@ -628,7 +677,7 @@ function render(D) {
   const reasonTxt = Object.entries(reasons).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k, v]) => `${k} ${v}`).join(' · ');
   const okRate = last.tried ? Math.round(last.ok / last.tried * 100) : 0;
 
-  $('#asof').textContent = `측정 데이터 ${D.exportedAt} 기준 · 마지막 측정 ${dates.length ? fmtDK(dates[L]) : '없음'}`;
+  $('#asof').textContent = `측정 데이터 ${D.exportedAt} 기준 · 마지막 측정 ${dates.length ? fmtDK(dates[L]) : '없음'}${D.leads?.live?.length ? ` · 새 문의 ${D.leads.live.length}건 실시간 반영` : ''}`;
   const dash = $('#dash');
   dash.innerHTML = `
   <div id="pg-home">
@@ -998,11 +1047,17 @@ $('#menuBtn').addEventListener('click', () => sideOpen(!$('#side').classList.con
 $('#sideDim').addEventListener('click', () => sideOpen(false));
 function show(D) {
   $('#login').hidden = true; $('#msg').hidden = true; $('#keybox').hidden = true; $('#logout').hidden = false;
-  render(D);
-  if (TEMP) $('#pg-home .pghead').insertAdjacentHTML('afterend','<div class="note" style="margin:0 0 12px;border-left:4px solid var(--warn)"><b>임시 계정으로 열려 있습니다.</b> Railway → Variables 에 <code>ADMIN_PASSWORD</code>(와 <code>ADMIN_DATA_KEY</code>)를 넣으면 그 비밀번호로 바뀌고 임시 계정은 자동으로 꺼집니다.</div>');
+  BASE = D;
+  paint();
   if (D.leads?.sheetUrl) { $('#sideSheet').href = D.leads.sheetUrl; $('#sideSheet').hidden = false; }
   DATA_STATE = 'dash'; applyView();
+  startLive();
 }
+function paint() { // 처음 그리기·새 문의 반영 때 같이 씀
+  render(withLive(BASE));
+  if (TEMP) $('#pg-home .pghead').insertAdjacentHTML('afterend','<div class="note" style="margin:0 0 12px;border-left:4px solid var(--warn)"><b>임시 계정으로 열려 있습니다.</b> Railway → Variables 에 <code>ADMIN_PASSWORD</code>(와 <code>ADMIN_DATA_KEY</code>)를 넣으면 그 비밀번호로 바뀌고 임시 계정은 자동으로 꺼집니다.</div>');
+}
+
 function showKeyBox(errText = '') {
   $('#login').hidden = true; $('#msg').hidden = true; $('#dash').hidden = true; $('#logout').hidden = false;
   $('#keybox').hidden = false; $('#keyErr').textContent = errText;

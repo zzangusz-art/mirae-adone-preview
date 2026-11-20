@@ -668,6 +668,17 @@
   /* ───────── 전환 이벤트 — 도구 불러오기·전화/카카오 클릭·스크롤은 assets/js/track.js */
   const track = (name, params) => { try { window.maTrack?.(name, params); } catch { } };
 
+  // 관리자 페이지에 새 문의를 바로 알림(시트 저장 성공 뒤) — 이름·연락처·지역·주소·문의 내용은 보내지 않는다(tools/admin/server.mjs lead-event)
+  const pingLead = (id, d) => {
+    try {
+      const a = d.attr || {}; let ref = '';
+      try { ref = a.referrer ? new URL(a.referrer).hostname.replace(/^www\./, '') : ''; } catch { }
+      const body = JSON.stringify({ id, services: d.services, industry: d.industry, budget: d.budget, page: d.page, landing: a.landing || '', utm_source: a.utm_source || '', utm_medium: a.utm_medium || '', gclid: !!a.gclid, ref, device: /Mobi|Android|iPhone/i.test(d.ua || '') ? '모바일' : 'PC', dwell: Math.round((d.dwell || 0) / 1000), test: /테스트|test/i.test(d.name || '') });
+      const url = `${ROOT}admin/api/lead-event`;
+      if (!(navigator.sendBeacon && navigator.sendBeacon(url, new Blob([body], { type: 'application/json' })))) fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body, keepalive: true }).catch(() => { });
+    } catch { }
+  };
+
   /* ───────── 상담 폼(3단계) */
   function prefillForm(form, { service, plan } = {}) {
     if (!form) return;
@@ -712,6 +723,7 @@
         try {
           const r = await fetch(CFG.LEAD_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(data) });
           const j = await r.json(); ok = !!j.ok; id = j.id || ''; if (!ok) throw new Error(j.error || '접수 실패');
+          if (id && !j.dup) pingLead(id, data);
         } catch (err) { form.classList.remove('is-busy'); toast('전송에 실패했습니다. 전화나 카카오톡으로 연락 주세요.', 'err', 4200); return; }
       }
       form.classList.remove('is-busy');
