@@ -525,7 +525,7 @@ function withLive(D) {
 }
 const liveCard = L => !L.live?.length ? '' : `
     <section class="card" style="border-left:4px solid var(--s2);margin-bottom:16px">
-      <div class="card__head"><div><h2>새 문의 ${L.live.length}건 <small class="muted" style="font-size:13px;font-weight:500">시트 집계 전 · 접수되는 즉시 표시</small></h2><p class="sub">이름·연락처·문의 내용은 알림 메일이나 구글 시트에서 확인하세요. 다음 자동 집계(매일 12:20 측정) 때 시트의 진행 상태와 합쳐집니다.</p></div></div>
+      <div class="card__head"><div><h2>새 문의 ${L.live.length}건 <small class="muted" style="font-size:13px;font-weight:500">시트 집계 전 · 접수되는 즉시 표시</small></h2><p class="sub">이름·연락처·문의 내용은 알림 메일이나 구글 시트에서 확인하세요. 다음 자동 집계(하루 3번 — 09:00·12:20·18:00 무렵) 때 시트의 진행 상태와 합쳐집니다.</p></div></div>
       <div class="tbl"><table><thead><tr><th>접수 시각</th><th>접수번호</th><th>관심 서비스</th><th>업종</th><th>월 예산</th><th>유입 경로</th><th>신청한 페이지</th><th>기기</th></tr></thead><tbody>
         ${[...L.live].reverse().map(x => `<tr><td>${esc(kstStamp(x.at))}</td><td>${esc(x.id)}</td><td style="white-space:normal;min-width:180px">${esc(x.services.join(', ') || '선택 안 함')}</td><td>${esc(x.industry || '—')}</td><td>${esc(x.budget || '—')}</td><td>${esc(x.src)}</td><td>${esc(x.page || '—')}</td><td>${esc(x.device)}</td></tr>`).join('')}
       </tbody></table></div>
@@ -580,7 +580,7 @@ function renderLeads(D) {
       <div><h3>지역</h3>${barsHtml(L.byRegion)}</div>
       <div><h3>기기</h3>${barsHtml(L.byDevice)}</div>
     </div>
-    <p class="muted" style="font-size:12.5px;margin-top:12px">시트 집계 ${esc(upd)} 기준(매일 측정 뒤 자동 갱신)${L.live?.length ? ` + 그 뒤 들어온 새 문의 ${L.live.length}건(지역은 시트 집계 때 반영)` : ''}. 새 문의는 접수되는 즉시 더해집니다. 연락처·문의 내용은 「구글 시트 열기」에서 확인하세요 — 구글 계정 로그인이 필요합니다.</p>`;
+    <p class="muted" style="font-size:12.5px;margin-top:12px">시트 집계 ${esc(upd)} 기준(하루 3번 — 09:00·12:20·18:00 무렵 자동 갱신)${L.live?.length ? ` + 그 뒤 들어온 새 문의 ${L.live.length}건(지역은 시트 집계 때 반영)` : ''}. 새 문의는 접수되는 즉시 더해집니다. 연락처·문의 내용은 「구글 시트 열기」에서 확인하세요 — 구글 계정 로그인이 필요합니다.</p>`;
   if (series.length) lineChart($('#ldD'), { dates: series.map(s => s[0]), height: 170, unit: '건', label: '날짜별 접수', series: [{ name: '접수', color: 's1', values: series.map(s => s[1]) }] });
 }
 
