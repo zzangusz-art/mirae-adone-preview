@@ -88,7 +88,7 @@ wr('llms.txt', `# ${COMPANY.name} (${COMPANY.nameEn})
 ${BLOG_PLANS.map(p => `- 브랜드 블로그 ${p.name}: 월 ${p.count}회 ${won(p.price)} (1회당 ${won(Math.round(p.price / p.count))})`).join('\n')}
 ${PRICE_SHOW_WEB_AI ? `- 홈페이지 + AI 검색 ${WEB_AI_PLAN.build.name}: ${won(WEB_AI_PLAN.build.price)} (1개월 차)\n- ${WEB_AI_PLAN.operate.name}: 월 ${won(WEB_AI_PLAN.operate.price)} (2개월 차부터)` : '- 홈페이지 + AI 검색: 상담 후 견적'}
 - 네이버 검색광고: 매체비와 운영 수수료 분리 안내. 그 밖의 서비스는 상담 후 견적.
-- AI 검색·검색 노출은 최적화 작업과 리포트를 제공하며 특정 순위·노출을 보장하지 않습니다.
+- AI 검색·검색 노출은 최적화 작업과 리포트를 제공하며 특정 순위·노출을 약속하지 않습니다.
 
 ## 이런 검색어에 답하는 페이지
 ${KEYWORD_LINKS.map(([t, h]) => `- ${t}: ${SITE}${h}`).join('\n')}

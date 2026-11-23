@@ -127,7 +127,7 @@ export function footer(R) {
     <div class="ft__biz">
       <p><span>상호 ${COMPANY.name}</span><span>대표 ${COMPANY.ceo}</span><span>사업자등록번호 ${COMPANY.bizNo}</span></p>
       <p><span>${COMPANY.address}</span><span>대표번호 ${COMPANY.phone}</span><span>이메일 <a href="mailto:${COMPANY.email}">${COMPANY.email}</a></span></p>
-      <p class="ft__legal">AI 검색·검색 노출은 최적화 작업과 리포트를 제공하며 특정 순위나 노출을 보장하지 않습니다. 모든 가격은 부가세 별도입니다.</p>
+      <p class="ft__legal">AI 검색·검색 노출은 최적화 작업과 리포트를 제공하며 특정 순위나 노출을 약속하지 않습니다. 모든 가격은 부가세 별도입니다.</p>
       <p class="ft__copy">© ${new Date().getFullYear()} ${COMPANY.name}. All rights reserved.</p>
     </div>
   </div>

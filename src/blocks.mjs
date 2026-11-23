@@ -159,7 +159,7 @@ export const cpcCalculator = () => `<div class="calc glass glass--light" data-ca
   <div class="calc__out">
     <div class="calc__row calc__row--ad"><p>검색광고 예상 매체비 <small>클릭할 때마다 과금 · 멈추면 노출 종료</small></p><b data-calc-ad>—</b></div>
     <div class="calc__row calc__row--geo"><p>AI 검색 운영 파트너십 <small>월 고정 · 클릭 수와 무관 · 만든 페이지는 자산으로 남음</small></p><b>${PRICE_SHOW_WEB_AI ? man(WEB_AI_PLAN.operate.price) + ' / 월' : '상담 후 견적'}</b></div>
-    <p class="calc__note">${esc(CPC.note)} <a href="${CPC.source[1]}" target="_blank" rel="noopener nofollow">출처 보기</a> · AI 검색 최적화는 노출을 보장하지 않으므로 광고와 병행하며 비중을 조절하는 방식을 권합니다.</p>
+    <p class="calc__note">${esc(CPC.note)} <a href="${CPC.source[1]}" target="_blank" rel="noopener nofollow">출처 보기</a> · AI 검색 최적화는 노출 여부를 약속할 수 없으므로 광고와 병행하며 비중을 조절하는 방식을 권합니다.</p>
   </div>
 </div>`;
 
@@ -213,7 +213,7 @@ export const portfolioGrid = (R, items, { filters = true, group = 'pf', limit = 
 </div>`;
 };
 
-// ───────── AI 검색(GEO) 전용 블록 — 참고 이미지 1~7을 미래애드원 기준(보장 표현 없이)으로 재구성
+// ───────── AI 검색(GEO) 전용 블록 — 참고 이미지 1~7을 미래애드원 기준(결과를 약속하는 표현 없이)으로 재구성
 export const chatDemo = () => `<div class="aichat glass" data-aichat data-reveal>
   <div class="aichat__bar"><span></span><span></span><span></span><p>AI 답변 화면 예시</p><em>예시</em></div>
   <div class="aichat__body">
@@ -241,7 +241,7 @@ export const costStructure = () => {
 
 export const keywordCards = () => `<div class="kwc">${[CPC.rows[0], CPC.rows[1], CPC.rows[3]].map((r, i) => `<article class="kwc__c" data-reveal style="--d:${i * 80}ms"><p class="kwc__ind">${r.k}</p><p class="kwc__q">${r.q.map(q => `“${esc(q)}”`).join('<br>')}</p><dl><div><dt>클릭당 비용(예시)</dt><dd class="is-ad">${man(r.lo)}~${man(r.hi)}</dd></div><div><dt>월 100클릭이면</dt><dd class="is-ad">${man(r.lo * 100)}~${man(r.hi * 100)}</dd></div><div><dt>AI 답변·자연 검색 유입</dt><dd class="is-geo">클릭 비용 0원</dd></div></dl><p class="kwc__f">같은 질문에 답하는 페이지가 있으면 광고 의존도를 낮출 수 있습니다</p></article>`).join('')}</div>`;
 
-export const geoTimeline = () => `<div class="tl" data-reveal><ol>${GEO_TIMELINE.map((t, i) => `<li style="--d:${i * 90}ms"><span class="tl__dot"></span><p class="tl__t">${t.t}</p><h4>${t.h}</h4><p>${t.d}</p></li>`).join('')}</ol><p class="tl__note">${icon('spark')} 광고는 집행을 멈추면 노출도 사라집니다. 사이트에 만든 답변 페이지는 관리 기간만큼 쌓입니다. 질문 수는 관리 범위 예시이며 노출 결과를 보장하지 않습니다.</p></div>`;
+export const geoTimeline = () => `<div class="tl" data-reveal><ol>${GEO_TIMELINE.map((t, i) => `<li style="--d:${i * 90}ms"><span class="tl__dot"></span><p class="tl__t">${t.t}</p><h4>${t.h}</h4><p>${t.d}</p></li>`).join('')}</ol><p class="tl__note">${icon('spark')} 광고는 집행을 멈추면 노출도 사라집니다. 사이트에 만든 답변 페이지는 관리 기간만큼 쌓입니다. 질문 수는 관리 범위 예시이며 노출 결과를 약속하지 않습니다.</p></div>`;
 
 // 리포트 예시 차트: 질문 30개 표본 중 브랜드 언급 수(예시 데이터)
 export const reportChart = () => {
@@ -257,7 +257,7 @@ export const reportChart = () => {
     ${pts.map(([x, y]) => `<circle cx="${px(x)}" cy="${py(y)}" r="4" class="rchart__dot"/>`).join('')}
     ${labels.map((l, i) => `<text x="${px(i)}" y="${H - 8}" text-anchor="middle">${l}</text>`).join('')}
   </svg>
-  <p class="rchart__note">실제 보고서에는 질문 원문, 플랫폼, 측정 일시·로그인 여부, 캡처가 함께 들어갑니다. 위 수치는 화면 설명용 예시이며 결과를 보장하지 않습니다.</p>
+  <p class="rchart__note">실제 보고서에는 질문 원문, 플랫폼, 측정 일시·로그인 여부, 캡처가 함께 들어갑니다. 위 수치는 화면 설명용 예시이며 결과를 약속하지 않습니다.</p>
 </figure>`;
 };
 
