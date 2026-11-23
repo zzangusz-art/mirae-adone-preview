@@ -156,7 +156,7 @@ ${ctaBand(R)}`;
 export function about() {
   const p = 'about/', R = depthR(p);
   const body = `
-${pageHero({ R, eyebrow: 'ABOUT', title: '우리는 광고만 파는<br>회사가 아닙니다', lead: '미래애드원은 블로그관리대행·홈페이지 제작·AEO·GEO 마케팅·바이럴 마케팅을 직접 운영하는 서울 송파구의 온라인광고대행사입니다. 전문 콘텐츠 제작과 디지털 광고 운영을 하나로 연결합니다.', crumbs: crumbNav(R, [['홈', ''], ['회사소개', p]]), ctas: `${quoteBtn('상담 신청')}<a class="btn btn--glass" href="${COMPANY.brochure}" target="_blank" rel="noopener">${icon('download')} 회사소개서</a>` })}
+${pageHero({ R, eyebrow: 'ABOUT', title: '우리는 광고만 파는<br>회사가 아닙니다', lead: '미래애드원은 블로그관리대행·홈페이지 제작·AEO·GEO 마케팅·바이럴 마케팅을 직접 운영하는 서울 송파구의 온라인광고대행사입니다. 전문 콘텐츠 제작과 디지털 광고 운영을 하나로 연결합니다.', crumbs: crumbNav(R, [['홈', ''], ['회사소개', p]]), ctas: `${quoteBtn('상담 신청')}${COMPANY.brochure ? `<a class="btn btn--glass" href="${COMPANY.brochure}" target="_blank" rel="noopener">${icon('download')} 회사소개서</a>` : ''}` })}
 <section class="sec">
   <div class="wrap intro">
     <div data-reveal><p class="eyebrow">COMPANY</p><h2>화려한 약속보다<br>명확한 실행 범위</h2></div>
@@ -418,7 +418,7 @@ ${pageHero({ R, eyebrow: 'CONTACT', title: '대표님의 사업,<br>먼저 듣�
     <a class="cmeth" href="tel:${COMPANY.phone}" data-track="tel">${icon('phone')}<div><b>전화 상담</b><span>${COMPANY.phone}</span></div></a>
     <button class="cmeth" type="button" data-copy="${COMPANY.phone}">${icon('copy')}<div><b>번호 복사</b><span>나중에 전화하실 때</span></div></button>
     <a class="cmeth" href="${COMPANY.kakao}" target="_blank" rel="noopener" data-track="kakao">${icon('chat')}<div><b>카카오톡 오픈채팅</b><span>사진·자료를 바로 보내실 때</span></div></a>
-    <a class="cmeth" href="${COMPANY.brochure}" target="_blank" rel="noopener">${icon('download')}<div><b>회사소개서</b><span>내부 검토용 자료</span></div></a>
+    ${COMPANY.brochure ? `<a class="cmeth" href="${COMPANY.brochure}" target="_blank" rel="noopener">${icon('download')}<div><b>회사소개서</b><span>내부 검토용 자료</span></div></a>` : ''}
     <div class="cinfo"><p>${COMPANY.address}</p><p>사업자등록번호 ${COMPANY.bizNo}</p></div>
   </aside>
 </div></section>

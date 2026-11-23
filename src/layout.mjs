@@ -121,7 +121,7 @@ export function footer(R) {
       </div>
       ${col('서비스', [['services/brand-blog/', '브랜드 블로그'], ['services/seo-aeo-geo/', 'SEO·AEO·GEO'], ['services/website/', '홈페이지 제작'], ['services/naver-search-ads/', '네이버 검색광고'], ['services/', '전체 18개 서비스']])}
       ${col('회사', [['about/', '회사소개'], ['portfolio/', '포트폴리오'], ['reviews/', '고객 후기'], ['pricing/', '가격 안내'], ['insights/', '인사이트']])}
-      ${col('고객지원', [['contact/', '상담 신청'], ['faq/', '자주 묻는 질문'], ['privacy/', '개인정보처리방침'], [COMPANY.brochure, '회사소개서'], [COMPANY.naverBlog, '네이버 블로그']])}
+      ${col('고객지원', [['contact/', '상담 신청'], ['faq/', '자주 묻는 질문'], ['privacy/', '개인정보처리방침'], ...(COMPANY.brochure ? [[COMPANY.brochure, '회사소개서']] : []), [COMPANY.naverBlog, '네이버 블로그']])}
     </div>
     <nav class="ft__kw" aria-label="주요 서비스 키워드"><p>주요 서비스</p><ul>${KEYWORD_LINKS.map(([t, h]) => `<li><a href="${R}${h}">${t}</a></li>`).join('')}</ul></nav>
     <div class="ft__biz">

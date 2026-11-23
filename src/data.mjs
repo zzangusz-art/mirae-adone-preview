@@ -14,7 +14,9 @@ export const COMPANY = {
   email: 'dlejrgud9793@naver.com',
   kakao: 'https://open.kakao.com/o/glzPMi4f',
   naverBlog: 'https://blog.naver.com/dlejrgud9793',
-  brochure: 'https://drive.google.com/file/d/1n3WeBi6A1U8Kqk3gn2zT-Oxb5VQbPsvO/view?usp=sharing',
+  // 회사소개서 링크는 비워 둠(2026-11-23): 기존 PDF(구글 드라이브 1n3WeBi6A1U8Kqk3gn2zT-Oxb5VQbPsvO)에 「키워드 상위노출」·「블로그 최적화 노출」 문구가 있어
+  // 네이버 검색광고 심사에서 「상위노출, 노출보장」 사유로 노출제한 예정 통보를 받음. 문구를 고친 새 소개서 주소를 넣으면 푸터·회사소개·상담 페이지에 다시 나타남
+  brochure: '',
   slogan: '광고를 넘어, 비즈니스의 성장을 설계하다.',
   subSlogan: '광고를 아는 회사는 많습니다. 사업을 이해하는 회사는 다릅니다.',
 };
