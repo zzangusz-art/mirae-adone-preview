@@ -95,6 +95,10 @@ ${KEYWORD_LINKS.map(([t, h]) => `- ${t}: ${SITE}${h}`).join('\n')}
 - 홈페이지 제작·병원 홈페이지: ${SITE}services/website/ · ${SITE}industries/medical/
 - 블로그운영대행·블로그광고대행·블로그 홍보: ${SITE}services/brand-blog/ · ${SITE}services/blog-viral/
 
+## 검색·AI에서 실제로 확인한 노출(${D.AI_PROOF_DATE} 직접 검색, 화면은 ${SITE}#ai-screens)
+${D.AI_PROOF.map(x => `- ${x.eng} 「${x.q}」: ${x.cap}`).join('\n')}
+${D.AI_RECORDINGS.map(r => `- ChatGPT(로그인 없음) 「${r.q}」: ${r.note}. 녹화 ${SITE}assets/video/${r.video}-d.mp4`).join('\n')}
+
 ## 주요 페이지
 - [서비스 전체](${SITE}services/)
 ${SERVICES.map(s => `- [${s.name}](${SITE}services/${s.slug}/): ${s.copy}`).join('\n')}

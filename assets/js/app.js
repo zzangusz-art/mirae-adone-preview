@@ -331,6 +331,16 @@
       tg.innerHTML = icon(wanted ? 'pause' : 'play'); tg.setAttribute('aria-label', wanted ? '일시정지' : '재생');
     };
     tg.addEventListener('click', () => { wanted = !wanted; sync(); });
+    // 녹화가 여러 개면 질문 탭으로 바꿔 본다(같은 화면에서 영상만 교체)
+    const note = $('[data-airec-note]', w);
+    $$('[data-airec-tab]', w).forEach(b => b.addEventListener('click', () => {
+      $$('[data-airec-tab]', w).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      Object.assign(v.dataset, { d: b.dataset.d, m: b.dataset.m, posterM: b.dataset.posterM });
+      v.poster = mob ? b.dataset.posterM : b.dataset.poster; v.removeAttribute('src'); v.load();
+      v.setAttribute('aria-label', `ChatGPT에 「${b.dataset.q}」를 묻는 실제 화면 녹화`);
+      if (note) note.textContent = b.dataset.note;
+      wanted = !reduce; sync();
+    }));
     new IntersectionObserver(([e]) => { inView = e.isIntersecting; sync(); }, { threshold: .2 }).observe(v);
   });
 

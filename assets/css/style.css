@@ -1296,6 +1296,38 @@ html.no-anim [data-reveal],html.no-anim .tl li,html.no-anim .mchart__range,html.
 .airec__cap{display:flex;justify-content:center;flex-wrap:wrap;gap:6px 14px;margin-top:18px;color:rgba(255,255,255,.72);font-size:15px;text-align:center}
 .airec__cap b{color:#fff}
 .airec__foot{margin-top:6px;text-align:center;font-size:13px;font-style:italic;color:rgba(255,255,255,.5)}
+.airec__note{margin:16px 0 0;text-align:center;font-size:14px;color:rgba(255,255,255,.66)}
+
+/* 검색·AI 실제 노출 화면(2026-11-23) */
+.proof__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:8px}
+.proof__card{margin:0;background:#fff;border:1px solid var(--line);border-radius:var(--r-l);overflow:hidden;display:flex;flex-direction:column;box-shadow:0 18px 40px -28px rgba(15,23,42,.35);transition:transform .25s,box-shadow .25s}
+.proof__card:hover{transform:translateY(-3px);box-shadow:0 26px 50px -28px rgba(15,23,42,.45)}
+.proof__shot{display:block;width:100%;padding:0;border:0;background:#F3F6FA;cursor:zoom-in;aspect-ratio:16/10;overflow:hidden;border-bottom:1px solid var(--line)}
+.proof__shot img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.proof__card figcaption{padding:16px 18px 18px;display:flex;flex-direction:column;gap:5px}
+.proof__tag{font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--blue)}
+.proof__card b{font-size:16px;line-height:1.4;color:var(--ink);word-break:keep-all}
+.proof__cap{font-size:14px;line-height:1.55;color:var(--ink-2)}
+.proof__flow{margin-top:44px;padding:28px clamp(20px,3vw,36px);border-radius:var(--r-l);background:var(--ink);color:#fff}
+.proof__flow-h{margin:0 0 18px;font-size:clamp(18px,2vw,22px);font-weight:800;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.proof__flow-h small{font-size:13px;font-weight:500;color:rgba(255,255,255,.6)}
+.proof__flow ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;counter-reset:none}
+.proof__flow li{position:relative;padding:18px 18px 16px;border-radius:var(--r);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+.proof__flow li:not(:last-child)::after{content:"";position:absolute;right:-12px;top:50%;width:10px;height:10px;border-top:2px solid rgba(255,255,255,.35);border-right:2px solid rgba(255,255,255,.35);transform:translateY(-50%) rotate(45deg)}
+.proof__n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--orange);color:#fff;font-size:12px;font-weight:800}
+.proof__k{margin:10px 0 2px;font-size:13px;color:rgba(255,255,255,.7)}
+.proof__v{margin:0 0 6px;font-size:clamp(19px,2vw,23px);font-weight:800;letter-spacing:-.02em}
+.proof__d{margin:0;font-size:12.5px;line-height:1.5;color:rgba(255,255,255,.58)}
+.proof__note{margin:18px 0 0;font-size:13.5px;line-height:1.6;color:var(--ink-3)}
+.proof__note a{color:var(--blue);font-weight:600}
+@media (max-width:1023px){.proof__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){
+  .proof__grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin:0 -20px;padding:4px 20px 12px;scrollbar-width:none}
+  .proof__grid::-webkit-scrollbar{display:none}
+  .proof__card{flex:0 0 82%;scroll-snap-align:center}
+  .proof__flow ol{grid-template-columns:1fr}
+  .proof__flow li:not(:last-child)::after{right:auto;left:50%;top:auto;bottom:-12px;transform:translateX(-50%) rotate(135deg)}
+}
 
 /* ── AI 답변 설계 슬라이드(카드 캐러셀: 가운데 카드 + 양옆 카드가 여백에 보임) */
 .aisl-sec{background:radial-gradient(900px 520px at 85% 0%,rgba(129,92,255,.35),transparent 60%),radial-gradient(800px 500px at 0% 100%,rgba(61,125,255,.28),transparent 60%),linear-gradient(160deg,#2A1E4A,#151230 55%,#101530);color:#fff;overflow:hidden}

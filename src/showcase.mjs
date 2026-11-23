@@ -1,6 +1,6 @@
 // 사례·증거 블록: AI 검색 실제 녹화, AI 답변 설계 슬라이드, 작업 전후 변화, 홈페이지 레퍼런스, 협력 언론사
 import fs from 'node:fs';
-import { WEBCASE_META, AI_RECORDINGS, CASE_CHANGES, PRESS_LOGOS, BLOG_PLANS } from './data.mjs';
+import { WEBCASE_META, AI_RECORDINGS, AI_PROOF, AI_PROOF_DATE, AI_FLOW, CASE_CHANGES, PRESS_LOGOS, BLOG_PLANS } from './data.mjs';
 import { esc, man, icon, img, imgSize } from './lib.mjs';
 import { sectionHead } from './blocks.mjs';
 
@@ -10,23 +10,46 @@ const pic = (R, rel, alt, { eager = false, cls = '' } = {}) => {
   return `<img${cls ? ` class="${cls}"` : ''} src="${R}assets/img/${rel}" width="${w}" height="${h}" alt="${esc(alt)}"${eager ? '' : ' loading="lazy"'} decoding="async">`;
 };
 
-// ───────── AI 검색 실제 녹화(로그인하지 않은 ChatGPT, 화면 그대로)
+// ───────── AI 검색 실제 녹화(로그인하지 않은 ChatGPT, 화면 그대로) — 녹화가 여러 개면 위에 질문 탭
+const recSrc = (R, r) => { const v = `${R}assets/video/${r.video}`; return { d: `${v}-d.mp4`, m: `${v}-m.mp4`, p: `${v}-d-poster.webp`, pm: `${v}-m-poster.webp` }; };
+const dotDate = d => d.replace(/-/g, '.');
 export const aiRecording = R => {
-  const r = AI_RECORDINGS[0], v = `${R}assets/video/${r.video}`;
+  const recs = AI_RECORDINGS, r = recs[0], s = recSrc(R, r);
+  const tabs = recs.length > 1 ? `<div class="airec__tabs" role="group" aria-label="녹화한 질문">${recs.map((x, i) => { const t = recSrc(R, x); return `<button type="button" aria-pressed="${i === 0}" data-airec-tab data-d="${t.d}" data-m="${t.m}" data-poster="${t.p}" data-poster-m="${t.pm}" data-q="${esc(x.q)}" data-note="${esc(`${x.note} · 녹화 ${dotDate(x.date)}`)}">${esc(x.label)}<small>「${esc(x.q)}」</small></button>`; }).join('')}</div>` : '';
   return `<section class="sec sec--ink airec-sec" id="ai-proof">
 <div class="wrap">
-  ${sectionHead({ eyebrow: 'REAL AI SEARCH', title: 'AI에게 회사 이름을 물으면,<br>홈페이지를 근거로 답합니다', lead: '로그인하지 않은 ChatGPT에 직접 묻고 화면을 그대로 녹화했습니다. 답변에 공식 홈페이지가 출처로 붙는지 확인해 보세요.', center: true })}
+  ${sectionHead({ eyebrow: 'REAL AI SEARCH', title: 'AI에게 직접 묻고,<br>화면 그대로 녹화했습니다', lead: '로그인하지 않은 ChatGPT에 질문하고 답이 나오는 과정을 그대로 녹화했습니다. 답변에 미래애드원 공식 홈페이지가 출처로 붙는지 확인해 보세요.', center: true })}
   <div class="airec" data-airec>
+    ${tabs}
     <div class="airec__screen" data-reveal>
       <div class="airec__bar"><span></span><span></span><span></span><p>chatgpt.com</p><em>실제 녹화</em><button class="airec__toggle" type="button" data-airec-toggle aria-label="일시정지">${icon('pause')}</button></div>
       <div class="airec__view">
-        <video muted playsinline loop preload="none" poster="${v}-d-poster.webp" data-d="${v}-d.mp4" data-m="${v}-m.mp4" data-poster-m="${v}-m-poster.webp" data-airec-video aria-label="ChatGPT에 「${esc(r.q)}」를 묻는 실제 화면 녹화"></video>
+        <video muted playsinline loop preload="none" poster="${s.p}" data-d="${s.d}" data-m="${s.m}" data-poster-m="${s.pm}" data-airec-video aria-label="ChatGPT에 「${esc(r.q)}」를 묻는 실제 화면 녹화"></video>
       </div>
     </div>
+    <p class="airec__note" data-airec-note>${esc(r.note)} · 녹화 ${dotDate(r.date)}</p>
   </div>
 </div>
 </section>`;
 };
+
+// ───────── 검색·AI 실제 노출 화면(2026-11-23 직접 검색해 찍은 화면, 빨간 테두리는 설명용 표시) + 노출→유입→문의 기록
+export const aiProof = R => `<section class="sec proof-sec" id="ai-screens">
+<div class="wrap">
+  ${sectionHead({ eyebrow: 'REAL SEARCH SCREENS', title: '검색하고 AI에 물었을 때,<br>실제로 이렇게 보입니다', lead: `네이버·구글·AI 답변에서 직접 검색하고 찍은 화면입니다(${dotDate(AI_PROOF_DATE)}). 빨간 테두리는 미래애드원이 나온 자리를 표시한 것이고, 화면 내용은 바꾸지 않았습니다.` })}
+  <div class="proof__grid">${AI_PROOF.map(x => `
+    <figure class="proof__card" data-reveal>
+      <button type="button" class="proof__shot" data-lightbox="proof" data-full="${R}assets/img/${x.img}" data-w="${imgSize(x.img).w}" data-h="${imgSize(x.img).h}" aria-label="${esc(`${x.eng} 「${x.q}」 화면 크게 보기`)}">${pic(R, x.img.replace('proof/', 'proof/thumb-'), `${x.eng}에서 「${x.q}」 검색 화면 — ${x.cap}`)}</button>
+      <figcaption><span class="proof__tag">${esc(x.eng)} · ${esc(x.tag)}</span><b>「${esc(x.q)}」</b><span class="proof__cap">${esc(x.cap)}</span></figcaption>
+    </figure>`).join('')}
+  </div>
+  <div class="proof__flow" data-reveal>
+    <p class="proof__flow-h">이렇게 보이고, 이렇게 들어옵니다 <small>${esc(AI_FLOW.period)} 미래애드원 홈페이지 측정 기록</small></p>
+    <ol>${AI_FLOW.steps.map(([k, v, d], i) => `<li><span class="proof__n">${i + 1}</span><p class="proof__k">${esc(k)}</p><p class="proof__v">${esc(v)}</p><p class="proof__d">${esc(d)}</p></li>`).join('')}</ol>
+  </div>
+  <p class="proof__note">AI 답변과 검색 결과는 질문하는 시점·기기·지역에 따라 달라질 수 있어, 화면마다 검색한 날짜를 함께 적었습니다. 같은 기록 방식으로 고객사 보고서를 만듭니다 — <a href="${R}services/ai-visibility/">AI 검색 가시성 진단</a></p>
+</div>
+</section>`;
 
 // ───────── AI 답변 설계 슬라이드(설명용 예시 화면, 자동 입력 애니메이션)
 const J = (k, v, last = false) => `  <span class="t-k">"${k}"</span>: <span class="t-s">"${v}"</span>${last ? '' : ','}\n`;

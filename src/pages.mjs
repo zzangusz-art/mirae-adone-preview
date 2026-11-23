@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {
-  SITE, COMPANY, SERVICES, AXES, INDUSTRIES, PORTFOLIO, PORTFOLIO_CATS, REVIEWS, FAQ, BLOG_FAQ, BLOG_PLANS, WEB_AI_PLAN, PRICE_SHOW_WEB_AI, WEB_BUILD_CHECKS, WEB_INDUSTRY_PAGES,
+  SITE, COMPANY, SERVICES, AXES, INDUSTRIES, PORTFOLIO, PORTFOLIO_CATS, REVIEWS, FAQ, BLOG_FAQ, BLOG_PLANS, WEB_AI_PLAN, PRICE_SHOW_WEB_AI, WEB_BUILD_CHECKS, WEB_INDUSTRY_PAGES, AI_RECORDINGS,
   CPC, BLOG_CATEGORIES, BLOG_AUTHOR, SEQUENCE, SEO, KEYWORD_LINKS, svc,
 } from './data.mjs';
 import { page, ORG, WEBSITE, crumbs, crumbNav, quoteForm } from './layout.mjs';
@@ -13,7 +13,7 @@ import {
   reportChart, reportFieldsTable, monthFlows, geoIndustries, statusBoard,
 } from './blocks.mjs';
 import { esc, won, man, icon, img, imgUrl, ROOT } from './lib.mjs';
-import { aiRecording, aiSlides, beforeAfter, webCases, pressWall, WEBCASES } from './showcase.mjs';
+import { aiRecording, aiProof, aiSlides, beforeAfter, webCases, pressWall, WEBCASES } from './showcase.mjs';
 
 const depthR = p => (p ? '../'.repeat(p.split('/').filter(Boolean).length) : '');
 const url = p => SITE + p;
@@ -71,6 +71,8 @@ ${logosMarquee(R)}
 
 
 ${aiRecording(R)}
+
+${aiProof(R)}
 
 ${howBento(R)}
 
@@ -147,7 +149,10 @@ ${ctaBand(R)}`;
     path: '',
     html: page({
       R, current: '', ...meta('home'),
-      canonical: SITE, bodyClass: 'is-home', jsonld: [{ '@context': 'https://schema.org', '@graph': [ORG, WEBSITE] }], body,
+      canonical: SITE, bodyClass: 'is-home', jsonld: [{ '@context': 'https://schema.org', '@graph': [ORG, WEBSITE, ...AI_RECORDINGS.map(r => ({
+        '@type': 'VideoObject', '@id': `${SITE}#video-${r.key}`, name: `ChatGPT에 「${r.q}」를 묻는 실제 화면 녹화`, description: `로그인하지 않은 ChatGPT에 「${r.q}」를 묻고 화면을 그대로 녹화했습니다. ${r.note}.`,
+        thumbnailUrl: `${SITE}assets/video/${r.video}-d-poster.webp`, contentUrl: `${SITE}assets/video/${r.video}-d.mp4`, uploadDate: `${r.date}T12:00:00+09:00`, inLanguage: 'ko-KR', publisher: { '@id': SITE + '#org' },
+      }))] }], body,
     }),
   };
 }
@@ -376,6 +381,7 @@ export function portfolio() {
   const body = `
 ${pageHero({ R, eyebrow: 'PORTFOLIO', title: '말보다 결과물로<br>보여 드립니다', lead: `직접 만들고 운영하는 홈페이지 ${WEBCASES.sites.length}곳의 실제 화면과 블로그 운영 성과·블로그 스킨·홈페이지·바이럴·검색광고·SNS 작업 사례 ${PORTFOLIO.filter(x => x.cat !== 'press').length}건을 분류해 정리했습니다.`, crumbs: crumbNav(R, [['홈', ''], ['포트폴리오', p]]), ctas: quoteBtn('비슷한 작업 상담') })}
 ${webCases(R, { title: '홈페이지 제작·운영<br>레퍼런스' })}
+${aiProof(R)}
 <section class="sec sec--gray"><div class="wrap">${sectionHead({ eyebrow: 'WORKS', title: '분야별 작업 사례' })}${portfolioGrid(R, PORTFOLIO.filter(x => x.cat !== 'press'), { group: 'pf' })}</div></section>
 <section class="sec"><div class="wrap">${sectionHead({ eyebrow: 'MEDIA', title: '협력 언론사', center: true })}${pressWall(R)}</div></section>
 ${logosMarquee(R)}
