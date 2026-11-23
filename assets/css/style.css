@@ -713,7 +713,7 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 .exp--about{align-items:center}
 .exp__q{border-radius:var(--r-xl);padding:clamp(28px,4vw,48px)}
 .exp__q .i{width:34px;height:34px;color:var(--blue)}
-.exp__q p{font-size:clamp(22px,2.6vw,32px);font-weight:800;line-height:1.45;letter-spacing:-.03em;margin:14px 0}
+.exp__q p{font-size:clamp(22px,2.6vw,32px);font-weight:800;line-height:1.45;letter-spacing:-.03em;margin:0 0 14px}
 .exp__q cite{font-style:normal;color:var(--ink-3);font-size:14px}
 
 /* ───────── CTA 띠 */

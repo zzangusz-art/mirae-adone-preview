@@ -173,7 +173,7 @@ ${pageHero({ R, eyebrow: 'ABOUT', title: '우리는 광고만 파는<br>회사�
 <section class="sec" id="experience">
   <div class="wrap exp exp--about">
     <div data-reveal><p class="eyebrow">BUSINESS EXPERIENCE</p><h2>마케팅과 사업 운영을<br>함께 경험한 시선</h2><p>미래애드원의 대표는 광고대행업 외에도 별도의 식자재 유통 사업을 운영합니다. 직접 사업을 운영하며 얻은 현장 경험을 고객사의 마케팅 과제를 이해하는 데 활용합니다.</p><p class="small">식자재 유통 사업은 미래애드원 법인 사업이 아니며, 대표자가 별도로 운영하는 사업입니다.</p></div>
-    <blockquote class="exp__q glass glass--light" data-reveal style="--d:80ms">${icon('quote')}<p>광고를 아는 회사는 많습니다.<br>사업을 이해하는 회사는 다릅니다.</p><cite>미래애드원</cite></blockquote>
+    <blockquote class="exp__q glass glass--light" data-reveal style="--d:80ms"><p>광고를 아는 회사는 많습니다.<br>사업을 이해하는 회사는 다릅니다.</p><cite>미래애드원</cite></blockquote>
   </div>
 </section>
 <section class="sec sec--navy" id="process">
