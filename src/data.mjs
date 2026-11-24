@@ -946,9 +946,11 @@ export const WEBCASE_META = {
 // 2026-11-24 2차(사용자 「영상에서 미래애드원이 부각되지 않음」): record_perplexity.mjs --hover 1 로 출처 칩에 실제 마우스를 올려 Perplexity 출처 카드(미래애드원 글 제목)를 띄우고,
 //   motion/tools/spot_rec.py 로 끝에 확대·파란 테두리·안내 문구(spot: true → 녹화 아래 안내에 「설명을 위해 덧붙인 편집」 표시). 인테리어 질문은 3회 재녹화 모두 출처 없음 → 블로그관리대행 비용(pxh-5a, 출처 11곳)으로 교체.
 //   pxh-5a 답변 맨 끝 주의 문장에 「보장」이 있으나 녹화는 첫 문장 위치에서 끝나 화면에 나오지 않음
+// 2026-11-24 3차(사용자 「3개 정도 연달아서 보이게」): record_perplexity.mjs --hover 3 으로 출처 칩 3곳에 차례로 마우스 → 카드마다 「미래애드원 출처 1·2·3」 번호표·테두리, 끝 문구 「이 답변 N곳에…」.
+//   비용 pxm-5a(출처 6곳, 카드 제목에 「- 미래애드원」, 답변 전체에 민감 표현 없음)를 첫 탭으로. 사용자 요청으로 녹화 영역 소개 문장·녹화 아래 안내문은 화면에서 뺌(note 는 llms.txt 에만)
 export const AI_RECORDINGS = [
+  { key: 'cost', engine: 'Perplexity', host: 'perplexity.ai', label: '블로그관리대행 비용을 물으면', q: '블로그관리대행 비용', video: 'ai-px-cost-1124m', mobile: false, spot: true, date: '2026-11-24', note: '「월 15회·30회·40회」 공개 가격 예시 등 6곳의 출처로 미래애드원(mirae-adone)이 붙습니다(출처 카드 제목 「블로그관리대행·홈페이지 제작 가격 안내 - 미래애드원」)' },
   { key: 'blogops', engine: 'Perplexity', host: 'perplexity.ai', label: '블로그운영대행을 물으면', q: '블로그운영대행', video: 'ai-px-blogops-1124t', mobile: false, spot: true, date: '2026-11-24', note: '「운영대행과 광고대행의 차이」·가격·계약 확인점 등 3곳의 출처로 미래애드원(mirae-adone)이 붙습니다' },
-  { key: 'cost', engine: 'Perplexity', host: 'perplexity.ai', label: '블로그관리대행 비용을 물으면', q: '블로그관리대행 비용', video: 'ai-px-cost-1124t', mobile: false, spot: true, date: '2026-11-24', note: '첫 문장과 「월 15회 33만 원」 같은 공개 가격 예시 등 11곳의 출처로 미래애드원(mirae-adone)이 붙습니다' },
 ]
 
 // ───────── 검색·AI 실제 노출 화면(tools/ai-visibility/proof-capture.mjs, 2026-11-23) — 미래애드원이 나온 요소에 설명용 빨간 테두리만 덧그림
