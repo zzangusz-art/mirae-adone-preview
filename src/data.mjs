@@ -957,9 +957,9 @@ export const AI_PROOF = [
   { img: 'proof/google-aeo-question.webp', eng: '구글', q: '중소기업이 쓰기 좋은 aeo마케팅 통합 서비스 뭐가 있어?', tag: '질문형 검색', cap: 'AI에 묻듯 검색한 질문에 SEO·AEO·GEO 서비스 페이지가 나옵니다.' },
   { img: 'proof/google-aeo-geo.webp', eng: '구글', q: 'AEO GEO 마케팅', tag: '검색 결과', cap: '인사이트 글 「AEO·GEO 마케팅, 우리 회사도 지금 시작해야 할까」가 나옵니다.' },
   { img: 'proof/google-brand.webp', eng: '구글', q: '미래애드원', tag: '검색 결과', cap: '공식 홈페이지가 주요 페이지 바로가기와 함께 나옵니다.' },
-  { img: 'proof/naver-realestate-blog.webp', eng: '네이버', q: '부동산 블로그 마케팅', tag: '블로그 영역', cap: '미래애드원 브랜드 블로그 글이 블로그 검색 영역에 나옵니다.' },
 ];
 // 노출 → 유입 → 문의(미래애드원 홈페이지 자체 측정 — 서치콘솔·GA4·상담 시트). 숫자를 바꿀 때는 기간도 함께
+// 화면에는 단계 이름과 숫자만 표시(사용자 요청 11-24: 측정 기간·출처 문구, 화면 위 안내 문장, 아래 안내 문단, 「부동산 블로그 마케팅」 카드 삭제) — 기간·출처는 기록용으로 여기 남김
 export const AI_FLOW = {
   period: '2026.10.28~11.22',
   steps: [

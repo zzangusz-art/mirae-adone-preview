@@ -1,6 +1,6 @@
 // 사례·증거 블록: AI 검색 실제 녹화, AI 답변 설계 슬라이드, 작업 전후 변화, 홈페이지 레퍼런스, 협력 언론사
 import fs from 'node:fs';
-import { WEBCASE_META, AI_RECORDINGS, AI_PROOF, AI_PROOF_DATE, AI_FLOW, CASE_CHANGES, PRESS_LOGOS, BLOG_PLANS } from './data.mjs';
+import { WEBCASE_META, AI_RECORDINGS, AI_PROOF, AI_FLOW, CASE_CHANGES, PRESS_LOGOS, BLOG_PLANS } from './data.mjs';
 import { esc, man, icon, img, imgSize } from './lib.mjs';
 import { sectionHead } from './blocks.mjs';
 
@@ -36,7 +36,7 @@ export const aiRecording = R => {
 // ───────── 검색·AI 실제 노출 화면(2026-11-23 직접 검색해 찍은 화면, 빨간 테두리는 설명용 표시) + 노출→유입→문의 기록
 export const aiProof = R => `<section class="sec proof-sec" id="ai-screens">
 <div class="wrap">
-  ${sectionHead({ eyebrow: 'REAL SEARCH SCREENS', title: '검색하고 AI에 물었을 때,<br>실제로 이렇게 보입니다', lead: `네이버·구글·AI 답변에서 직접 검색하고 찍은 화면입니다(${dotDate(AI_PROOF_DATE)}). 빨간 테두리는 미래애드원이 나온 자리를 표시한 것이고, 화면 내용은 바꾸지 않았습니다.` })}
+  ${sectionHead({ eyebrow: 'REAL SEARCH SCREENS', title: '검색하고 AI에 물었을 때,<br>실제로 이렇게 보입니다' })}
   <div class="proof__grid">${AI_PROOF.map(x => `
     <figure class="proof__card" data-reveal>
       <button type="button" class="proof__shot" data-lightbox="proof" data-full="${R}assets/img/${x.img}" data-w="${imgSize(x.img).w}" data-h="${imgSize(x.img).h}" aria-label="${esc(`${x.eng} 「${x.q}」 화면 크게 보기`)}">${pic(R, x.img.replace('proof/', 'proof/thumb-'), `${x.eng}에서 「${x.q}」 검색 화면 — ${x.cap}`)}</button>
@@ -44,10 +44,9 @@ export const aiProof = R => `<section class="sec proof-sec" id="ai-screens">
     </figure>`).join('')}
   </div>
   <div class="proof__flow" data-reveal>
-    <p class="proof__flow-h">이렇게 보이고, 이렇게 들어옵니다 <small>${esc(AI_FLOW.period)} 미래애드원 홈페이지 측정 기록</small></p>
-    <ol>${AI_FLOW.steps.map(([k, v, d], i) => `<li><span class="proof__n">${i + 1}</span><p class="proof__k">${esc(k)}</p><p class="proof__v">${esc(v)}</p><p class="proof__d">${esc(d)}</p></li>`).join('')}</ol>
+    <p class="proof__flow-h">이렇게 보이고, 이렇게 들어옵니다</p>
+    <ol>${AI_FLOW.steps.map(([k, v], i) => `<li><span class="proof__n">${i + 1}</span><p class="proof__k">${esc(k)}</p><p class="proof__v">${esc(v)}</p></li>`).join('')}</ol>
   </div>
-  <p class="proof__note">AI 답변과 검색 결과는 질문하는 시점·기기·지역에 따라 달라질 수 있어, 화면마다 검색한 날짜를 함께 적었습니다. 같은 기록 방식으로 고객사 보고서를 만듭니다 — <a href="${R}services/ai-visibility/">AI 검색 가시성 진단</a></p>
 </div>
 </section>`;
 
