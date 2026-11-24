@@ -18,7 +18,7 @@ export const aiRecording = R => {
   const tabs = recs.length > 1 ? `<div class="airec__tabs" role="group" aria-label="녹화한 질문">${recs.map((x, i) => { const t = recSrc(R, x); return `<button type="button" aria-pressed="${i === 0}" data-airec-tab data-d="${t.d}" data-m="${t.m}" data-poster="${t.p}" data-poster-m="${t.pm}" data-host="${esc(x.host)}" data-engine="${esc(x.engine)}" data-mobile="${x.mobile === false ? '0' : '1'}" data-q="${esc(x.q)}">${esc(x.label)}<small>「${esc(x.q)}」</small></button>`; }).join('')}</div>` : '';
   return `<section class="sec sec--ink airec-sec" id="ai-proof">
 <div class="wrap">
-  ${sectionHead({ eyebrow: 'REAL AI SEARCH', title: 'AI에게 마케팅을 물으면,<br>미래애드원 페이지를 근거로 답합니다', center: true })}
+  ${sectionHead({ eyebrow: 'REAL AI SEARCH', title: '미래애드원은 자신있기 때문에<br>미래애드원으로 직접 보여드립니다.', center: true })}
   <div class="airec" data-airec${r.mobile === false ? ' data-nom' : ''}>
     ${tabs}
     <div class="airec__screen" data-reveal>
