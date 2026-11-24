@@ -150,7 +150,7 @@ ${ctaBand(R)}`;
     html: page({
       R, current: '', ...meta('home'),
       canonical: SITE, bodyClass: 'is-home', jsonld: [{ '@context': 'https://schema.org', '@graph': [ORG, WEBSITE, ...AI_RECORDINGS.map(r => ({
-        '@type': 'VideoObject', '@id': `${SITE}#video-${r.key}`, name: `ChatGPT에 「${r.q}」를 묻는 실제 화면 녹화`, description: `로그인하지 않은 ChatGPT에 「${r.q}」를 묻고 화면을 그대로 녹화했습니다. ${r.note}.`,
+        '@type': 'VideoObject', '@id': `${SITE}#video-${r.key}`, name: `${r.engine}에 「${r.q}」 질문을 한 실제 화면 녹화`, description: `로그인하지 않은 ${r.engine}에 「${r.q}」 질문을 하고 화면을 그대로 녹화했습니다. ${r.note}.`,
         thumbnailUrl: `${SITE}assets/video/${r.video}-d-poster.webp`, contentUrl: `${SITE}assets/video/${r.video}-d.mp4`, uploadDate: `${r.date}T12:00:00+09:00`, inLanguage: 'ko-KR', publisher: { '@id': SITE + '#org' },
       }))] }], body,
     }),

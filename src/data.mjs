@@ -939,12 +939,13 @@ export const WEBCASE_META = {
   ex4: { abc: 'D', kind: '대학로 공연 제작사', live: false, status: '오픈 준비', facts: ['공연 상세 6편 · 예매 연결', '4K 히어로 필름', 'SEO·AEO·GEO ALWAYS 관리 시스템', '브랜딩 인블로그 발행'] },
 };
 
-// ───────── AI 검색 실제 녹화(로그인하지 않은 ChatGPT·새 브라우저 프로필 · motion/tools/record_chatgpt.mjs → encode_rec2.py: 답변 영역만, 대기 구간 줄임, 1.5배속)
-// 2026-11-23 다시 녹화(클라이언트 요청 「최신 영상으로 더 탄탄하게」). 같은 날 추천형 질문 6개(블로그관리대행·브랜드 블로그·AEO GEO·홈페이지 제작·온라인광고대행사·인테리어 업체 추천)는
-// 로그인 없는 ChatGPT 답에 미래애드원이 나오지 않았고(motion/recordings/probe-2026-11-23.json), 「블로그관리대행 비용은 보통 얼마야?」는 10번 중 2번만 미래애드원을 출처로 붙여
-// (한 번은 답변에 「상위 노출」 표현) 싣지 않음 — 매번 재현되는 질문만 싣는다. 녹화가 2개 이상이면 위에 질문 탭이 생긴다(data-airec-tab)
+// ───────── AI 검색 실제 녹화(로그인하지 않은 AI 서비스·새 브라우저 프로필 → motion/tools/encode_rec2.py: 답변 영역만, 대기 구간 줄임)
+// 2026-11-24 사용자 요청 「ChatGPT 회사 이름 질문 대신 Perplexity 등이 블로그 마케팅·AEO GEO 질문에 답하는 예시」 → motion/tools/probe_perplexity.mjs 로 6개 질문을 물어
+// 미래애드원(mirae-adone) 출처가 붙고 민감 표현이 없는 2개만 채택(블로그광고대행·AEO GEO 마케팅·운영대행 진행 방식은 출처 없음, 블로그관리대행 비용은 답변에 「상위노출」) — motion/recordings/px-probe.json
+// 모바일 녹화는 없어(mobile: false) 모바일에서도 PC 녹화를 보여 줌. 녹화가 2개 이상이면 위에 질문 탭(data-airec-tab)
 export const AI_RECORDINGS = [
-  { key: 'mirae', label: '회사 이름을 물으면', q: '미래애드원 어떤 회사야?', video: 'ai-mirae-1123', date: '2026-11-23', note: '공식 홈페이지를 출처로 대표·주소·서비스를 정리합니다' },
+  { key: 'blogops', engine: 'Perplexity', host: 'perplexity.ai', label: '블로그운영대행을 물으면', q: '블로그운영대행', video: 'ai-px-blogops-1124', mobile: false, date: '2026-11-24', note: '「검색 노출·방문자·조회수 월간 보고」 항목의 출처로 미래애드원(mirae-adone)이 붙습니다' },
+  { key: 'interior', engine: 'Perplexity', host: 'perplexity.ai', label: '인테리어 블로그 마케팅을 물으면', q: '인테리어 블로그 마케팅', video: 'ai-px-interior-1124', mobile: false, date: '2026-11-24', note: '「시공 사례·견적 체크리스트·FAQ 운영」 항목의 출처로 미래애드원(mirae-adone)이 붙습니다' },
 ]
 
 // ───────── 검색·AI 실제 노출 화면(tools/ai-visibility/proof-capture.mjs, 2026-11-23) — 미래애드원이 나온 요소에 설명용 빨간 테두리만 덧그림

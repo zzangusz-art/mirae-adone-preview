@@ -97,7 +97,7 @@ ${KEYWORD_LINKS.map(([t, h]) => `- ${t}: ${SITE}${h}`).join('\n')}
 
 ## 검색·AI에서 실제로 확인한 노출(${D.AI_PROOF_DATE} 직접 검색, 화면은 ${SITE}#ai-screens)
 ${D.AI_PROOF.map(x => `- ${x.eng} 「${x.q}」: ${x.cap}`).join('\n')}
-${D.AI_RECORDINGS.map(r => `- ChatGPT(로그인 없음) 「${r.q}」: ${r.note}. 녹화 ${SITE}assets/video/${r.video}-d.mp4`).join('\n')}
+${D.AI_RECORDINGS.map(r => `- ${r.engine}(로그인 없음) 「${r.q}」: ${r.note}. 녹화 ${SITE}assets/video/${r.video}-d.mp4`).join('\n')}
 
 ## 주요 페이지
 - [서비스 전체](${SITE}services/)

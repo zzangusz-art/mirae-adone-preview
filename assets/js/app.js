@@ -323,7 +323,9 @@
   $$('[data-airec]').forEach(w => {
     const v = $('[data-airec-video]', w), tg = $('[data-airec-toggle]', w);
     const mob = matchMedia('(max-width:640px)').matches;
-    if (mob) { v.poster = v.dataset.posterM; w.classList.add('is-m'); }
+    // 모바일 녹화가 없는 녹화(data-nom)는 모바일에서도 PC 화면 비율 그대로
+    const setMob = has => w.classList.toggle('is-m', mob && has);
+    if (mob) { v.poster = v.dataset.posterM; setMob(!w.hasAttribute('data-nom')); }
     let wanted = !reduce, inView = false;
     const sync = () => {
       if (inView && wanted) { if (!v.getAttribute('src')) v.src = mob ? v.dataset.m : v.dataset.d; v.play().catch(() => {}); }
@@ -337,7 +339,9 @@
       $$('[data-airec-tab]', w).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
       Object.assign(v.dataset, { d: b.dataset.d, m: b.dataset.m, posterM: b.dataset.posterM });
       v.poster = mob ? b.dataset.posterM : b.dataset.poster; v.removeAttribute('src'); v.load();
-      v.setAttribute('aria-label', `ChatGPT에 「${b.dataset.q}」를 묻는 실제 화면 녹화`);
+      v.setAttribute('aria-label', `${b.dataset.engine}에 「${b.dataset.q}」 질문을 한 실제 화면 녹화`);
+      const host = $('[data-airec-host]', w); if (host) host.textContent = b.dataset.host;
+      setMob(b.dataset.mobile === '1');
       if (note) note.textContent = b.dataset.note;
       wanted = !reduce; sync();
     }));

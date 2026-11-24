@@ -10,21 +10,23 @@ const pic = (R, rel, alt, { eager = false, cls = '' } = {}) => {
   return `<img${cls ? ` class="${cls}"` : ''} src="${R}assets/img/${rel}" width="${w}" height="${h}" alt="${esc(alt)}"${eager ? '' : ' loading="lazy"'} decoding="async">`;
 };
 
-// ───────── AI 검색 실제 녹화(로그인하지 않은 ChatGPT, 화면 그대로) — 녹화가 여러 개면 위에 질문 탭
-const recSrc = (R, r) => { const v = `${R}assets/video/${r.video}`; return { d: `${v}-d.mp4`, m: `${v}-m.mp4`, p: `${v}-d-poster.webp`, pm: `${v}-m-poster.webp` }; };
+// ───────── AI 검색 실제 녹화(로그인하지 않은 AI 서비스, 화면 그대로) — 녹화가 여러 개면 위에 질문 탭
+// 모바일 녹화가 없으면(mobile: false) 모바일에서도 PC 녹화를 보여 준다
+const recSrc = (R, r) => { const v = `${R}assets/video/${r.video}`, m = r.mobile === false ? 'd' : 'm'; return { d: `${v}-d.mp4`, m: `${v}-${m}.mp4`, p: `${v}-d-poster.webp`, pm: `${v}-${m}-poster.webp` }; };
 const dotDate = d => d.replace(/-/g, '.');
 export const aiRecording = R => {
   const recs = AI_RECORDINGS, r = recs[0], s = recSrc(R, r);
-  const tabs = recs.length > 1 ? `<div class="airec__tabs" role="group" aria-label="녹화한 질문">${recs.map((x, i) => { const t = recSrc(R, x); return `<button type="button" aria-pressed="${i === 0}" data-airec-tab data-d="${t.d}" data-m="${t.m}" data-poster="${t.p}" data-poster-m="${t.pm}" data-q="${esc(x.q)}" data-note="${esc(`${x.note} · 녹화 ${dotDate(x.date)}`)}">${esc(x.label)}<small>「${esc(x.q)}」</small></button>`; }).join('')}</div>` : '';
+  const engines = [...new Set(recs.map(x => x.engine))].join('·');
+  const tabs = recs.length > 1 ? `<div class="airec__tabs" role="group" aria-label="녹화한 질문">${recs.map((x, i) => { const t = recSrc(R, x); return `<button type="button" aria-pressed="${i === 0}" data-airec-tab data-d="${t.d}" data-m="${t.m}" data-poster="${t.p}" data-poster-m="${t.pm}" data-host="${esc(x.host)}" data-engine="${esc(x.engine)}" data-mobile="${x.mobile === false ? '0' : '1'}" data-q="${esc(x.q)}" data-note="${esc(`${x.note} · 녹화 ${dotDate(x.date)}`)}">${esc(x.label)}<small>「${esc(x.q)}」</small></button>`; }).join('')}</div>` : '';
   return `<section class="sec sec--ink airec-sec" id="ai-proof">
 <div class="wrap">
-  ${sectionHead({ eyebrow: 'REAL AI SEARCH', title: 'AI에게 직접 묻고,<br>화면 그대로 녹화했습니다', lead: '로그인하지 않은 ChatGPT에 질문하고 답이 나오는 과정을 그대로 녹화했습니다. 답변에 미래애드원 공식 홈페이지가 출처로 붙는지 확인해 보세요.', center: true })}
-  <div class="airec" data-airec>
+  ${sectionHead({ eyebrow: 'REAL AI SEARCH', title: 'AI에게 마케팅을 물으면,<br>미래애드원 페이지를 근거로 답합니다', lead: `로그인하지 않은 ${engines}에 블로그 마케팅·AEO GEO 마케팅 질문을 하고 답이 나오는 과정을 그대로 녹화했습니다. 답변 출처에 미래애드원(mirae-adone.com)이 붙는지 확인해 보세요.`, center: true })}
+  <div class="airec" data-airec${r.mobile === false ? ' data-nom' : ''}>
     ${tabs}
     <div class="airec__screen" data-reveal>
-      <div class="airec__bar"><span></span><span></span><span></span><p>chatgpt.com</p><em>실제 녹화</em><button class="airec__toggle" type="button" data-airec-toggle aria-label="일시정지">${icon('pause')}</button></div>
+      <div class="airec__bar"><span></span><span></span><span></span><p data-airec-host>${esc(r.host)}</p><em>실제 녹화</em><button class="airec__toggle" type="button" data-airec-toggle aria-label="일시정지">${icon('pause')}</button></div>
       <div class="airec__view">
-        <video muted playsinline loop preload="none" poster="${s.p}" data-d="${s.d}" data-m="${s.m}" data-poster-m="${s.pm}" data-airec-video aria-label="ChatGPT에 「${esc(r.q)}」를 묻는 실제 화면 녹화"></video>
+        <video muted playsinline loop preload="none" poster="${s.p}" data-d="${s.d}" data-m="${s.m}" data-poster-m="${s.pm}" data-airec-video aria-label="${esc(r.engine)}에 「${esc(r.q)}」 질문을 한 실제 화면 녹화"></video>
       </div>
     </div>
     <p class="airec__note" data-airec-note>${esc(r.note)} · 녹화 ${dotDate(r.date)}</p>
