@@ -943,9 +943,12 @@ export const WEBCASE_META = {
 // 2026-11-24 사용자 요청 「ChatGPT 회사 이름 질문 대신 Perplexity 등이 블로그 마케팅·AEO GEO 질문에 답하는 예시」 → motion/tools/probe_perplexity.mjs 로 6개 질문을 물어
 // 미래애드원(mirae-adone) 출처가 붙고 민감 표현이 없는 2개만 채택(블로그광고대행·AEO GEO 마케팅·운영대행 진행 방식은 출처 없음, 블로그관리대행 비용은 답변에 「상위노출」) — motion/recordings/px-probe.json
 // 모바일 녹화는 없어(mobile: false) 모바일에서도 PC 녹화를 보여 줌. 녹화가 2개 이상이면 위에 질문 탭(data-airec-tab)
+// 2026-11-24 2차(사용자 「영상에서 미래애드원이 부각되지 않음」): record_perplexity.mjs --hover 1 로 출처 칩에 실제 마우스를 올려 Perplexity 출처 카드(미래애드원 글 제목)를 띄우고,
+//   motion/tools/spot_rec.py 로 끝에 확대·파란 테두리·안내 문구(spot: true → 녹화 아래 안내에 「설명을 위해 덧붙인 편집」 표시). 인테리어 질문은 3회 재녹화 모두 출처 없음 → 블로그관리대행 비용(pxh-5a, 출처 11곳)으로 교체.
+//   pxh-5a 답변 맨 끝 주의 문장에 「보장」이 있으나 녹화는 첫 문장 위치에서 끝나 화면에 나오지 않음
 export const AI_RECORDINGS = [
-  { key: 'blogops', engine: 'Perplexity', host: 'perplexity.ai', label: '블로그운영대행을 물으면', q: '블로그운영대행', video: 'ai-px-blogops-1124', mobile: false, date: '2026-11-24', note: '「검색 노출·방문자·조회수 월간 보고」 항목의 출처로 미래애드원(mirae-adone)이 붙습니다' },
-  { key: 'interior', engine: 'Perplexity', host: 'perplexity.ai', label: '인테리어 블로그 마케팅을 물으면', q: '인테리어 블로그 마케팅', video: 'ai-px-interior-1124', mobile: false, date: '2026-11-24', note: '「시공 사례·견적 체크리스트·FAQ 운영」 항목의 출처로 미래애드원(mirae-adone)이 붙습니다' },
+  { key: 'blogops', engine: 'Perplexity', host: 'perplexity.ai', label: '블로그운영대행을 물으면', q: '블로그운영대행', video: 'ai-px-blogops-1124s', mobile: false, spot: true, date: '2026-11-24', note: '「운영대행과 광고대행의 차이」·가격·계약 확인점 등 3곳의 출처로 미래애드원(mirae-adone)이 붙습니다' },
+  { key: 'cost', engine: 'Perplexity', host: 'perplexity.ai', label: '블로그관리대행 비용을 물으면', q: '블로그관리대행 비용', video: 'ai-px-cost-1124s', mobile: false, spot: true, date: '2026-11-24', note: '첫 문장과 「월 15회 33만 원」 같은 공개 가격 예시 등 11곳의 출처로 미래애드원(mirae-adone)이 붙습니다' },
 ]
 
 // ───────── 검색·AI 실제 노출 화면(tools/ai-visibility/proof-capture.mjs, 2026-11-23) — 미래애드원이 나온 요소에 설명용 빨간 테두리만 덧그림
